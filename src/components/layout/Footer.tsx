@@ -35,25 +35,28 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Links */}
+          {/* Platform Links */}
           <div>
             <h3 className="text-lg font-semibold mb-4">Platform</h3>
             <ul className="space-y-2">
-              <li><Link to="/investors" className="text-gray-400 hover:text-white transition-colors text-base">Investors</Link></li>
-              <li><Link to="/grants" className="text-gray-400 hover:text-white transition-colors text-base">Grants</Link></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-base flex items-center gap-1"><Slack size={16} /> Join our Slack</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-base flex items-center gap-1"><MessageCircle size={16} /> Ask a Mentor</a></li>
+              <li><Link to="/funding/vc" className="text-gray-400 hover:text-white transition-colors text-base">Venture Capital</Link></li>
+              <li><Link to="/funding/microvc" className="text-gray-400 hover:text-white transition-colors text-base">Micro VCs</Link></li>
+              <li><Link to="/funding/angel" className="text-gray-400 hover:text-white transition-colors text-base">Angel Investors</Link></li>
+              <li><Link to="/funding/accelerator" className="text-gray-400 hover:text-white transition-colors text-base">Accelerators</Link></li>
+              <li><Link to="/funding/incubator" className="text-gray-400 hover:text-white transition-colors text-base">Incubators</Link></li>
+              <li><Link to="/funding/grants" className="text-gray-400 hover:text-white transition-colors text-base">Government Grants</Link></li>
             </ul>
           </div>
 
+          {/* Company Links */}
           <div>
             <h3 className="text-lg font-semibold mb-4">Company</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-base">About Us</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-base">Contact</a></li>
+              <li><Link to="/about" className="text-gray-400 hover:text-white transition-colors text-base">About Us</Link></li>
+              <li><Link to="/contact" className="text-gray-400 hover:text-white transition-colors text-base">Contact</Link></li>
               <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-base">Careers</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-base">Privacy Policy</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-base">Terms of Service</a></li>
+              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-base flex items-center gap-1"><Slack size={16} /> Join our Slack</a></li>
+              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-base flex items-center gap-1"><MessageCircle size={16} /> Ask a Mentor</a></li>
             </ul>
           </div>
 
@@ -61,7 +64,7 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Stay Updated</h3>
             <p className="text-gray-400 text-base mb-4">Get the latest funding opportunities and startup news.</p>
-            <form className="flex w-full max-w-xs" onSubmit={handleNewsletter}>
+            <form className="flex w-full max-w-xs mb-4" onSubmit={handleNewsletter}>
               <input
                 type="email"
                 placeholder="Your email"
@@ -74,6 +77,15 @@ const Footer: React.FC = () => {
               </button>
             </form>
             {newsletterSuccess && <div className="text-green-400 mt-2 text-sm animate-fade-in">Thank you for subscribing!</div>}
+            
+            {/* Legal Links */}
+            <div className="mt-6 space-y-2">
+              <h4 className="text-sm font-semibold text-gray-300">Legal</h4>
+              <ul className="space-y-1">
+                <li><Link to="/privacy-policy" className="text-gray-400 hover:text-white transition-colors text-sm">Privacy Policy</Link></li>
+                <li><Link to="/terms-of-service" className="text-gray-400 hover:text-white transition-colors text-sm">Terms of Service</Link></li>
+              </ul>
+            </div>
           </div>
         </div>
 
