@@ -27,6 +27,7 @@ import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import TermsOfServicePage from './pages/TermsOfServicePage';
 import ContactPage from './pages/ContactPage';
 import AboutPage from './pages/AboutPage';
+import DisclaimerPage from './pages/DisclaimerPage';
 
 const NotFound = () => (
   <div style={{ padding: 40, textAlign: 'center' }}>
@@ -55,6 +56,7 @@ export const router = createBrowserRouter([
       { path: 'contact', element: <ContactPage /> },
       { path: 'privacy-policy', element: <PrivacyPolicyPage /> },
       { path: 'terms-of-service', element: <TermsOfServicePage /> },
+      { path: 'disclaimer', element: <DisclaimerPage /> },
     ]
   },
   {
