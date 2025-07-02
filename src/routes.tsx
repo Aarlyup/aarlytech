@@ -23,6 +23,10 @@ import InvestorMatchPage from './pages/InvestorMatchPage';
 import AdminSignInPage from './pages/AdminSignInPage';
 import AdminPanelPage from './pages/AdminPanelPage';
 import ContentComingSoonPage from './pages/ContentComingSoonPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import TermsOfServicePage from './pages/TermsOfServicePage';
+import ContactPage from './pages/ContactPage';
+import AboutPage from './pages/AboutPage';
 
 const NotFound = () => (
   <div style={{ padding: 40, textAlign: 'center' }}>
@@ -47,6 +51,10 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <HomePage /> },
       { path: 'auth', element: <AuthPage /> },
+      { path: 'about', element: <AboutPage /> },
+      { path: 'contact', element: <ContactPage /> },
+      { path: 'privacy-policy', element: <PrivacyPolicyPage /> },
+      { path: 'terms-of-service', element: <TermsOfServicePage /> },
     ]
   },
   {
@@ -98,4 +106,4 @@ export const router = createBrowserRouter([
   //   path: '/admin',
   //   element: <AdminPanelPage />,
   // },
-]); 
+]);
