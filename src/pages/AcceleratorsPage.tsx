@@ -5,32 +5,9 @@ import type { AcceleratorFilters as FilterType } from '../components/accelerator
 import AcceleratorCard from '../components/accelerators/AcceleratorCard';
 import Button from '../components/ui/Button';
 import { emptyFilters } from '../constants/accelerators';
+import { acceleratorService, type Accelerator } from '../services/acceleratorService';
 
-interface Accelerator {
-  id: string;
-  name: string;
-  logo_url: string;
-  state: string;
-  affiliation: string;
-  tags: string[];
-  application_status: string;
-  batch_frequency: string;
-  equity_taken: string;
-  funding_offered: string;
-  duration_weeks: number;
-  created_at: string;
-  updated_at: string;
-  total_startups_supported: number;
-  funded_startup_percent: number;
-  company_email: string;
-  company_linkedin: string;
-  poc_email: string;
-  poc_linkedin: string;
-  description: string;
-  website_url: string;
-  sectors_supported: string[];
-}
-
+// Demo data fallback
 const DEMO_ACCELERATORS = [
   {
     id: '1',
@@ -56,30 +33,6 @@ const DEMO_ACCELERATORS = [
     website_url: '',
     sectors_supported: ['AI', 'Seed'],
   },
-  {
-    id: '2',
-    name: 'Demo Accelerator Two',
-    logo_url: '',
-    state: 'Pune',
-    affiliation: 'Govt-backed',
-    tags: ['Infra'],
-    application_status: 'Closed',
-    batch_frequency: 'Yearly',
-    equity_taken: '2%',
-    funding_offered: '₹10L',
-    duration_weeks: 8,
-    created_at: '2023-01-01T00:00:00Z',
-    updated_at: '2023-01-01T00:00:00Z',
-    total_startups_supported: 3,
-    funded_startup_percent: 33,
-    company_email: '',
-    company_linkedin: '',
-    poc_email: '',
-    poc_linkedin: '',
-    description: 'A demo accelerator for pre-seed startups.',
-    website_url: '',
-    sectors_supported: ['Healthtech', 'Pre-seed'],
-  },
 ];
 
 function ErrorFallback({ error }: { error: Error }) {
@@ -92,28 +45,80 @@ function ErrorFallback({ error }: { error: Error }) {
 
 const AcceleratorsPage: React.FC = () => {
   const [filters, setFilters] = useState<FilterType>(emptyFilters);
-  const [accelerators, setAccelerators] = useState<Accelerator[]>([]);
+  const [accelerators, setAccelerators] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
   const pageSize = 12;
 
   useEffect(() => {
-    const loadAccelerators = async () => {
-      try {
-        setLoading(true);
-        // Use demo data since we removed backend
-        setAccelerators(DEMO_ACCELERATORS);
-        setTotalCount(DEMO_ACCELERATORS.length);
-      } catch (error) {
-        setAccelerators(DEMO_ACCELERATORS);
-        setTotalCount(DEMO_ACCELERATORS.length);
-      } finally {
-        setLoading(false);
-      }
-    };
     loadAccelerators();
   }, [filters, page]);
+
+  const loadAccelerators = async () => {
+    try {
+      setLoading(true);
+      
+      // Convert filters to API format
+      const apiFilters = {
+        page,
+        limit: pageSize,
+        search: filters.search[0] || undefined,
+        affiliation: filters.affiliation.length > 0 ? filters.affiliation.join(',') : undefined,
+        applicationStatus: filters.applicationStatus.length > 0 ? filters.applicationStatus.join(',') : undefined,
+        tags: filters.tags.length > 0 ? filters.tags.join(',') : undefined,
+        equityRange: filters.equityRange.length > 0 ? filters.equityRange.join(',') : undefined,
+        fundingRange: filters.fundingRange.length > 0 ? filters.fundingRange.join(',') : undefined,
+        durationRange: filters.durationRange.length > 0 ? filters.durationRange.join(',') : undefined,
+      };
+
+      const response = await acceleratorService.getAccelerators(apiFilters);
+      
+      // Convert backend format to frontend format
+      const formattedAccelerators = response.accelerators.map((acc: Accelerator) => ({
+        id: acc._id,
+        name: acc.name,
+        logo_url: acc.logo_url,
+        state: acc.state,
+        affiliation: acc.affiliation,
+        tags: acc.tags,
+        application_status: acc.application_status,
+        batch_frequency: acc.batch_frequency,
+        equity_taken: acc.equity_taken,
+        funding_offered: acc.funding_offered,
+        duration_weeks: acc.duration_weeks,
+        created_at: acc.createdAt,
+        updated_at: acc.updatedAt,
+        total_startups_supported: acc.total_startups_supported,
+        funded_startup_percent: acc.funded_startup_percent,
+        company_email: acc.company_email,
+        company_linkedin: acc.company_linkedin,
+        poc_email: acc.poc_email,
+        poc_linkedin: acc.poc_linkedin,
+        description: acc.description,
+        website_url: acc.website_url,
+        sectors_supported: acc.sectors_supported,
+      }));
+
+      if (page === 1) {
+        setAccelerators(formattedAccelerators);
+      } else {
+        setAccelerators(prev => [...prev, ...formattedAccelerators]);
+      }
+      
+      setTotalCount(response.total);
+      setHasMore(response.currentPage < response.totalPages);
+    } catch (error) {
+      console.error('Failed to load accelerators:', error);
+      // Fallback to demo data
+      setAccelerators(DEMO_ACCELERATORS);
+      setTotalCount(DEMO_ACCELERATORS.length);
+      setHasMore(false);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleFilterChange = (newFilters: FilterType) => {
     setFilters(newFilters);
@@ -123,9 +128,6 @@ const AcceleratorsPage: React.FC = () => {
   const handleLoadMore = () => {
     setPage(prev => prev + 1);
   };
-
-  const totalPages = Math.ceil(totalCount / pageSize);
-  const hasMore = page < totalPages;
 
   if (loading && page === 1) {
     return (
@@ -163,7 +165,7 @@ const AcceleratorsPage: React.FC = () => {
           <AcceleratorCard key={accelerator.id} accelerator={accelerator} />
         ))}
       </div>
-      {accelerators.length === 0 && (
+      {accelerators.length === 0 && !loading && (
         <div className="text-center py-12">
           <p className="text-gray-500">No accelerators found matching your criteria.</p>
         </div>
@@ -186,4 +188,4 @@ const AcceleratorsPage: React.FC = () => {
   );
 };
 
-export default AcceleratorsPage; 
+export default AcceleratorsPage;
