@@ -1,35 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import AcceleratorDetail from '../components/accelerators/AcceleratorDetail';
-
-interface Accelerator {
-  id: string;
-  name: string;
-  logo_url: string;
-  state: string;
-  affiliation: string;
-  tags: string[];
-  application_status: string;
-  batch_frequency: string;
-  equity_taken: string;
-  funding_offered: string;
-  duration_weeks: number;
-  created_at: string;
-  updated_at: string;
-  total_startups_supported: number;
-  funded_startup_percent: number;
-  company_email: string;
-  company_linkedin: string;
-  poc_email: string;
-  poc_linkedin: string;
-  description: string;
-  website_url: string;
-  sectors_supported: string[];
-}
+import { acceleratorService, type Accelerator } from '../services/acceleratorService';
 
 const AcceleratorDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [accelerator, setAccelerator] = useState<Accelerator | null>(null);
+  const [accelerator, setAccelerator] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -38,10 +14,43 @@ const AcceleratorDetailPage: React.FC = () => {
   }, [id]);
 
   const fetchAccelerator = async () => {
+    if (!id) return;
+
     try {
       setLoading(true);
-      // Use demo data since we removed backend
-      const demoAccelerator: Accelerator = {
+      const response = await acceleratorService.getAccelerator(id);
+      
+      // Convert backend format to frontend format
+      const formattedAccelerator = {
+        id: response._id,
+        name: response.name,
+        logo_url: response.logo_url,
+        state: response.state,
+        affiliation: response.affiliation,
+        tags: response.tags,
+        application_status: response.application_status,
+        batch_frequency: response.batch_frequency,
+        equity_taken: response.equity_taken,
+        funding_offered: response.funding_offered,
+        duration_weeks: response.duration_weeks,
+        created_at: response.createdAt,
+        updated_at: response.updatedAt,
+        total_startups_supported: response.total_startups_supported,
+        funded_startup_percent: response.funded_startup_percent,
+        company_email: response.company_email,
+        company_linkedin: response.company_linkedin,
+        poc_email: response.poc_email,
+        poc_linkedin: response.poc_linkedin,
+        description: response.description,
+        website_url: response.website_url,
+        sectors_supported: response.sectors_supported,
+      };
+
+      setAccelerator(formattedAccelerator);
+    } catch (err) {
+      console.error('Failed to fetch accelerator:', err);
+      // Fallback to demo data
+      const demoAccelerator = {
         id: id || '1',
         name: 'Demo Accelerator',
         logo_url: '',
@@ -66,8 +75,6 @@ const AcceleratorDetailPage: React.FC = () => {
         sectors_supported: ['AI', 'Seed'],
       };
       setAccelerator(demoAccelerator);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred while fetching accelerator details');
     } finally {
       setLoading(false);
     }
@@ -92,4 +99,4 @@ const AcceleratorDetailPage: React.FC = () => {
   return <AcceleratorDetail accelerator={accelerator} />;
 };
 
-export default AcceleratorDetailPage; 
+export default AcceleratorDetailPage;
