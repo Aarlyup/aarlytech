@@ -60,11 +60,11 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Newsletter */}
+          {/* Newsletter & Legal */}
           <div>
             <h3 className="text-lg font-semibold mb-4">Stay Updated</h3>
             <p className="text-gray-400 text-base mb-4">Get the latest funding opportunities and startup news.</p>
-            <form className="flex w-full max-w-xs mb-4" onSubmit={handleNewsletter}>
+            <form className="flex w-full max-w-xs mb-6" onSubmit={handleNewsletter}>
               <input
                 type="email"
                 placeholder="Your email"
@@ -84,6 +84,7 @@ const Footer: React.FC = () => {
               <ul className="space-y-1">
                 <li><Link to="/privacy-policy" className="text-gray-400 hover:text-white transition-colors text-sm">Privacy Policy</Link></li>
                 <li><Link to="/terms-of-service" className="text-gray-400 hover:text-white transition-colors text-sm">Terms of Service</Link></li>
+                <li><Link to="/disclaimer" className="text-gray-400 hover:text-white transition-colors text-sm">Disclaimer</Link></li>
               </ul>
             </div>
           </div>
