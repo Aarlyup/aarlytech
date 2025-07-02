@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import HomeLayout from './components/layout/HomeLayout';
 import AppLayout from './components/layout/AppLayout';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 import HomePage from './pages/HomePage';
 import IncubatorDetailPage from './pages/IncubatorDetailPage';
 import IncubatorsPage from './pages/IncubatorsPage';
@@ -46,6 +47,7 @@ const Placeholder = ({ title }: { title: string }) => (
 );
 
 export const router = createBrowserRouter([
+  // Public routes
   {
     path: '/',
     element: <HomeLayout />,
@@ -59,26 +61,27 @@ export const router = createBrowserRouter([
       { path: 'disclaimer', element: <DisclaimerPage /> },
     ]
   },
-  {
-    path: '/',
-    element: <AppLayout />,
-    children: [
-      { path: 'incubators', element: <IncubatorsPage /> },
-      { path: 'incubators/:id', element: <IncubatorDetailPage /> },
-      { path: 'accelerators', element: <AcceleratorsPage /> },
-      { path: 'accelerators/:id', element: <AcceleratorDetailPage /> },
-      { path: 'microvcs', element: <MicroVCsPage /> },
-      { path: 'microvcs/:id', element: <MicroVCDetailPage /> },
-      { path: '*', element: <NotFound /> }
-    ]
-  },
+  
+  // Protected routes
   {
     path: '/dashboard',
-    element: <DashboardLayout><DashboardPage /></DashboardLayout>,
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout>
+          <DashboardPage />
+        </DashboardLayout>
+      </ProtectedRoute>
+    ),
   },
   {
     path: '/funding',
-    element: <FundingLayout><Placeholder title="Funding" /></FundingLayout>,
+    element: (
+      <ProtectedRoute>
+        <FundingLayout>
+          <Placeholder title="Funding" />
+        </FundingLayout>
+      </ProtectedRoute>
+    ),
     children: [
       { path: 'vc', element: <MicroVCsPage /> },
       { path: 'microvc', element: <MicroVCsPage /> },
@@ -90,22 +93,51 @@ export const router = createBrowserRouter([
   },
   {
     path: '/finnewz',
-    element: <DashboardLayout><FinNewzPage /></DashboardLayout>,
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout>
+          <FinNewzPage />
+        </DashboardLayout>
+      </ProtectedRoute>
+    ),
   },
   {
     path: '/investor-match',
-    element: <DashboardLayout><InvestorMatchPage /></DashboardLayout>,
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout>
+          <InvestorMatchPage />
+        </DashboardLayout>
+      </ProtectedRoute>
+    ),
   },
   {
     path: '/content',
-    element: <DashboardLayout><ContentComingSoonPage /></DashboardLayout>,
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout>
+          <ContentComingSoonPage />
+        </DashboardLayout>
+      </ProtectedRoute>
+    ),
   },
-  // {
-  //   path: '/admin-signin',
-  //   element: <AdminSignInPage />,
-  // },
-  // {
-  //   path: '/admin',
-  //   element: <AdminPanelPage />,
-  // },
+  
+  // Legacy protected routes (for backward compatibility)
+  {
+    path: '/',
+    element: (
+      <ProtectedRoute>
+        <AppLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      { path: 'incubators', element: <IncubatorsPage /> },
+      { path: 'incubators/:id', element: <IncubatorDetailPage /> },
+      { path: 'accelerators', element: <AcceleratorsPage /> },
+      { path: 'accelerators/:id', element: <AcceleratorDetailPage /> },
+      { path: 'microvcs', element: <MicroVCsPage /> },
+      { path: 'microvcs/:id', element: <MicroVCDetailPage /> },
+      { path: '*', element: <NotFound /> }
+    ]
+  },
 ]);
