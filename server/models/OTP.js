@@ -19,7 +19,7 @@ const otpSchema = new mongoose.Schema({
   expiresAt: {
     type: Date,
     default: Date.now,
-    expires: 900 // 15 minutes in seconds
+    expires: 900 // 15 minutes in seconds (creates TTL index)
   },
   isUsed: {
     type: Boolean,
@@ -28,9 +28,6 @@ const otpSchema = new mongoose.Schema({
 }, {
   timestamps: true
 });
-
-// Index for automatic cleanup
-otpSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 // Index for faster queries
 otpSchema.index({ email: 1, type: 1, isUsed: 1 });
