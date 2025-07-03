@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const passport = require('./config/passport');
 
 const connectDB = require('./config/database');
@@ -20,6 +21,9 @@ const microvcRoutes = require('./routes/microvcs');
 const uploadRoutes = require('./routes/upload');
 
 const app = express();
+
+// Trust first proxy (needed for express-rate-limit on Render)
+app.set('trust proxy', 1);
 
 // Connect to database
 connectDB();
@@ -43,16 +47,19 @@ app.use(helmet({
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  max: 100,
   message: 'Too many requests from this IP, please try again later.'
 });
 app.use('/api/', limiter);
 
 // CORS
-const allowedOrigins = (process.env.FRONTEND_URLS || '').split(',').map(origin => origin.trim()).filter(Boolean);
+const allowedOrigins = (process.env.FRONTEND_URLS || '')
+  .split(',')
+  .map(origin => origin.trim())
+  .filter(Boolean);
 
 app.use(cors({
-  origin: function (origin, callback) {
+  origin: (origin, callback) => {
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
@@ -65,21 +72,25 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// Body parsing middleware
+// Body parsing
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Cookie parser
 app.use(cookieParser());
 
-// Session middleware for OAuth
+// Session middleware
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-session-secret',
   resave: false,
   saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI,
+    ttl: 24 * 60 * 60 // 1 day
+  }),
   cookie: {
     secure: process.env.NODE_ENV === 'production',
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    maxAge: 24 * 60 * 60 * 1000
   }
 }));
 
@@ -87,18 +98,18 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Compression middleware
+// Compression
 app.use(compression());
 
-// Logging middleware
+// Logging (dev only)
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-// Health check route
+// Health check
 app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
+  res.json({
+    status: 'OK',
     message: 'Aarly API is running',
     timestamp: new Date().toISOString()
   });
@@ -116,22 +127,18 @@ app.use('*', (req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-// Error handling middleware
+// Error handling
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
-
 const server = app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV}`);
-  console.log(`🌐 Frontend URL: ${process.env.FRONTEND_URL}`);
+  console.log(`🌐 Allowed Frontend URLs: ${process.env.FRONTEND_URLS}`);
 });
 
-// Handle unhandled promise rejections
-process.on('unhandledRejection', (err, promise) => {
-  console.log(`Error: ${err.message}`);
-  // Close server & exit process
-  server.close(() => {
-    process.exit(1);
-  });
+// Handle unhandled rejections
+process.on('unhandledRejection', (err) => {
+  console.error(`Error: ${err.message}`);
+  server.close(() => process.exit(1));
 });
