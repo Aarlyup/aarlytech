@@ -68,7 +68,7 @@ const sendVerificationEmail = async (email, otp, name) => {
         </div>
         <div class="footer">
           <p>© 2025 Aarly. All rights reserved.</p>
-          <p>Need help? Contact us at hello@aarly.co</p>
+          <p>Need help? Contact us at teamaarly@gmail.com</p>
         </div>
       </div>
     </body>
@@ -148,7 +148,7 @@ const sendWelcomeEmail = async (email, name) => {
         </div>
         <div class="footer">
           <p>© 2025 Aarly. All rights reserved.</p>
-          <p>Bangalore, Karnataka, India | hello@aarly.co</p>
+          <p>Pilani, Rajasthan, India | teamaarly@gmail.com</p>
         </div>
       </div>
     </body>
