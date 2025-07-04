@@ -3,6 +3,7 @@ import MicroVCFilters from '../components/microvcs/MicroVCFilters';
 import type { MicroVCFilters as FilterType } from '../components/microvcs/MicroVCFilters';
 import MicroVCCard from '../components/microvcs/MicroVCCard';
 import Button from '../components/ui/Button';
+import { Helmet } from 'react-helmet-async';
 
 interface MicroVC {
   id: string;
@@ -131,6 +132,16 @@ const MicroVCsPage: React.FC = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Micro VCs for Startups in India | Aarly</title>
+        <meta name="description" content="Browse top Micro VCs in India for early-stage startup funding. Compare micro venture capital options and find the right fit for your business." />
+        <link rel="canonical" href="https://aarly.co/microvcs" />
+        <meta property="og:title" content="Micro VCs for Startups in India | Aarly" />
+        <meta property="og:description" content="Browse top Micro VCs in India for early-stage startup funding. Compare micro venture capital options and find the right fit for your business." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://aarly.co/microvcs" />
+        <meta property="og:image" content="/Screenshot 2025-06-29 140116.png" />
+      </Helmet>
       <div className="mb-8 px-2 md:px-6 pt-4 md:pt-8">
         <h1 className="text-2xl font-bold mb-2">Micro-VCs</h1>
         <p className="text-gray-600">

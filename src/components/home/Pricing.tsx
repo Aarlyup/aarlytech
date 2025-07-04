@@ -25,8 +25,8 @@ const pricingPlans = [
 
 const Pricing: React.FC = () => {
   return (
-    <section id="pricing" className="py-16 bg-gray-50 scroll-mt-20 mb-16">
-      <div className="container mx-auto px-4">
+    <section id="pricing" className="py-12 sm:py-16 md:py-20 bg-gray-50 scroll-mt-20 mb-16">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">Simple, Transparent Pricing</h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">

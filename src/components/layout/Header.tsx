@@ -15,18 +15,10 @@ const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
 
-  const isAppPage = [
-    '/dashboard',
-    '/funding',
-    '/investor-match',
-    '/finnewz',
-  ].some(path => location.pathname.startsWith(path));
-
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -59,38 +51,52 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 ${
-      isScrolled 
-        ? 'bg-white/95 backdrop-blur-sm shadow-lg' 
-        : 'bg-transparent'
+    <header className={`fixed top-0 left-0 w-screen max-w-none z-50 transition-all duration-300 ${
+      isHomePage
+        ? 'bg-white/95 backdrop-blur-sm shadow-lg'
+        : isScrolled 
+          ? 'bg-white/95 backdrop-blur-sm shadow-lg' 
+          : 'bg-transparent'
     }`}>
-      <div className="container mx-auto px-4 py-5 flex items-center justify-between">
+      {/* More visible white strip at the very top, only on main page */}
+      {isHomePage && (
+        <div className="w-full h-1 bg-white shadow-md" style={{ minHeight: '2px' }}></div>
+      )}
+      <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
         <Logo />
-
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
+        <nav className="hidden md:flex items-center space-x-8 w-auto">
           {isHomePage ? (
             <>
               <button 
                 onClick={() => scrollToSection('how-it-works')} 
-                className={`font-medium transition-colors ${
-                  isScrolled 
-                    ? 'text-gray-700 hover:text-blue-600' 
-                    : 'text-white hover:text-blue-200'
-                }`}
+                className="font-medium transition-colors text-black relative group"
+                style={{ zIndex: 1 }}
               >
-                How It Works
+                <span className="relative z-10 group-hover:text-blue-700 transition-colors duration-200">
+                  How It Works
+                  <span className="block h-0.5 bg-gradient-to-r from-blue-400 to-blue-700 absolute left-0 -bottom-1 w-0 group-hover:w-full transition-all duration-300"></span>
+                </span>
               </button>
               <button 
                 onClick={() => scrollToSection('pricing')} 
-                className={`font-medium transition-colors ${
-                  isScrolled 
-                    ? 'text-gray-700 hover:text-blue-600' 
-                    : 'text-white hover:text-blue-200'
-                }`}
+                className="font-medium transition-colors text-black relative group"
+                style={{ zIndex: 1 }}
               >
-                Pricing
+                <span className="relative z-10 group-hover:text-blue-700 transition-colors duration-200">
+                  Pricing
+                  <span className="block h-0.5 bg-gradient-to-r from-blue-400 to-blue-700 absolute left-0 -bottom-1 w-0 group-hover:w-full transition-all duration-300"></span>
+                </span>
               </button>
+              {!isAuthenticated && (
+                <Button
+                  onClick={handleAuthClick}
+                  className="ml-4 flex items-center space-x-2 bg-gradient-to-r from-amber-400 to-amber-500 text-white font-semibold px-6 py-2 rounded-lg shadow-lg hover:from-amber-500 hover:to-yellow-500 transition-all duration-200"
+                >
+                  <Rocket size={18} />
+                  <span>Explore Now</span>
+                </Button>
+              )}
             </>
           ) : (
             <>
@@ -100,7 +106,7 @@ const Header: React.FC = () => {
                     to="/dashboard"
                     className={`font-medium transition-colors ${
                       location.pathname.startsWith('/dashboard')
-                        ? 'text-blue-600' : isScrolled ? 'text-gray-700 hover:text-blue-600' : 'text-white hover:text-blue-200'
+                        ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
                     }`}
                   >
                     Dashboard
@@ -109,7 +115,7 @@ const Header: React.FC = () => {
                     to="/funding/vc"
                     className={`font-medium transition-colors ${
                       location.pathname.startsWith('/funding')
-                        ? 'text-blue-600' : isScrolled ? 'text-gray-700 hover:text-blue-600' : 'text-white hover:text-blue-200'
+                        ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
                     }`}
                   >
                     Funding
@@ -118,7 +124,7 @@ const Header: React.FC = () => {
                     to="/investor-match"
                     className={`font-medium transition-colors ${
                       location.pathname.startsWith('/investor-match')
-                        ? 'text-blue-600' : isScrolled ? 'text-gray-700 hover:text-blue-600' : 'text-white hover:text-blue-200'
+                        ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
                     }`}
                   >
                     Investor Match
@@ -127,21 +133,26 @@ const Header: React.FC = () => {
                     to="/finnewz"
                     className={`font-medium transition-colors ${
                       location.pathname.startsWith('/finnewz')
-                        ? 'text-blue-600' : isScrolled ? 'text-gray-700 hover:text-blue-600' : 'text-white hover:text-blue-200'
+                        ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
                     }`}
                   >
                     Fin'Newz
+                  </Link>
+                  <Link
+                    to="/content"
+                    className={`font-medium transition-colors ${
+                      location.pathname.startsWith('/content')
+                        ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
+                    }`}
+                  >
+                    Content
                   </Link>
                 </>
               )}
               {!isHomePage && !isAuthenticated && (
                 <button
                   onClick={scrollToTop}
-                  className={`flex items-center space-x-1 transition-colors ${
-                    isScrolled 
-                      ? 'text-gray-700 hover:text-blue-600' 
-                      : 'text-white hover:text-blue-200'
-                  }`}
+                  className="flex items-center space-x-1 transition-colors text-gray-700 hover:text-blue-600"
                 >
                   <Home size={18} />
                   <span>Home</span>
@@ -151,7 +162,7 @@ const Header: React.FC = () => {
           )}
 
           {/* User Menu or Auth Button */}
-          {isAuthenticated ? (
+          {isAuthenticated && !location.pathname.startsWith('/funding') ? (
             <div className="relative">
               <button
                 onClick={() => setShowUserMenu(!showUserMenu)}
@@ -168,7 +179,7 @@ const Header: React.FC = () => {
                     <User className="w-4 h-4 text-white" />
                   </div>
                 )}
-                <span className={`font-medium ${isScrolled ? 'text-gray-700' : 'text-white'}`}>
+                <span className="font-medium text-black">
                   {user?.name?.split(' ')[0]}
                 </span>
               </button>
@@ -196,39 +207,28 @@ const Header: React.FC = () => {
                 </div>
               )}
             </div>
-          ) : (
-            <Button 
-              onClick={handleAuthClick}
-              variant="primary" 
-              className={`flex items-center space-x-2 transition-all ${
-                isScrolled 
-                  ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg' 
-                  :  'bg-gradient-to-r from-amber-400 to-amber-500 text-white shadow-lg hover:shadow-xl'
-              }`}
-            >
-              <Rocket size={18} />
-              <span className="font-semibold">Get Started</span>
-            </Button>
-          )}
+          ) : null}
         </nav>
 
         {/* Mobile Menu Button */}
         <button 
-          className={`md:hidden p-2 transition-colors ${
+          className={`md:hidden p-2 transition-colors w-12 h-12 text-blue-700 font-bold shadow-lg rounded-full flex items-center justify-center bg-white/90 border border-blue-100 ${
             isScrolled 
-              ? 'text-gray-700 hover:text-blue-600' 
-              : 'text-white hover:text-blue-200'
+              ? 'hover:text-blue-600' 
+              : 'hover:text-blue-200'
           }`}
+          style={{ fontSize: 0 }}
+          aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
-          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          {mobileMenuOpen ? <X size={36} /> : <Menu size={36} />}
         </button>
       </div>
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white/95 backdrop-blur-sm shadow-lg animate-fade-in-down">
-          <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
+        <div className="md:hidden fixed top-[70px] left-0 w-screen max-w-none z-50 bg-white backdrop-blur-xl shadow-2xl rounded-b-3xl animate-fade-in-down border-t border-blue-100">
+          <div className="px-4 py-6 flex flex-col space-y-5">
             {isAuthenticated ? (
               <>
                 <div className="flex items-center gap-3 pb-4 border-b border-gray-200">
@@ -250,37 +250,44 @@ const Header: React.FC = () => {
                 </div>
                 <Link
                   to="/dashboard"
-                  className="text-gray-700 hover:text-blue-600 font-medium py-2 transition-colors"
+                  className="text-gray-700 hover:text-blue-600 font-semibold py-3 px-2 rounded-lg transition-colors text-lg"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Dashboard
                 </Link>
                 <Link
                   to="/funding/vc"
-                  className="text-gray-700 hover:text-blue-600 font-medium py-2 transition-colors"
+                  className="text-gray-700 hover:text-blue-600 font-semibold py-3 px-2 rounded-lg transition-colors text-lg"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Funding
                 </Link>
                 <Link
                   to="/investor-match"
-                  className="text-gray-700 hover:text-blue-600 font-medium py-2 transition-colors"
+                  className="text-gray-700 hover:text-blue-600 font-semibold py-3 px-2 rounded-lg transition-colors text-lg"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Investor Match
                 </Link>
                 <Link
                   to="/finnewz"
-                  className="text-gray-700 hover:text-blue-600 font-medium py-2 transition-colors"
+                  className="text-gray-700 hover:text-blue-600 font-semibold py-3 px-2 rounded-lg transition-colors text-lg"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Fin'Newz
                 </Link>
+                <Link
+                  to="/content"
+                  className="text-gray-700 hover:text-blue-600 font-semibold py-3 px-2 rounded-lg transition-colors text-lg"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Content
+                </Link>
                 <button
                   onClick={handleLogout}
-                  className="text-red-600 hover:text-red-700 font-medium py-2 transition-colors text-left flex items-center gap-2"
+                  className="text-red-600 hover:text-red-700 font-semibold py-3 px-2 rounded-lg transition-colors text-lg"
                 >
-                  <LogOut className="w-4 h-4" />
+                  <LogOut className="w-4 h-4 mr-2" />
                   Sign Out
                 </button>
               </>
@@ -290,13 +297,13 @@ const Header: React.FC = () => {
                   <>
                     <button
                       onClick={() => scrollToSection('how-it-works')}
-                      className="text-gray-700 hover:text-blue-600 font-medium py-2 transition-colors text-left"
+                      className="text-gray-700 hover:text-blue-600 font-semibold py-3 px-2 rounded-lg transition-colors text-lg"
                     >
                       How It Works
                     </button>
                     <button
                       onClick={() => scrollToSection('pricing')}
-                      className="text-gray-700 hover:text-blue-600 font-medium py-2 transition-colors text-left"
+                      className="text-gray-700 hover:text-blue-600 font-semibold py-3 px-2 rounded-lg transition-colors text-lg"
                     >
                       Pricing
                     </button>
@@ -313,7 +320,7 @@ const Header: React.FC = () => {
                 {!isHomePage && (
                   <button
                     onClick={scrollToTop}
-                    className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 font-medium py-2 transition-colors"
+                    className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 font-semibold py-3 px-2 rounded-lg transition-colors text-lg"
                   >
                     <Home size={18} />
                     <span>Back to Home</span>

@@ -13,7 +13,7 @@ const fundingNav = [
 
 const FundingSidebar: React.FC = () => (
   <aside className="w-full md:fixed md:top-24 md:left-0 md:w-64 md:h-[calc(100vh-6rem)] bg-gradient-to-b from-gray-50 via-white to-gray-100 border-r border-blue-200 shadow-md md:z-30 flex flex-col backdrop-blur-xl bg-white/80 animate-fade-in rounded-2xl md:rounded-none md:shadow-md p-2 md:p-0" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07)'}}>
-    <nav className="flex-1 flex flex-col gap-1 px-2 mt-4">
+    <nav className="flex-1 flex flex-col gap-2 px-2 mt-4">
       {fundingNav.map(item => (
         <NavLink
           key={item.label}

@@ -1,6 +1,7 @@
 import React from 'react';
 import IncubatorsPage from '../IncubatorsPage';
 import IncubatorCard from '../../components/incubators/IncubatorCard';
+import Header from '../../components/layout/Header';
 
 const DEMO_GRANTS = [
   {
@@ -56,14 +57,17 @@ const DEMO_GRANTS = [
 ];
 
 const GrantsFundingPage: React.FC = () => (
-  <div>
-    <h1 className="text-2xl font-bold mb-6 text-blue-700">Govt Grants & Schemes</h1>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {DEMO_GRANTS.map((grant) => (
-        <IncubatorCard key={grant.id} incubator={grant} />
-      ))}
+  <>
+    <Header />
+    <div className="max-w-5xl mx-auto px-2 sm:px-4 md:px-8 py-8">
+      <h1 className="text-2xl font-bold mb-6 text-blue-700">Govt Grants & Schemes</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {DEMO_GRANTS.map((grant) => (
+          <IncubatorCard key={grant.id} incubator={grant} />
+        ))}
+      </div>
     </div>
-  </div>
+  </>
 );
 
 export default GrantsFundingPage; 

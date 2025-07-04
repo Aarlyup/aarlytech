@@ -18,81 +18,72 @@ const Footer: React.FC = () => {
       {/* Gradient top border */}
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-400 opacity-70 rounded-t-xl" />
       <div className="container mx-auto px-4 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8 items-start">
+        <div className="flex flex-wrap flex-row gap-3 items-start md:grid md:grid-cols-4 md:gap-8">
           {/* Logo and description */}
-          <div className="flex flex-col items-start justify-center md:justify-start h-full">
-            <Logo className="mb-3" imgClassName="h-14 w-auto" textClassName="text-4xl font-bold text-white pb-1 ml-3" />
-            <p className="text-gray-400 text-base max-w-xs mb-6">
+          <div className="flex flex-col items-start justify-center md:justify-start h-full min-w-[120px]">
+            <Logo className="mb-1" imgClassName="h-7 w-auto" textClassName="text-lg md:text-2xl font-bold text-white pb-1 ml-2" />
+            <p className="text-gray-400 text-xs md:text-base max-w-xs mb-2">
               Find the right investors, grants, and startup support — instantly.
             </p>
-            <div className="flex space-x-3 mt-2">
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-transform hover:scale-110 hover:drop-shadow-md" aria-label="Twitter"><Twitter size={22} /></a>
-              <a href="#" className="text-gray-400 hover:text-blue-500 transition-transform hover:scale-110 hover:drop-shadow-md" aria-label="LinkedIn"><Linkedin size={22} /></a>
-              <a href="#" className="text-gray-400 hover:text-pink-400 transition-transform hover:scale-110 hover:drop-shadow-md" aria-label="Instagram"><Instagram size={22} /></a>
-              <a href="#" className="text-gray-400 hover:text-green-400 transition-transform hover:scale-110 hover:drop-shadow-md" aria-label="WhatsApp"><Phone size={22} /></a>
-              <a href="#" className="text-gray-400 hover:text-gray-200 transition-transform hover:scale-110 hover:drop-shadow-md" aria-label="GitHub"><Github size={22} /></a>
-              <a href="mailto:hello@aarly.co" className="text-gray-400 hover:text-amber-400 transition-transform hover:scale-110 hover:drop-shadow-md" aria-label="Email"><Mail size={22} /></a>
+            <div className="flex flex-row space-x-3 mt-1">
+              <a href="#" className="text-gray-400 hover:text-blue-400 transition-transform hover:scale-110 hover:drop-shadow-md" aria-label="Twitter"><Twitter size={20} /></a>
+              <a href="#" className="text-gray-400 hover:text-blue-500 transition-transform hover:scale-110 hover:drop-shadow-md" aria-label="Linkedin"><Linkedin size={20} /></a>
+              <a href="#" className="text-gray-400 hover:text-pink-400 transition-transform hover:scale-110 hover:drop-shadow-md" aria-label="Instagram"><Instagram size={20} /></a>
             </div>
           </div>
 
           {/* Platform Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Platform</h3>
-            <ul className="space-y-2">
-              <li><Link to="/funding/vc" className="text-gray-400 hover:text-white transition-colors text-base">Venture Capital</Link></li>
-              <li><Link to="/funding/microvc" className="text-gray-400 hover:text-white transition-colors text-base">Micro VCs</Link></li>
-              <li><Link to="/funding/angel" className="text-gray-400 hover:text-white transition-colors text-base">Angel Investors</Link></li>
-              <li><Link to="/funding/accelerator" className="text-gray-400 hover:text-white transition-colors text-base">Accelerators</Link></li>
-              <li><Link to="/funding/incubator" className="text-gray-400 hover:text-white transition-colors text-base">Incubators</Link></li>
-              <li><Link to="/funding/grants" className="text-gray-400 hover:text-white transition-colors text-base">Government Grants</Link></li>
+            <h3 className="text-sm md:text-lg font-semibold mb-2">Platform</h3>
+            <ul className="space-y-1 text-xs md:text-base">
+              <li><Link to="/funding/vc" className="text-gray-400 hover:text-white transition-colors">Venture Capital</Link></li>
+              <li><Link to="/funding/microvc" className="text-gray-400 hover:text-white transition-colors">Micro VCs</Link></li>
+              <li><Link to="/funding/angel" className="text-gray-400 hover:text-white transition-colors">Angel Investors</Link></li>
+              <li><Link to="/funding/accelerator" className="text-gray-400 hover:text-white transition-colors">Accelerators</Link></li>
+              <li><Link to="/funding/incubator" className="text-gray-400 hover:text-white transition-colors">Incubators</Link></li>
+              <li><Link to="/funding/grants" className="text-gray-400 hover:text-white transition-colors">Government Grants</Link></li>
             </ul>
           </div>
-
           {/* Company Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Company</h3>
-            <ul className="space-y-2">
-              <li><Link to="/about" className="text-gray-400 hover:text-white transition-colors text-base">About Us</Link></li>
-              <li><Link to="/contact" className="text-gray-400 hover:text-white transition-colors text-base">Contact</Link></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-base">Careers</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-base flex items-center gap-1"><Slack size={16} /> Join our Slack</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-base flex items-center gap-1"><MessageCircle size={16} /> Ask a Mentor</a></li>
+            <h3 className="text-sm md:text-lg font-semibold mb-2">Company</h3>
+            <ul className="space-y-1 text-xs md:text-base">
+              <li><Link to="/about" className="text-gray-400 hover:text-white transition-colors">About Us</Link></li>
+              <li><Link to="/contact" className="text-gray-400 hover:text-white transition-colors">Contact</Link></li>
+              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Careers</a></li>
+            </ul>
+          </div>
+          {/* Legal Links */}
+          <div>
+            <h3 className="text-sm md:text-lg font-semibold mb-2">Legal</h3>
+            <ul className="space-y-1 text-xs md:text-base">
+              <li><Link to="/privacy-policy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</Link></li>
+              <li><Link to="/terms-of-service" className="text-gray-400 hover:text-white transition-colors">Terms of Service</Link></li>
+              <li><Link to="/disclaimer" className="text-gray-400 hover:text-white transition-colors">Disclaimer</Link></li>
             </ul>
           </div>
 
-          {/* Newsletter & Legal */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Stay Updated</h3>
-            <p className="text-gray-400 text-base mb-4">Get the latest funding opportunities and startup news.</p>
-            <form className="flex w-full max-w-xs mb-6" onSubmit={handleNewsletter}>
+          {/* Newsletter */}
+          <div className="w-full md:w-auto">
+            <h3 className="text-sm md:text-lg font-semibold mb-2">Stay Updated</h3>
+            <p className="text-gray-400 text-xs md:text-base mb-2">Get the latest funding opportunities and startup news.</p>
+            <form className="flex w-full max-w-xs mb-2" onSubmit={handleNewsletter}>
               <input
                 type="email"
                 placeholder="Your email"
-                className="bg-gray-800 text-white px-4 py-2 rounded-l-lg focus:outline-none flex-grow text-base border border-gray-700 focus:ring-2 focus:ring-blue-500 transition-all"
+                className="bg-gray-800 text-white px-3 py-1 rounded-l-lg focus:outline-none flex-grow text-xs md:text-base border border-gray-700 focus:ring-2 focus:ring-blue-500 transition-all"
                 required
                 disabled={newsletterSuccess}
               />
-              <button className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-r-lg transition-colors flex items-center justify-center focus:ring-2 focus:ring-blue-400 focus:ring-offset-2" disabled={newsletterSuccess}>
-                <ArrowRight size={18} />
+              <button className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-r-lg transition-colors flex items-center justify-center focus:ring-2 focus:ring-blue-400 focus:ring-offset-2" disabled={newsletterSuccess}>
+                <ArrowRight size={14} />
               </button>
             </form>
-            {newsletterSuccess && <div className="text-green-400 mt-2 text-sm animate-fade-in">Thank you for subscribing!</div>}
-            
-            {/* Legal Links */}
-            <div className="mt-6 space-y-2">
-              <h4 className="text-sm font-semibold text-gray-300">Legal</h4>
-              <ul className="space-y-1">
-                <li><Link to="/privacy-policy" className="text-gray-400 hover:text-white transition-colors text-sm">Privacy Policy</Link></li>
-                <li><Link to="/terms-of-service" className="text-gray-400 hover:text-white transition-colors text-sm">Terms of Service</Link></li>
-                <li><Link to="/disclaimer" className="text-gray-400 hover:text-white transition-colors text-sm">Disclaimer</Link></li>
-              </ul>
-            </div>
+            {newsletterSuccess && <div className="text-green-400 mt-1 text-xs animate-fade-in">Thank you for subscribing!</div>}
           </div>
         </div>
-
-        <div className="mt-12 pt-8 border-t border-gray-800 text-center text-gray-500 text-sm flex flex-col md:flex-row items-center justify-between gap-4">
-          <span>&copy; {new Date().getFullYear()} Aarly. All rights reserved.</span>
-          <span className="flex items-center gap-1">Made with <Heart size={14} className="inline text-pink-400 animate-pulse" /> by Aarly Team</span>
+        <div className="mt-4 pt-4 border-t border-gray-800 text-center text-gray-500 text-xs md:text-sm flex flex-col md:flex-row items-center justify-between gap-1">
+          <span>&copy; {new Date().getFullYear()} Aarly. All rights reserved. | Made with <Heart size={10} className="inline text-pink-400 animate-pulse" /> by Aarly Team</span>
         </div>
       </div>
     </footer>

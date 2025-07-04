@@ -3,6 +3,7 @@ import IncubatorFilters from '../components/incubators/IncubatorFilters';
 import type { IncubatorFilters as FilterType } from '../components/incubators/IncubatorFilters';
 import IncubatorCard from '../components/incubators/IncubatorCard';
 import Button from '../components/ui/Button';
+import { Helmet } from 'react-helmet-async';
 
 interface Incubator {
   id: string;
@@ -149,6 +150,16 @@ const IncubatorsPage: React.FC = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Startup Incubators in India | Aarly</title>
+        <meta name="description" content="Explore top startup incubators in India. Find the best programs, funding, and support for your startup journey." />
+        <link rel="canonical" href="https://aarly.co/incubators" />
+        <meta property="og:title" content="Startup Incubators in India | Aarly" />
+        <meta property="og:description" content="Explore top startup incubators in India. Find the best programs, funding, and support for your startup journey." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://aarly.co/incubators" />
+        <meta property="og:image" content="/Screenshot 2025-06-29 140116.png" />
+      </Helmet>
       <div className="mb-8 px-2 md:px-6 pt-4 md:pt-8">
         <h1 className="text-2xl font-bold mb-2">Incubators</h1>
         <p className="text-gray-600">

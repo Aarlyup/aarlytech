@@ -21,8 +21,8 @@ const features = [
 
 const HowItWorks: React.FC = () => {
   return (
-    <section id="how-it-works" className="py-16 scroll-mt-20 bg-gradient-to-b from-blue-50/60 via-white to-indigo-50/60">
-      <div className="container mx-auto px-4">
+    <section id="how-it-works" className="py-12 sm:py-16 md:py-20 scroll-mt-20 bg-gradient-to-b from-blue-50/60 via-white to-indigo-50/60">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">How It Works</h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -30,7 +30,7 @@ const HowItWorks: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 gap-y-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 gap-y-8">
           {features.map((feature, index) => (
             <div 
               key={index} 
@@ -48,16 +48,13 @@ const HowItWorks: React.FC = () => {
         </div>
 
         <div className="mt-16 bg-gradient-to-r from-indigo-50 to-blue-50 rounded-xl p-8 md:p-12 shadow-md">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center">
             <div>
               <h3 className="text-2xl font-bold mb-4 text-blue-900">Ready to kickstart your funding journey?</h3>
               <p className="text-gray-700 mb-6 text-lg">
-                Join thousands of startups who've successfully secured funding through Aarly's platform.
+                Pioneers raise first. Secure your funding through Aarly today.
               </p>
               <div className="flex flex-wrap gap-4">
-                <div className="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-base font-semibold shadow-sm">
-                  ₹120Cr+ Raised
-                </div>
                 <div className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-base font-semibold shadow-sm">
                   300+ Investors
                 </div>

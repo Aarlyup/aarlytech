@@ -16,31 +16,22 @@ const Hero: React.FC = () => {
   }, []);
 
   return (
-    <div className="h-screen relative">
+    <div className="min-h-[500px] md:h-screen relative">
       {/* Background Image Layer */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')] bg-cover bg-center"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-700 opacity-60"></div>
+        <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')] bg-center bg-no-repeat object-contain md:bg-cover md:object-cover"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-700" style={{ opacity: 0.9 }}></div>
       </div>
 
       {/* Content Layer */}
-      <div className="relative z-10 h-full flex items-center justify-center pt-[72px]">
+      <div className="relative z-10 h-full flex items-center justify-center pt-[72px] py-16 sm:py-24 md:py-32">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto md:mx-0">
-            <div 
-              data-aos="fade-down"
-              data-aos-delay="100"
-              className="inline-flex items-center px-3 py-1 rounded-full bg-blue-800/30 text-blue-100 text-sm font-medium mb-6"
-            >
-              <span className="w-2 h-2 rounded-full bg-blue-400 mr-2"></span>
-              Discover 300+ funding options for startups
-            </div>
-            
             <h1 
               data-aos="fade-up"
               data-aos-delay="200"
               data-aos-easing="ease-out-cubic"
-              className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-8"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-8"
             >
               Find the right investors, grants, and startup support — <span className="text-blue-300">instantly.</span>
             </h1>
@@ -49,7 +40,7 @@ const Hero: React.FC = () => {
               data-aos="fade-up"
               data-aos-delay="300"
               data-aos-easing="ease-out-cubic"
-              className="text-xl text-blue-100 mb-6 max-w-2xl"
+              className="text-base sm:text-lg md:text-xl text-blue-100 mb-6 max-w-2xl"
             >
               A curated database of 300+ real funding options tailored for Indian & global founders at every stage.
             </p>
@@ -72,7 +63,7 @@ const Hero: React.FC = () => {
             >
               <Button
                 size="lg"
-                className="group"
+                className="group w-full sm:w-auto"
               >
                 <Rocket size={20} className="mr-2 -rotate-[deg]" />
                 Explore Now

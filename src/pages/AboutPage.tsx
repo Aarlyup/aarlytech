@@ -7,21 +7,21 @@ import Button from '../components/ui/Button';
 const AboutPage: React.FC = () => {
   const teamMembers = [
     {
-      name: "Abhinav Dwivedy",
-      role: "Founder & CEO",
-      bio: "Serial entrepreneur with 8+ years in startup ecosystem. Previously founded two successful ventures.",
+      name: "Aarav Mehta",
+      role: "Lead Designer",
+      bio: "Creative visionary with a passion for building beautiful, user-friendly products.",
       image: "/api/placeholder/150/150"
     },
     {
-      name: "Priya Sharma",
-      role: "Head of Product",
-      bio: "Former product manager at leading fintech companies. Expert in user experience and platform design.",
+      name: "Sneha Kapoor",
+      role: "Growth Strategist",
+      bio: "Expert in scaling startups and driving user engagement through data-driven strategies.",
       image: "/api/placeholder/150/150"
     },
     {
-      name: "Rahul Gupta",
-      role: "Head of Partnerships",
-      bio: "15+ years in venture capital and startup investments. Deep network across Indian startup ecosystem.",
+      name: "Rohan Singh",
+      role: "Tech Lead",
+      bio: "Full-stack developer with a knack for solving complex problems and leading agile teams.",
       image: "/api/placeholder/150/150"
     }
   ];
@@ -73,31 +73,19 @@ const AboutPage: React.FC = () => {
         <div className="container mx-auto px-4 max-w-6xl">
           
           {/* Hero Section */}
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full mb-8">
-              <Rocket className="w-10 h-10 text-blue-600" />
-            </div>
-            <h1 className="text-5xl font-bold text-blue-900 mb-6">About Aarly</h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              We're on a mission to democratize startup funding by making investor connections and funding opportunities accessible to every entrepreneur in India and beyond.
-            </p>
-          </div>
-
-          {/* Stats Section */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
-            {stats.map((stat, index) => (
-              <div key={index} className="backdrop-blur-xl bg-white/80 border border-blue-100 shadow-lg rounded-2xl p-6 text-center">
-                <div className="flex justify-center mb-3">
-                  {stat.icon}
-                </div>
-                <div className="text-3xl font-bold text-blue-900 mb-2">{stat.number}</div>
-                <div className="text-gray-600 font-medium">{stat.label}</div>
-              </div>
-            ))}
+          <div className="text-center mb-10 sm:mb-14 md:mb-16 px-2 sm:px-0">
+            <img
+              src="/Screenshot 2025-06-29 140116.png"
+              alt="Aarly Rocket"
+              className="mx-auto mb-6 sm:mb-8 w-20 h-20 sm:w-24 sm:h-24 object-contain drop-shadow-lg rounded-full border-4 border-blue-100 bg-white"
+              style={{ background: 'linear-gradient(135deg, #e0e7ff 0%, #f0f4ff 100%)' }}
+            />
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-blue-900 mb-4 sm:mb-6 tracking-tight drop-shadow-sm">About Aarly</h1>
+            <p className="text-base sm:text-lg md:text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed font-medium px-2">We're on a mission to democratize startup funding by making investor connections and funding opportunities accessible to every entrepreneur in India and beyond.</p>
           </div>
 
           {/* Mission & Vision */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-10 md:mb-16">
             <div className="backdrop-blur-xl bg-white/80 border border-blue-100 shadow-2xl rounded-3xl p-8">
               <div className="flex items-center gap-3 mb-6">
                 <Target className="w-8 h-8 text-blue-600" />
@@ -120,7 +108,7 @@ const AboutPage: React.FC = () => {
           </div>
 
           {/* Our Story */}
-          <div className="backdrop-blur-xl bg-white/80 border border-blue-100 shadow-2xl rounded-3xl p-8 md:p-12 mb-16">
+          <div className="backdrop-blur-xl bg-white/80 border border-blue-100 shadow-2xl rounded-3xl p-5 sm:p-8 md:p-12 mb-10 md:mb-16">
             <h2 className="text-3xl font-bold text-blue-900 mb-6 text-center">Our Story</h2>
             <div className="prose prose-lg max-w-none text-gray-700">
               <p className="text-lg leading-relaxed mb-6">
@@ -136,15 +124,13 @@ const AboutPage: React.FC = () => {
           </div>
 
           {/* Core Values */}
-          <div className="mb-16">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-blue-900 mb-4">Our Core Values</h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                These principles guide everything we do and shape how we serve the startup community.
-              </p>
+          <div className="mb-10 md:mb-16">
+            <div className="text-center mb-8 md:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-blue-900 mb-2 sm:mb-4">Our Core Values</h2>
+              <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">These principles guide everything we do and shape how we serve the startup community.</p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
               {values.map((value, index) => (
                 <div key={index} className="backdrop-blur-xl bg-white/80 border border-blue-100 shadow-lg rounded-2xl p-8">
                   <div className="flex items-center gap-4 mb-4">
@@ -160,15 +146,13 @@ const AboutPage: React.FC = () => {
           </div>
 
           {/* Team Section */}
-          <div className="mb-16">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-blue-900 mb-4">Meet Our Team</h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Passionate individuals working together to transform the startup funding landscape.
-              </p>
+          <div className="mb-10 md:mb-16">
+            <div className="text-center mb-8 md:mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-blue-900 mb-2 sm:mb-4">Meet Our Team</h2>
+              <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">Passionate individuals working together to transform the startup funding landscape.</p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
               {teamMembers.map((member, index) => (
                 <div key={index} className="backdrop-blur-xl bg-white/80 border border-blue-100 shadow-lg rounded-2xl p-6 text-center">
                   <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full mx-auto mb-4 flex items-center justify-center">
@@ -182,54 +166,25 @@ const AboutPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Timeline */}
-          <div className="mb-16">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-blue-900 mb-4">Our Journey</h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Key milestones in our mission to democratize startup funding.
-              </p>
-            </div>
-            
-            <div className="relative">
-              <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-blue-200"></div>
-              <div className="space-y-8">
-                {milestones.map((milestone, index) => (
-                  <div key={index} className={`flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}>
-                    <div className={`w-1/2 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'}`}>
-                      <div className="backdrop-blur-xl bg-white/80 border border-blue-100 shadow-lg rounded-2xl p-6">
-                        <div className="text-2xl font-bold text-blue-600 mb-2">{milestone.year}</div>
-                        <p className="text-gray-700">{milestone.event}</p>
-                      </div>
-                    </div>
-                    <div className="relative flex items-center justify-center w-8 h-8 bg-blue-600 rounded-full border-4 border-white shadow-lg z-10">
-                      <CheckCircle className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="w-1/2"></div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
           {/* CTA Section */}
-          <div className="backdrop-blur-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-3xl p-8 md:p-12 text-center">
-            <h2 className="text-3xl font-bold mb-4">Ready to Start Your Funding Journey?</h2>
-            <p className="text-xl mb-8 opacity-90">
-              Join thousands of entrepreneurs who have found their perfect funding match through Aarly.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/auth">
-                <Button className="bg-white text-blue-600 hover:bg-gray-100 font-semibold px-8 py-3 rounded-lg transition-all flex items-center gap-2">
-                  Get Started Free
-                  <ArrowRight className="w-5 h-5" />
-                </Button>
-              </Link>
-              <Link to="/contact">
-                <Button variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 font-semibold px-8 py-3 rounded-lg transition-all">
-                  Contact Us
-                </Button>
-              </Link>
+          <div className="relative bg-gradient-to-br from-blue-500 via-indigo-500 to-blue-700 rounded-2xl md:rounded-3xl p-6 sm:p-8 md:p-14 text-center shadow-2xl mt-10 md:mt-20 overflow-hidden flex flex-col items-center justify-center">
+            <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px] rounded-2xl md:rounded-3xl pointer-events-none" />
+            <div className="relative z-10 w-full flex flex-col items-center">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-3 sm:mb-4 tracking-tight text-white drop-shadow-lg">Ready to Start Your Funding Journey?</h2>
+              <p className="text-base sm:text-xl md:text-2xl mb-6 sm:mb-10 opacity-95 font-medium text-white drop-shadow-sm">Join thousands of entrepreneurs who have found their perfect funding match through Aarly.</p>
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center w-full max-w-xl">
+                <Link to="/auth" className="flex-1 min-w-[180px]">
+                  <Button className="w-full bg-white text-blue-700 hover:bg-blue-50 hover:text-blue-800 font-bold px-6 sm:px-10 py-3 sm:py-4 rounded-xl shadow-lg transition-all duration-200 text-base sm:text-lg border-2 border-white focus:ring-4 focus:ring-blue-200 flex items-center justify-center gap-2">
+                    Get Started Free
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </Button>
+                </Link>
+                <Link to="/contact" className="flex-1 min-w-[180px]">
+                  <Button className="w-full bg-white text-blue-700 hover:bg-blue-50 hover:text-blue-800 font-bold px-6 sm:px-10 py-3 sm:py-4 rounded-xl shadow-lg transition-all duration-200 text-base sm:text-lg border-2 border-white focus:ring-4 focus:ring-blue-200 flex items-center justify-center gap-2">
+                    <span>Contact Us</span>
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
