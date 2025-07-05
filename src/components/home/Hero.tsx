@@ -16,7 +16,7 @@ const Hero: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-[500px] md:h-screen relative">
+    <div className="min-h-[500px] md:h-screen relative mb-10">
       {/* Background Image Layer */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')] bg-center bg-no-repeat object-contain md:bg-cover md:object-cover"></div>

@@ -170,8 +170,8 @@ const AuthPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-indigo-100 flex flex-col">
-      <header className="w-full bg-white/90 shadow-sm py-4 px-8 flex items-center justify-between fixed top-0 left-0 z-40" style={{backdropFilter: 'blur(8px)'}}>
-        <Logo />
+      <header className="w-full bg-white/90 shadow-sm py-2 px-6 flex items-center fixed top-0 left-0 z-40" style={{backdropFilter: 'blur(8px)'}}>
+        {/* Logo removed to prevent duplicate in auth navbar */}
       </header>
       <div className="flex-1 flex items-center justify-center pt-24 pb-8 px-4">
         <div className="backdrop-blur-xl bg-white/70 border border-blue-100 shadow-2xl rounded-3xl w-full max-w-md p-8">

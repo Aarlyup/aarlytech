@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Lock } from 'lucide-react';
 import Card from '../ui/Card';
 import Button from '../ui/Button';
 import { useNavigate } from 'react-router-dom';
+import gsap from 'gsap';
 
 const InvestorPreview = ({ blurred = true }) => {
   return (
@@ -90,8 +91,48 @@ const GrantPreview = ({ blurred = true }) => {
   );
 };
 
+const previewCards = [
+  <InvestorPreview blurred={true} key="investor1" />, 
+  <InvestorPreview blurred={true} key="investor2" />, 
+  <GrantPreview blurred={true} key="grant1" />
+];
+
 const PreviewSection: React.FC = () => {
   const navigate = useNavigate();
+  const [current, setCurrent] = useState(0);
+  const cardRefs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)];
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // GSAP animation for card transitions (mobile only)
+  useEffect(() => {
+    cardRefs.forEach((ref, idx) => {
+      if (ref.current) {
+        gsap.set(ref.current, { x: idx === current ? 0 : 100, scale: idx === current ? 1 : 0.85, opacity: idx === current ? 1 : 0 });
+      }
+    });
+    if (cardRefs[current].current) {
+      gsap.to(cardRefs[current].current, { x: 0, scale: 1, opacity: 1, duration: 0.7, ease: 'power3.out' });
+    }
+    cardRefs.forEach((ref, idx) => {
+      if (idx !== current && ref.current) {
+        gsap.to(ref.current, { x: -100, scale: 0.85, opacity: 0, duration: 0.7, ease: 'power3.in' });
+      }
+    });
+  }, [current]);
+
+  // Auto-loop
+  useEffect(() => {
+    timeoutRef.current = setTimeout(() => {
+      setCurrent((prev) => (prev + 1) % previewCards.length);
+    }, 2500);
+    return () => { if (timeoutRef.current) clearTimeout(timeoutRef.current); };
+  }, [current]);
+
+  // Manual navigation (optional)
+  const goTo = (idx: number) => {
+    setCurrent(idx);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+  };
 
   return (
     <section className="py-12 sm:py-16 md:py-20 bg-gray-50 mt-16">
@@ -102,17 +143,40 @@ const PreviewSection: React.FC = () => {
             Get access to our curated list of investors, grants, and government schemes to accelerate your startup journey.
           </p>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 gap-y-8 mb-12">
-          {/* Sample Investors */}
+        {/* Carousel for small screens */}
+        <div className="block md:hidden">
+          <div className="flex flex-col items-center w-full">
+            <div className="flex justify-center items-center min-h-[340px] w-full">
+              {previewCards.map((card, idx) => (
+                <div
+                  key={idx}
+                  ref={cardRefs[idx]}
+                  className={`mx-auto w-full max-w-xs sm:max-w-sm transition-all duration-300`}
+                  style={{ display: idx === current ? 'block' : 'none' }}
+                >
+                  {card}
+                </div>
+              ))}
+            </div>
+            {/* Manual navigation dots */}
+            <div className="flex gap-2 mt-6 justify-center">
+              {previewCards.map((_, idx) => (
+                <button
+                  key={idx}
+                  className={`w-2.5 h-2.5 rounded-full ${idx === current ? 'bg-blue-600' : 'bg-gray-300'} transition-all`}
+                  onClick={() => goTo(idx)}
+                  aria-label={`Go to card ${idx + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+        {/* 3-column grid for md+ screens */}
+        <div className="hidden md:grid grid-cols-3 gap-4 md:gap-6 gap-y-8 mb-12">
           <InvestorPreview blurred={true} />
           <InvestorPreview blurred={true} />
-          
-          {/* Sample Grant */}
           <GrantPreview blurred={true} />
         </div>
-
-        {/* Submit Resource button and text removed as requested */}
       </div>
     </section>
   );

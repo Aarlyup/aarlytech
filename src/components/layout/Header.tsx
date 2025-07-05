@@ -12,6 +12,7 @@ const Header: React.FC = () => {
   const { mobileMenuOpen, setMobileMenuOpen } = useUi();
   const { user, logout, isAuthenticated } = useAuth();
   const isHomePage = location.pathname === '/';
+  const isAuthPage = location.pathname === '/auth';
   const [isScrolled, setIsScrolled] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
 
@@ -58,12 +59,12 @@ const Header: React.FC = () => {
           ? 'bg-white/95 backdrop-blur-sm shadow-lg' 
           : 'bg-transparent'
     }`}>
-      {/* More visible white strip at the very top, only on main page */}
-      {isHomePage && (
+      {/* More visible white strip at the very top, only on main page and not on auth page */}
+      {isHomePage && !isAuthPage && (
         <div className="w-full h-1 bg-white shadow-md" style={{ minHeight: '2px' }}></div>
       )}
       <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-        <Logo />
+        <Logo imgClassName="h-14 md:h-16 w-auto" />
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-8 w-auto">
           {isHomePage ? (
@@ -149,7 +150,8 @@ const Header: React.FC = () => {
                   </Link>
                 </>
               )}
-              {!isHomePage && !isAuthenticated && (
+              {/* Remove Home button on auth page */}
+              {!isHomePage && !isAuthenticated && !isAuthPage && (
                 <button
                   onClick={scrollToTop}
                   className="flex items-center space-x-1 transition-colors text-gray-700 hover:text-blue-600"

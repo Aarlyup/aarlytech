@@ -2,6 +2,7 @@ import React from 'react';
 import Hero from '../components/home/Hero';
 import PreviewSection from '../components/home/PreviewSection';
 import HowItWorks from '../components/home/HowItWorks';
+import Pricing from '../components/home/Pricing';
 import ScrollToTop from '../components/ui/ScrollToTop';
 import { Helmet } from 'react-helmet-async';
 
@@ -21,6 +22,7 @@ const HomePage: React.FC = () => {
       <Hero />
       <PreviewSection />
       <HowItWorks />
+      <Pricing />
       <ScrollToTop />
     </>
   );

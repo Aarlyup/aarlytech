@@ -35,7 +35,7 @@ const Sidebar: React.FC = () => {
     <aside className="fixed top-16 left-0 w-64 h-[calc(100vh-4rem)] bg-gradient-to-b from-gray-50 via-white to-gray-100 border-r border-gray-200 shadow-sm z-30 flex flex-col">
       {/* Top: Logo and App Name */}
       <div className="flex items-center gap-3 px-6 pt-1">
-        <Logo className="py-4" />
+        <Logo className="py-4" imgClassName="h-10 md:h-12 w-auto" />
       </div>
 
       {/* Nav Items */}

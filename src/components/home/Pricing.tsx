@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom';
 
 const pricingPlans = [
   {
-    name: 'Free',
+    name: '',
     description: 'Everything you need to get started',
     price: '₹0',
-    duration: 'forever (for now 😉)',
+    duration: '',
     features: [
       'Unlimited investor profiles',
       'Full access to all grants & schemes',
@@ -30,7 +30,7 @@ const Pricing: React.FC = () => {
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">Simple, Transparent Pricing</h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            We believe in making funding accessible to everyone. That's why it's completely free!
+            We believe in making funding accessible to everyone.
           </p>
         </div>
 
@@ -51,7 +51,7 @@ const Pricing: React.FC = () => {
                 
                 <div className="mb-6">
                   <span className="text-4xl font-bold">{plan.price}</span>
-                  <span className="text-gray-500 text-sm">/{plan.duration}</span>
+                  {plan.duration && <span className="text-gray-500 text-sm">/{plan.duration}</span>}
                 </div>
                 
                 <ul className="space-y-3 mb-8">
@@ -76,11 +76,6 @@ const Pricing: React.FC = () => {
           ))}
         </div>
 
-        <div className="mt-16 text-center">
-          <p className="text-gray-700 text-lg font-medium mt-8 mb-2">
-            No login required. No credit card needed. Just click and explore! <span role="img" aria-label="rocket">🚀</span>
-          </p>
-        </div>
       </div>
     </section>
   );
