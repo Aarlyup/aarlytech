@@ -142,11 +142,10 @@ const verifyEmail = async (req, res) => {
 
     // Set HTTP-only cookie
     const cookieOptions = {
-      domain: '.aarly.in',
       expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
+      sameSite: 'none'
     };
 
     res.cookie('token', token, cookieOptions);
@@ -302,11 +301,10 @@ const login = async (req, res) => {
 
     // Set HTTP-only cookie
     const cookieOptions = {
-      domain: '.aarly.in',
       expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
+      sameSite: 'none'
     };
 
     res.cookie('token', token, cookieOptions);
@@ -342,7 +340,7 @@ const logout = async (req, res) => {
       expires: new Date(0),
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
+      sameSite: 'none'
     });
 
     res.status(200).json({
@@ -396,11 +394,10 @@ const googleSuccess = async (req, res) => {
 
     // Set HTTP-only cookie
     const cookieOptions = {
-      domain: '.aarly.in',
       expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
+      sameSite: 'none'
     };
 
     res.cookie('token', token, cookieOptions);
