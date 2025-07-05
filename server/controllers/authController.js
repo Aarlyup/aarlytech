@@ -145,7 +145,7 @@ const verifyEmail = async (req, res) => {
       expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none'
+      sameSite: 'lax'
     };
 
     res.cookie('token', token, cookieOptions);
@@ -304,7 +304,7 @@ const login = async (req, res) => {
       expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none'
+      sameSite: 'lax'
     };
 
     res.cookie('token', token, cookieOptions);
@@ -340,7 +340,7 @@ const logout = async (req, res) => {
       expires: new Date(0),
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none'
+      sameSite: 'lax'
     });
 
     res.status(200).json({
@@ -397,7 +397,7 @@ const googleSuccess = async (req, res) => {
       expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none'
+      sameSite: 'lax'
     };
 
     res.cookie('token', token, cookieOptions);
