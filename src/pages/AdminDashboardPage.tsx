@@ -4,6 +4,7 @@ import {
   Users, 
   Newspaper, 
   MessageCircle, 
+  Briefcase,
   Plus, 
   Edit, 
   Trash2, 
@@ -67,9 +68,24 @@ interface Contact {
   createdAt: string;
 }
 
+interface FundingItem {
+  _id: string;
+  name: string;
+  [key: string]: any;
+}
+
+const fundingCategories = [
+  { key: 'angel-investors', label: 'Angel Investors' },
+  { key: 'venture-capital', label: 'Venture Capital' },
+  { key: 'micro-vcs', label: 'Micro VCs' },
+  { key: 'incubators', label: 'Incubators' },
+  { key: 'accelerators', label: 'Accelerators' },
+  { key: 'govt-grants', label: 'Govt Grants' }
+];
+
 const AdminDashboardPage: React.FC = () => {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<'investor-match' | 'news' | 'contacts'>('investor-match');
+  const [activeTab, setActiveTab] = useState<'investor-match' | 'news' | 'contacts' | 'funding'>('investor-match');
   const [loading, setLoading] = useState(false);
 
   // Investor Match State
@@ -105,6 +121,13 @@ const AdminDashboardPage: React.FC = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [replyMessage, setReplyMessage] = useState('');
+
+  // Funding State
+  const [fundingItems, setFundingItems] = useState<FundingItem[]>([]);
+  const [selectedFundingCategory, setSelectedFundingCategory] = useState('angel-investors');
+  const [showFundingForm, setShowFundingForm] = useState(false);
+  const [editingFundingItem, setEditingFundingItem] = useState<FundingItem | null>(null);
+  const [fundingForm, setFundingForm] = useState<any>({});
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -172,6 +195,8 @@ const AdminDashboardPage: React.FC = () => {
         await loadNews();
       } else if (activeTab === 'contacts') {
         await loadContacts();
+      } else if (activeTab === 'funding') {
+        await loadFundingItems();
       }
     } catch (error) {
       console.error('Error loading data:', error);
@@ -219,6 +244,20 @@ const AdminDashboardPage: React.FC = () => {
       }
     } catch (error) {
       console.error('Error loading contacts:', error);
+    }
+  };
+
+  const loadFundingItems = async () => {
+    try {
+      const response = await fetch(`${API_URL}/funding/admin/${selectedFundingCategory}`, {
+        credentials: 'include'
+      });
+      const data = await response.json();
+      if (data.success) {
+        setFundingItems(data.data);
+      }
+    } catch (error) {
+      console.error('Error loading funding items:', error);
     }
   };
 
@@ -410,6 +449,84 @@ const AdminDashboardPage: React.FC = () => {
     }
   };
 
+  // Funding Functions
+  const handleFundingSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const url = editingFundingItem 
+        ? `${API_URL}/funding/admin/${selectedFundingCategory}/${editingFundingItem._id}`
+        : `${API_URL}/funding/admin/${selectedFundingCategory}`;
+      
+      const method = editingFundingItem ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(fundingForm),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        await loadFundingItems();
+        setShowFundingForm(false);
+        setEditingFundingItem(null);
+        setFundingForm({});
+      } else {
+        alert(data.message || 'Failed to save funding item');
+      }
+    } catch (error) {
+      console.error('Error saving funding item:', error);
+      alert('Failed to save funding item');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteFundingItem = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this item?')) return;
+
+    setLoading(true);
+    try {
+      const response = await fetch(`${API_URL}/funding/admin/${selectedFundingCategory}/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        await loadFundingItems();
+      } else {
+        alert(data.message || 'Failed to delete item');
+      }
+    } catch (error) {
+      console.error('Error deleting funding item:', error);
+      alert('Failed to delete item');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Reset funding form when category or editing item changes
+  useEffect(() => {
+    if (editingFundingItem) {
+      setFundingForm({ ...editingFundingItem });
+    } else {
+      setFundingForm({});
+    }
+  }, [editingFundingItem, selectedFundingCategory]);
+
+  // Load funding items when category changes
+  useEffect(() => {
+    if (activeTab === 'funding') {
+      loadFundingItems();
+    }
+  }, [selectedFundingCategory]);
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'new': return 'bg-blue-100 text-blue-800';
@@ -477,6 +594,17 @@ const AdminDashboardPage: React.FC = () => {
               >
                 <MessageCircle className="w-5 h-5 inline mr-2" />
                 Contacts
+              </button>
+              <button
+                onClick={() => setActiveTab('funding')}
+                className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === 'funding'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                <Briefcase className="w-5 h-5 inline mr-2" />
+                Funding
               </button>
             </nav>
           </div>
@@ -662,6 +790,115 @@ const AdminDashboardPage: React.FC = () => {
                       </div>
                     </div>
                   ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Funding Tab */}
+          {activeTab === 'funding' && (
+            <div>
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-semibold">Funding Management</h2>
+                <Button onClick={() => setShowFundingForm(true)}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Item
+                </Button>
+              </div>
+
+              {/* Category Selector */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                <select
+                  value={selectedFundingCategory}
+                  onChange={(e) => setSelectedFundingCategory(e.target.value)}
+                  className="w-full max-w-xs p-2 border rounded-lg"
+                >
+                  {fundingCategories.map((cat) => (
+                    <option key={cat.key} value={cat.key}>
+                      {cat.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {loading ? (
+                <div className="text-center py-8">Loading...</div>
+              ) : (
+                <div className="space-y-4">
+                  {fundingItems.map((item) => (
+                    <div key={item._id} className="border rounded-lg p-4 flex justify-between items-start">
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-lg mb-2">{item.name}</h3>
+                        <div className="text-sm text-gray-600 space-y-1">
+                          {selectedFundingCategory === 'angel-investors' && (
+                            <>
+                              <p><span className="font-medium">City:</span> {item.city}</p>
+                              <p><span className="font-medium">Country:</span> {item.country}</p>
+                              <p><span className="font-medium">Ticket Size:</span> ₹{item.ticketSize?.toLocaleString()}</p>
+                            </>
+                          )}
+                          {selectedFundingCategory === 'venture-capital' && (
+                            <>
+                              <p><span className="font-medium">Head Office:</span> {item.headOffice}</p>
+                              <p><span className="font-medium">Fund Size:</span> ₹{item.fundSize?.toLocaleString()}</p>
+                              <p><span className="font-medium">Avg Ticket:</span> ₹{item.avgTicketSize?.toLocaleString()}</p>
+                            </>
+                          )}
+                          {selectedFundingCategory === 'micro-vcs' && (
+                            <>
+                              <p><span className="font-medium">Location:</span> {item.location}</p>
+                              <p><span className="font-medium">Fund Size:</span> ₹{item.fundSize?.toLocaleString()}</p>
+                              <p><span className="font-medium">Check Size:</span> ₹{item.checkSize?.toLocaleString()}</p>
+                            </>
+                          )}
+                          {selectedFundingCategory === 'incubators' && (
+                            <>
+                              <p><span className="font-medium">Location:</span> {item.location}</p>
+                              <p><span className="font-medium">Funding Support:</span> {item.fundingSupport}</p>
+                            </>
+                          )}
+                          {selectedFundingCategory === 'accelerators' && (
+                            <>
+                              <p><span className="font-medium">HQ:</span> {item.hq}</p>
+                              <p><span className="font-medium">Funding Offered:</span> {item.fundingOffered}</p>
+                            </>
+                          )}
+                          {selectedFundingCategory === 'govt-grants' && (
+                            <>
+                              <p><span className="font-medium">Authority:</span> {item.authority}</p>
+                              <p><span className="font-medium">Grant Size:</span> ₹{item.grantSize?.toLocaleString()}</p>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setEditingFundingItem(item);
+                            setShowFundingForm(true);
+                          }}
+                        >
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="text-red-600 hover:text-red-700"
+                          onClick={() => handleDeleteFundingItem(item._id)}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                  {fundingItems.length === 0 && (
+                    <div className="text-center py-8 text-gray-500">
+                      No items found for this category.
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -909,6 +1146,298 @@ const AdminDashboardPage: React.FC = () => {
                   </Button>
                   <Button type="submit" disabled={loading}>
                     {loading ? 'Saving...' : editingNews ? 'Update' : 'Create'}
+                  </Button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Funding Form Modal */}
+        {showFundingForm && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold">
+                  {editingFundingItem ? 'Edit' : 'Add'} {fundingCategories.find(c => c.key === selectedFundingCategory)?.label}
+                </h3>
+                <button
+                  onClick={() => {
+                    setShowFundingForm(false);
+                    setEditingFundingItem(null);
+                    setFundingForm({});
+                  }}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              
+              <form onSubmit={handleFundingSubmit} className="space-y-4">
+                {/* Common fields */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                  <input
+                    type="text"
+                    value={fundingForm.name || ''}
+                    onChange={(e) => setFundingForm({...fundingForm, name: e.target.value})}
+                    className="w-full p-2 border rounded-lg"
+                    required
+                  />
+                </div>
+
+                {/* Category-specific fields */}
+                {selectedFundingCategory === 'angel-investors' && (
+                  <>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">LinkedIn Profile URL</label>
+                        <input
+                          type="url"
+                          value={fundingForm.linkedinProfileUrl || ''}
+                          onChange={(e) => setFundingForm({...fundingForm, linkedinProfileUrl: e.target.value})}
+                          className="w-full p-2 border rounded-lg"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
+                        <input
+                          type="text"
+                          value={fundingForm.city || ''}
+                          onChange={(e) => setFundingForm({...fundingForm, city: e.target.value})}
+                          className="w-full p-2 border rounded-lg"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Country</label>
+                        <input
+                          type="text"
+                          value={fundingForm.country || ''}
+                          onChange={(e) => setFundingForm({...fundingForm, country: e.target.value})}
+                          className="w-full p-2 border rounded-lg"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Ticket Size (₹)</label>
+                        <input
+                          type="number"
+                          value={fundingForm.ticketSize || ''}
+                          onChange={(e) => setFundingForm({...fundingForm, ticketSize: parseInt(e.target.value)})}
+                          className="w-full p-2 border rounded-lg"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Prefer Founder Profile</label>
+                      <input
+                        type="text"
+                        value={fundingForm.preferFounderProfile || ''}
+                        onChange={(e) => setFundingForm({...fundingForm, preferFounderProfile: e.target.value})}
+                        className="w-full p-2 border rounded-lg"
+                        placeholder="e.g., College founders, solo founders ok"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Portfolio Highlights</label>
+                      <textarea
+                        value={fundingForm.portfolioHighlights || ''}
+                        onChange={(e) => setFundingForm({...fundingForm, portfolioHighlights: e.target.value})}
+                        className="w-full p-2 border rounded-lg h-24"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Contact</label>
+                      <input
+                        type="text"
+                        value={fundingForm.contact || ''}
+                        onChange={(e) => setFundingForm({...fundingForm, contact: e.target.value})}
+                        className="w-full p-2 border rounded-lg"
+                        placeholder="Email or LinkedIn profile"
+                        required
+                      />
+                    </div>
+                  </>
+                )}
+
+                {selectedFundingCategory === 'venture-capital' && (
+                  <>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Website URL</label>
+                        <input
+                          type="url"
+                          value={fundingForm.websiteUrl || ''}
+                          onChange={(e) => setFundingForm({...fundingForm, websiteUrl: e.target.value})}
+                          className="w-full p-2 border rounded-lg"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Head Office</label>
+                        <input
+                          type="text"
+                          value={fundingForm.headOffice || ''}
+                          onChange={(e) => setFundingForm({...fundingForm, headOffice: e.target.value})}
+                          className="w-full p-2 border rounded-lg"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Fund Size (₹)</label>
+                        <input
+                          type="number"
+                          value={fundingForm.fundSize || ''}
+                          onChange={(e) => setFundingForm({...fundingForm, fundSize: parseInt(e.target.value)})}
+                          className="w-full p-2 border rounded-lg"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Avg Ticket Size (₹)</label>
+                        <input
+                          type="number"
+                          value={fundingForm.avgTicketSize || ''}
+                          onChange={(e) => setFundingForm({...fundingForm, avgTicketSize: parseInt(e.target.value)})}
+                          className="w-full p-2 border rounded-lg"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Application Process</label>
+                        <select
+                          value={fundingForm.applicationProcess || ''}
+                          onChange={(e) => setFundingForm({...fundingForm, applicationProcess: e.target.value})}
+                          className="w-full p-2 border rounded-lg"
+                        >
+                          <option value="">Select Process</option>
+                          <option value="Warm intro">Warm intro</option>
+                          <option value="Direct pitch">Direct pitch</option>
+                          <option value="Online application">Online application</option>
+                          <option value="Referral only">Referral only</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Portfolio Highlights</label>
+                      <textarea
+                        value={fundingForm.portfolioHighlights || ''}
+                        onChange={(e) => setFundingForm({...fundingForm, portfolioHighlights: e.target.value})}
+                        className="w-full p-2 border rounded-lg h-24"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Investment Thesis URL</label>
+                      <input
+                        type="url"
+                        value={fundingForm.investmentThesis || ''}
+                        onChange={(e) => setFundingForm({...fundingForm, investmentThesis: e.target.value})}
+                        className="w-full p-2 border rounded-lg"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Contact</label>
+                      <input
+                        type="text"
+                        value={fundingForm.contact || ''}
+                        onChange={(e) => setFundingForm({...fundingForm, contact: e.target.value})}
+                        className="w-full p-2 border rounded-lg"
+                        placeholder="Email or LinkedIn profile"
+                        required
+                      />
+                    </div>
+                  </>
+                )}
+
+                {/* Add similar forms for other categories... */}
+                {selectedFundingCategory === 'govt-grants' && (
+                  <>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Authority</label>
+                        <select
+                          value={fundingForm.authority || ''}
+                          onChange={(e) => setFundingForm({...fundingForm, authority: e.target.value})}
+                          className="w-full p-2 border rounded-lg"
+                          required
+                        >
+                          <option value="">Select Authority</option>
+                          <option value="DPIIT">DPIIT</option>
+                          <option value="DST">DST</option>
+                          <option value="MSME">MSME</option>
+                          <option value="BIRAC">BIRAC</option>
+                          <option value="SERB">SERB</option>
+                          <option value="CSIR">CSIR</option>
+                          <option value="Other">Other</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Grant Size (₹)</label>
+                        <input
+                          type="number"
+                          value={fundingForm.grantSize || ''}
+                          onChange={(e) => setFundingForm({...fundingForm, grantSize: parseInt(e.target.value)})}
+                          className="w-full p-2 border rounded-lg"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Eligibility</label>
+                      <textarea
+                        value={fundingForm.eligibility || ''}
+                        onChange={(e) => setFundingForm({...fundingForm, eligibility: e.target.value})}
+                        className="w-full p-2 border rounded-lg h-24"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">How to Apply</label>
+                      <textarea
+                        value={fundingForm.howToApply || ''}
+                        onChange={(e) => setFundingForm({...fundingForm, howToApply: e.target.value})}
+                        className="w-full p-2 border rounded-lg h-24"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Timelines</label>
+                      <input
+                        type="text"
+                        value={fundingForm.timelines || ''}
+                        onChange={(e) => setFundingForm({...fundingForm, timelines: e.target.value})}
+                        className="w-full p-2 border rounded-lg"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Contact</label>
+                      <input
+                        type="text"
+                        value={fundingForm.contact || ''}
+                        onChange={(e) => setFundingForm({...fundingForm, contact: e.target.value})}
+                        className="w-full p-2 border rounded-lg"
+                        required
+                      />
+                    </div>
+                  </>
+                )}
+
+                <div className="flex gap-2 justify-end">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setShowFundingForm(false);
+                      setEditingFundingItem(null);
+                      setFundingForm({});
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit" disabled={loading}>
+                    {loading ? 'Saving...' : editingFundingItem ? 'Update' : 'Create'}
                   </Button>
                 </div>
               </form>
