@@ -16,7 +16,7 @@ const models = {
   'govt-grants': GovtGrant
 };
 
-// Get all items for a category
+// Get all items for a category (Admin)
 exports.getFundingItems = async (req, res) => {
   try {
     const { category } = req.params;
@@ -52,6 +52,7 @@ exports.getFundingItems = async (req, res) => {
       }
     });
   } catch (error) {
+    console.error('Get funding items error:', error);
     res.status(500).json({
       success: false,
       message: error.message
@@ -85,6 +86,7 @@ exports.getFundingItem = async (req, res) => {
       data: item
     });
   } catch (error) {
+    console.error('Get funding item error:', error);
     res.status(500).json({
       success: false,
       message: error.message
@@ -113,7 +115,46 @@ exports.createFundingItem = async (req, res) => {
       });
     }
 
-    const item = new Model(req.body);
+    // Process the data based on category
+    const processedData = { ...req.body };
+    
+    // Convert comma-separated strings to arrays for specific fields
+    const arrayFields = {
+      'angel-investors': ['investCategory', 'stage'],
+      'venture-capital': ['stageFocus', 'sectorFocus'],
+      'micro-vcs': ['stage', 'sector'],
+      'incubators': [],
+      'accelerators': ['stage', 'sectors'],
+      'govt-grants': ['stage', 'documentsRequired']
+    };
+
+    if (arrayFields[category]) {
+      arrayFields[category].forEach(field => {
+        if (processedData[field] && typeof processedData[field] === 'string') {
+          processedData[field] = processedData[field].split(',').map(s => s.trim()).filter(Boolean);
+        }
+      });
+    }
+
+    // Convert numeric fields
+    const numericFields = {
+      'angel-investors': ['ticketSize'],
+      'venture-capital': ['fundSize', 'avgTicketSize'],
+      'micro-vcs': ['fundSize', 'checkSize'],
+      'incubators': [],
+      'accelerators': [],
+      'govt-grants': ['grantSize']
+    };
+
+    if (numericFields[category]) {
+      numericFields[category].forEach(field => {
+        if (processedData[field]) {
+          processedData[field] = Number(processedData[field]);
+        }
+      });
+    }
+
+    const item = new Model(processedData);
     await item.save();
 
     res.status(201).json({
@@ -122,6 +163,7 @@ exports.createFundingItem = async (req, res) => {
       message: 'Item created successfully'
     });
   } catch (error) {
+    console.error('Create funding item error:', error);
     res.status(500).json({
       success: false,
       message: error.message
@@ -142,9 +184,46 @@ exports.updateFundingItem = async (req, res) => {
       });
     }
 
+    // Process the data same as create
+    const processedData = { ...req.body };
+    
+    const arrayFields = {
+      'angel-investors': ['investCategory', 'stage'],
+      'venture-capital': ['stageFocus', 'sectorFocus'],
+      'micro-vcs': ['stage', 'sector'],
+      'incubators': [],
+      'accelerators': ['stage', 'sectors'],
+      'govt-grants': ['stage', 'documentsRequired']
+    };
+
+    if (arrayFields[category]) {
+      arrayFields[category].forEach(field => {
+        if (processedData[field] && typeof processedData[field] === 'string') {
+          processedData[field] = processedData[field].split(',').map(s => s.trim()).filter(Boolean);
+        }
+      });
+    }
+
+    const numericFields = {
+      'angel-investors': ['ticketSize'],
+      'venture-capital': ['fundSize', 'avgTicketSize'],
+      'micro-vcs': ['fundSize', 'checkSize'],
+      'incubators': [],
+      'accelerators': [],
+      'govt-grants': ['grantSize']
+    };
+
+    if (numericFields[category]) {
+      numericFields[category].forEach(field => {
+        if (processedData[field]) {
+          processedData[field] = Number(processedData[field]);
+        }
+      });
+    }
+
     const item = await Model.findByIdAndUpdate(
       id,
-      req.body,
+      processedData,
       { new: true, runValidators: true }
     );
 
@@ -161,6 +240,7 @@ exports.updateFundingItem = async (req, res) => {
       message: 'Item updated successfully'
     });
   } catch (error) {
+    console.error('Update funding item error:', error);
     res.status(500).json({
       success: false,
       message: error.message
@@ -195,6 +275,7 @@ exports.deleteFundingItem = async (req, res) => {
       message: 'Item deleted successfully'
     });
   } catch (error) {
+    console.error('Delete funding item error:', error);
     res.status(500).json({
       success: false,
       message: error.message
@@ -220,7 +301,10 @@ exports.getPublicFundingItems = async (req, res) => {
     
     // Add search functionality
     if (search) {
-      filter.$text = { $search: search };
+      filter.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } }
+      ];
     }
 
     // Add category-specific filters
@@ -228,6 +312,8 @@ exports.getPublicFundingItems = async (req, res) => {
       if (filters[key] && filters[key] !== '') {
         if (Array.isArray(filters[key])) {
           filter[key] = { $in: filters[key] };
+        } else if (typeof filters[key] === 'string' && filters[key].includes(',')) {
+          filter[key] = { $in: filters[key].split(',') };
         } else {
           filter[key] = { $regex: filters[key], $options: 'i' };
         }
@@ -251,6 +337,7 @@ exports.getPublicFundingItems = async (req, res) => {
       }
     });
   } catch (error) {
+    console.error('Get public funding items error:', error);
     res.status(500).json({
       success: false,
       message: error.message
