@@ -55,7 +55,7 @@ const acceleratorSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Index for better search performance
+// Index for better search performance (without array fields in text index)
 acceleratorSchema.index({ name: 'text', hq: 'text' });
 
 module.exports = mongoose.model('AcceleratorNew', acceleratorSchema);

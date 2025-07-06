@@ -172,8 +172,8 @@ exports.getNews = async (req, res) => {
 // Create news
 exports.createNews = async (req, res) => {
   try {
-    console.log('Create news request body:', req.body);
-    console.log('Create news request user:', req.user);
+    console.log('Create news request body:', JSON.stringify(req.body));
+    console.log('Create news request user:', JSON.stringify(req.user));
     
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -205,7 +205,7 @@ exports.createNews = async (req, res) => {
         url: result.secure_url,
         publicId: result.public_id
       },
-      author: req.user._id.toString()
+      author: req.user._id
     };
 
     const news = new News(newsData);
@@ -229,8 +229,8 @@ exports.createNews = async (req, res) => {
 // Update news
 exports.updateNews = async (req, res) => {
   try {
-    console.log('Update news request body:', req.body);
-    console.log('Update news request user:', req.user);
+    console.log('Update news request body:', JSON.stringify(req.body));
+    console.log('Update news request user:', JSON.stringify(req.user));
     
     const news = await News.findById(req.params.id);
 
@@ -244,7 +244,7 @@ exports.updateNews = async (req, res) => {
     let updateData = { ...req.body };
 
     // If new image is uploaded
-    if (req.file) {
+    if (req.file && req.file.buffer) {
       // Delete old image from Cloudinary
       if (news.image.publicId) {
         await cloudinary.uploader.destroy(news.image.publicId);

@@ -97,7 +97,7 @@ exports.getFundingItem = async (req, res) => {
 // Create new item
 exports.createFundingItem = async (req, res) => {
   try {
-    console.log('Create funding item request body:', req.body);
+    console.log('Create funding item request body:', JSON.stringify(req.body));
     console.log('Category:', req.params.category);
     
     const errors = validationResult(req);
@@ -120,6 +120,7 @@ exports.createFundingItem = async (req, res) => {
 
     // Process the data based on category
     const processedData = { ...req.body };
+    console.log('Initial processed data:', JSON.stringify(processedData));
     
     try {
       // Convert comma-separated strings to arrays for specific fields
@@ -132,13 +133,13 @@ exports.createFundingItem = async (req, res) => {
         'govt-grants': ['stage', 'documentsRequired']
       };
   
+      // Always initialize array fields as empty arrays
       if (arrayFields[category]) {
         arrayFields[category].forEach(field => {
-          if (processedData[field] && typeof processedData[field] === 'string') {
-            processedData[field] = processedData[field].split(',').map(s => s.trim()).filter(Boolean);
-          } else if (!processedData[field]) {
-            // Initialize as empty array if not provided
+          if (!processedData[field]) {
             processedData[field] = [];
+          } else if (typeof processedData[field] === 'string') {
+            processedData[field] = processedData[field].split(',').map(s => s.trim()).filter(Boolean);
           }
         });
       }
@@ -156,15 +157,18 @@ exports.createFundingItem = async (req, res) => {
       'govt-grants': ['grantSize']
     };
 
+    // Convert numeric fields
     if (numericFields[category] && numericFields[category].length > 0) {
       numericFields[category].forEach(field => {
         if (processedData[field]) {
           processedData[field] = Number(processedData[field]);
+        } else {
+          processedData[field] = 0; // Default to 0 if not provided
         }
       });
     }
 
-    console.log('Processed data:', processedData);
+    console.log('Final processed data:', JSON.stringify(processedData));
 
     const item = new Model(processedData);
     await item.save();
@@ -186,7 +190,7 @@ exports.createFundingItem = async (req, res) => {
 // Update item
 exports.updateFundingItem = async (req, res) => {
   try {
-    console.log('Update funding item request body:', req.body);
+    console.log('Update funding item request body:', JSON.stringify(req.body));
     
     const { category, id } = req.params;
     
@@ -201,6 +205,8 @@ exports.updateFundingItem = async (req, res) => {
     // Process the data same as create
     let processedData = { ...req.body };
     
+    console.log('Initial processed data for update:', JSON.stringify(processedData));
+    
     try {
       const arrayFields = {
         'angel-investors': ['investCategory', 'stage'],
@@ -213,11 +219,10 @@ exports.updateFundingItem = async (req, res) => {
   
       if (arrayFields[category]) {
         arrayFields[category].forEach(field => {
-          if (processedData[field] && typeof processedData[field] === 'string') {
-            processedData[field] = processedData[field].split(',').map(s => s.trim()).filter(Boolean);
-          } else if (!processedData[field]) {
-            // Initialize as empty array if not provided
+          if (!processedData[field]) {
             processedData[field] = [];
+          } else if (typeof processedData[field] === 'string') {
+            processedData[field] = processedData[field].split(',').map(s => s.trim()).filter(Boolean);
           }
         });
       }
@@ -238,11 +243,13 @@ exports.updateFundingItem = async (req, res) => {
       numericFields[category].forEach(field => {
         if (processedData[field]) {
           processedData[field] = Number(processedData[field]);
+        } else {
+          processedData[field] = 0; // Default to 0 if not provided
         }
       });
     }
 
-    console.log('Processed data for update:', processedData);
+    console.log('Final processed data for update:', JSON.stringify(processedData));
 
     const item = await Model.findByIdAndUpdate(
       id,

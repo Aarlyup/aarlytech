@@ -56,7 +56,7 @@ const ventureCapitalSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Index for better search performance
+// Index for better search performance (without array fields in text index)
 ventureCapitalSchema.index({ name: 'text', headOffice: 'text' });
 
 module.exports = mongoose.model('VentureCapital', ventureCapitalSchema);

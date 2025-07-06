@@ -47,7 +47,7 @@ const microVCSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Index for better search performance
+// Index for better search performance (without array fields in text index)
 microVCSchema.index({ name: 'text', location: 'text' });
 
 module.exports = mongoose.model('MicroVCNew', microVCSchema);

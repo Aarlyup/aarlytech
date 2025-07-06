@@ -59,7 +59,7 @@ const govtGrantSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Index for better search performance
+// Index for better search performance (without array fields in text index)
 govtGrantSchema.index({ name: 'text', authority: 'text' });
 
 module.exports = mongoose.model('GovtGrant', govtGrantSchema);
