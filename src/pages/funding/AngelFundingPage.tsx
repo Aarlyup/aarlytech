@@ -31,6 +31,8 @@ const AngelFundingPage: React.FC = () => {
   const loadAngels = async () => {
     try {
       setLoading(true);
+      console.log('Loading Angels with search:', search);
+      
       const params = new URLSearchParams();
       if (search) params.append('search', search);
       
@@ -39,11 +41,17 @@ const AngelFundingPage: React.FC = () => {
       });
       const data = await response.json();
       
+      console.log('Angel data response:', data);
+      
       if (data.success) {
         setAngels(data.data);
+      } else {
+        console.error('Failed to load Angels:', data.message);
+        setAngels([]);
       }
     } catch (error) {
       console.error('Error loading angels:', error);
+      setAngels([]);
     } finally {
       setLoading(false);
     }

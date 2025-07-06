@@ -32,6 +32,8 @@ const VCFundingPage: React.FC = () => {
   const loadVCs = async () => {
     try {
       setLoading(true);
+      console.log('Loading VCs with search:', search);
+      
       const params = new URLSearchParams();
       if (search) params.append('search', search);
       
@@ -40,11 +42,17 @@ const VCFundingPage: React.FC = () => {
       });
       const data = await response.json();
       
+      console.log('VC data response:', data);
+      
       if (data.success) {
         setVCs(data.data);
+      } else {
+        console.error('Failed to load VCs:', data.message);
+        setVCs([]);
       }
     } catch (error) {
       console.error('Error loading VCs:', error);
+      setVCs([]);
     } finally {
       setLoading(false);
     }

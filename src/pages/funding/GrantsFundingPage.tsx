@@ -33,6 +33,8 @@ const GrantsFundingPage: React.FC = () => {
   const loadGrants = async () => {
     try {
       setLoading(true);
+      console.log('Loading Grants with search:', search);
+      
       const params = new URLSearchParams();
       if (search) params.append('search', search);
       
@@ -41,11 +43,17 @@ const GrantsFundingPage: React.FC = () => {
       });
       const data = await response.json();
       
+      console.log('Grants data response:', data);
+      
       if (data.success) {
         setGrants(data.data);
+      } else {
+        console.error('Failed to load Grants:', data.message);
+        setGrants([]);
       }
     } catch (error) {
       console.error('Error loading grants:', error);
+      setGrants([]);
     } finally {
       setLoading(false);
     }

@@ -88,6 +88,8 @@ const ContactManagement: React.FC = () => {
   const handleDelete = async (contactId: string) => {
     if (!confirm('Are you sure you want to delete this contact message?')) return;
     
+    console.log('Deleting contact with ID:', contactId);
+    
     try {
       setLoading(true);
       const response = await fetch(`${API_URL}/admin/contacts/${contactId}`, { 
@@ -95,6 +97,8 @@ const ContactManagement: React.FC = () => {
         credentials: 'include'
       });
 
+      console.log('Delete response status:', response.status);
+      
       if (response.ok) {
         const data = await response.json();
         
@@ -102,9 +106,10 @@ const ContactManagement: React.FC = () => {
           await loadContacts();
           if (selectedContact?._id === contactId) {
             setSelectedContact(null);
-          }
+          } 
+          alert('Contact deleted successfully');
         } else {
-          alert(data.message || 'Error deleting contact');
+          alert(data.message || 'Error deleting contact. Check console for details.');
         }
       } else {
         alert(`Error deleting contact: ${response.statusText}`);

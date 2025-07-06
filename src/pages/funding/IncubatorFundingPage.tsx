@@ -30,6 +30,8 @@ const IncubatorFundingPage: React.FC = () => {
   const loadIncubators = async () => {
     try {
       setLoading(true);
+      console.log('Loading Incubators with search:', search);
+      
       const params = new URLSearchParams();
       if (search) params.append('search', search);
       
@@ -38,11 +40,17 @@ const IncubatorFundingPage: React.FC = () => {
       });
       const data = await response.json();
       
+      console.log('Incubator data response:', data);
+      
       if (data.success) {
         setIncubators(data.data);
+      } else {
+        console.error('Failed to load Incubators:', data.message);
+        setIncubators([]);
       }
     } catch (error) {
       console.error('Error loading incubators:', error);
+      setIncubators([]);
     } finally {
       setLoading(false);
     }

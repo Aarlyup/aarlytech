@@ -30,6 +30,8 @@ const MicroVCFundingPage: React.FC = () => {
   const loadMicroVCs = async () => {
     try {
       setLoading(true);
+      console.log('Loading Micro VCs with search:', search);
+      
       const params = new URLSearchParams();
       if (search) params.append('search', search);
       
@@ -38,11 +40,17 @@ const MicroVCFundingPage: React.FC = () => {
       });
       const data = await response.json();
       
+      console.log('Micro VC data response:', data);
+      
       if (data.success) {
         setMicroVCs(data.data);
+      } else {
+        console.error('Failed to load Micro VCs:', data.message);
+        setMicroVCs([]);
       }
     } catch (error) {
       console.error('Error loading Micro VCs:', error);
+      setMicroVCs([]);
     } finally {
       setLoading(false);
     }

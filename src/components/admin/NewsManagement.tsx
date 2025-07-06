@@ -57,6 +57,8 @@ const NewsManagement: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    console.log('Form data before submission:', formData);
+    
     try {
       setLoading(true);
       
@@ -65,7 +67,11 @@ const NewsManagement: React.FC = () => {
       // Add text fields
       Object.entries(formData).forEach(([key, value]) => {
         if (key !== 'image' && value !== undefined) {
-          formDataToSend.append(key, value.toString());
+          if (key === 'isPublished') {
+            formDataToSend.append(key, value ? 'true' : 'false');
+          } else {
+            formDataToSend.append(key, value.toString());
+          }
         }
       });
       
@@ -81,12 +87,17 @@ const NewsManagement: React.FC = () => {
       const method = editingNews ? 'PUT' : 'POST';
       
       const response = await fetch(url, {
+        headers: {
+          // Don't set Content-Type as FormData will set it with boundary
+        },
         method,
         credentials: 'include',
         body: formDataToSend,
       });
 
+      console.log('Response status:', response.status);
       const data = await response.json();
+      console.log('Response data:', data);
       
       if (data.success) {
         await loadNews();
@@ -95,7 +106,7 @@ const NewsManagement: React.FC = () => {
         setFormData({});
         setImageFile(null);
       } else {
-        alert(data.message || 'Error saving news');
+        alert(data.message || 'Error saving news. Check console for details.');
       }
     } catch (error) {
       console.error('Error saving news:', error);

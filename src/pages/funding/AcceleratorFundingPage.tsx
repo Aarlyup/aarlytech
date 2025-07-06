@@ -32,6 +32,8 @@ const AcceleratorFundingPage: React.FC = () => {
   const loadAccelerators = async () => {
     try {
       setLoading(true);
+      console.log('Loading Accelerators with search:', search);
+      
       const params = new URLSearchParams();
       if (search) params.append('search', search);
       
@@ -40,11 +42,17 @@ const AcceleratorFundingPage: React.FC = () => {
       });
       const data = await response.json();
       
+      console.log('Accelerator data response:', data);
+      
       if (data.success) {
         setAccelerators(data.data);
+      } else {
+        console.error('Failed to load Accelerators:', data.message);
+        setAccelerators([]);
       }
     } catch (error) {
       console.error('Error loading accelerators:', error);
+      setAccelerators([]);
     } finally {
       setLoading(false);
     }

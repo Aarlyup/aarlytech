@@ -98,30 +98,34 @@ const InvestorMatchManagement: React.FC = () => {
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this investor match?')) return;
     
+    console.log('Deleting investor match with ID:', id);
+    
     try {
       setLoading(true);
-      setError('');
       const response = await fetch(`${API_URL}/admin/investor-matches/${id}`, {
         method: 'DELETE',
         credentials: 'include'
       });
 
+      console.log('Delete response status:', response.status);
+      
       if (response.ok) {
         const data = await response.json();
         
+        console.log('Delete response data:', data);
+        
         if (data.success) {
           await loadMatches();
-          setSuccess('Investor match deleted successfully');
-          setTimeout(() => setSuccess(''), 3000);
+          alert('Investor match deleted successfully');
         } else {
-          setError(data.message || 'Error deleting investor match');
+          alert(data.message || 'Error deleting investor match');
         }
       } else {
-        setError(`Error deleting investor match: ${response.statusText}`);
+        alert(`Error deleting investor match: ${response.statusText}`);
       }
     } catch (error) {
       console.error('Error deleting investor match:', error);
-      setError('Error deleting investor match');
+      alert('Error deleting investor match');
     } finally {
       setLoading(false);
     }

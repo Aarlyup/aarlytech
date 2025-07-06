@@ -138,6 +138,8 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    console.log('Form data before submission:', formData);
+    
     try {
       setLoading(true);
       setError('');
@@ -149,16 +151,35 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
       
       const method = editingItem ? 'PUT' : 'POST';
       
+      // Process array fields before sending
+      const processedData = { ...formData };
+      const fields = categoryFields[category] || [];
+      
+      fields.forEach(field => {
+        if (field.name.includes('stage') || field.name.includes('sector') || 
+            field.name.includes('Category') || field.name.includes('Focus') ||
+            field.name.includes('documentsRequired')) {
+          if (processedData[field.name] && typeof processedData[field.name] === 'string') {
+            // Keep as string for backend processing
+            processedData[field.name] = processedData[field.name].trim();
+          }
+        }
+      });
+      
+      console.log('Processed data for submission:', processedData);
+      
       const response = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify(formData),
+        body: JSON.stringify(processedData),
       });
 
+      console.log('Response status:', response.status);
       const data = await response.json();
+      console.log('Response data:', data);
       
       if (data.success) {
         setSuccess(editingItem ? 'Item updated successfully!' : 'Item created successfully!');
@@ -202,6 +223,8 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this item?')) return;
     
+    console.log('Deleting item with ID:', id);
+    
     try {
       setLoading(true);
       setError('');
@@ -210,6 +233,8 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
         credentials: 'include'
       });
 
+      console.log('Delete response status:', response.status);
+      
       const data = await response.json();
       
       if (data.success) {
