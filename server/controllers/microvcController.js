@@ -1,4 +1,4 @@
-const MicroVC = require('../models/MicroVC');
+const MicroVC = require('../models/MicroVCNew');
 const { validationResult } = require('express-validator');
 
 // Get all microvcs with filtering and pagination
@@ -8,9 +8,9 @@ exports.getMicroVCs = async (req, res) => {
       page = 1,
       limit = 12,
       search,
-      focus,
-      sectors,
-      state
+      location,
+      stage,
+      sector
     } = req.query;
 
     // Build filter object
@@ -20,16 +20,16 @@ exports.getMicroVCs = async (req, res) => {
       filter.$text = { $search: search };
     }
 
-    if (focus) {
-      filter.focus = { $in: focus.split(',') };
+    if (location) {
+      filter.location = { $in: location.split(',') };
     }
 
-    if (sectors) {
-      filter.sectors = { $in: sectors.split(',') };
+    if (stage) {
+      filter.stage = { $in: stage.split(',') };
     }
 
-    if (state) {
-      filter.location = { $regex: state.split(',').join('|'), $options: 'i' };
+    if (sector) {
+      filter.sector = { $in: sector.split(',') };
     }
 
     // Execute query with pagination
