@@ -23,6 +23,7 @@ const GrantsFundingPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selectedGrant, setSelectedGrant] = useState<GovtGrant | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -33,6 +34,7 @@ const GrantsFundingPage: React.FC = () => {
   const loadGrants = async () => {
     try {
       setLoading(true);
+      setError(null);
       console.log('Loading Grants with search:', search);
       
       const params = new URLSearchParams();
@@ -48,11 +50,12 @@ const GrantsFundingPage: React.FC = () => {
       if (data.success) {
         setGrants(data.data);
       } else {
-        console.error('Failed to load Grants:', data.message);
+        setError('Failed to load Grants: ' + data.message);
         setGrants([]);
       }
     } catch (error) {
       console.error('Error loading grants:', error);
+      setError('Error loading government grants. Please try again later.');
       setGrants([]);
     } finally {
       setLoading(false);
@@ -194,8 +197,12 @@ const GrantsFundingPage: React.FC = () => {
       </div>
 
       {grants.length === 0 && !loading && (
-        <div className="text-center py-12">
-          <p className="text-gray-500">No government grants found.</p>
+        <div className="text-center py-12 px-4">
+          {error ? (
+            <p className="text-red-500">{error}</p>
+          ) : (
+            <p className="text-gray-500">No government grants found matching your search criteria.</p>
+          )}
         </div>
       )}
 

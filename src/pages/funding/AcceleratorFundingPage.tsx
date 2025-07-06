@@ -22,6 +22,7 @@ const AcceleratorFundingPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selectedAccelerator, setSelectedAccelerator] = useState<Accelerator | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -32,6 +33,7 @@ const AcceleratorFundingPage: React.FC = () => {
   const loadAccelerators = async () => {
     try {
       setLoading(true);
+      setError(null);
       console.log('Loading Accelerators with search:', search);
       
       const params = new URLSearchParams();
@@ -47,11 +49,12 @@ const AcceleratorFundingPage: React.FC = () => {
       if (data.success) {
         setAccelerators(data.data);
       } else {
-        console.error('Failed to load Accelerators:', data.message);
+        setError('Failed to load Accelerators: ' + data.message);
         setAccelerators([]);
       }
     } catch (error) {
       console.error('Error loading accelerators:', error);
+      setError('Error loading accelerators. Please try again later.');
       setAccelerators([]);
     } finally {
       setLoading(false);
@@ -182,8 +185,12 @@ const AcceleratorFundingPage: React.FC = () => {
       </div>
 
       {accelerators.length === 0 && !loading && (
-        <div className="text-center py-12">
-          <p className="text-gray-500">No accelerators found.</p>
+        <div className="text-center py-12 px-4">
+          {error ? (
+            <p className="text-red-500">{error}</p>
+          ) : (
+            <p className="text-gray-500">No accelerators found matching your search criteria.</p>
+          )}
         </div>
       )}
 

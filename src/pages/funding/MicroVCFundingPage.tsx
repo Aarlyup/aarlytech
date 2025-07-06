@@ -20,6 +20,7 @@ const MicroVCFundingPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selectedMicroVC, setSelectedMicroVC] = useState<MicroVC | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -30,6 +31,7 @@ const MicroVCFundingPage: React.FC = () => {
   const loadMicroVCs = async () => {
     try {
       setLoading(true);
+      setError(null);
       console.log('Loading Micro VCs with search:', search);
       
       const params = new URLSearchParams();
@@ -45,11 +47,12 @@ const MicroVCFundingPage: React.FC = () => {
       if (data.success) {
         setMicroVCs(data.data);
       } else {
-        console.error('Failed to load Micro VCs:', data.message);
+        setError('Failed to load Micro VCs: ' + data.message);
         setMicroVCs([]);
       }
     } catch (error) {
       console.error('Error loading Micro VCs:', error);
+      setError('Error loading Micro VCs. Please try again later.');
       setMicroVCs([]);
     } finally {
       setLoading(false);
@@ -175,8 +178,12 @@ const MicroVCFundingPage: React.FC = () => {
       </div>
 
       {microvcs.length === 0 && !loading && (
-        <div className="text-center py-12">
-          <p className="text-gray-500">No micro VCs found.</p>
+        <div className="text-center py-12 px-4">
+          {error ? (
+            <p className="text-red-500">{error}</p>
+          ) : (
+            <p className="text-gray-500">No micro VCs found matching your search criteria.</p>
+          )}
         </div>
       )}
 

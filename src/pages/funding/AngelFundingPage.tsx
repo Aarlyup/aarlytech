@@ -21,6 +21,7 @@ const AngelFundingPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selectedAngel, setSelectedAngel] = useState<AngelInvestor | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -31,6 +32,7 @@ const AngelFundingPage: React.FC = () => {
   const loadAngels = async () => {
     try {
       setLoading(true);
+      setError(null);
       console.log('Loading Angels with search:', search);
       
       const params = new URLSearchParams();
@@ -46,11 +48,12 @@ const AngelFundingPage: React.FC = () => {
       if (data.success) {
         setAngels(data.data);
       } else {
-        console.error('Failed to load Angels:', data.message);
+        setError('Failed to load Angels: ' + data.message);
         setAngels([]);
       }
     } catch (error) {
       console.error('Error loading angels:', error);
+      setError('Error loading angel investors. Please try again later.');
       setAngels([]);
     } finally {
       setLoading(false);
@@ -178,8 +181,12 @@ const AngelFundingPage: React.FC = () => {
       </div>
 
       {angels.length === 0 && !loading && (
-        <div className="text-center py-12">
-          <p className="text-gray-500">No angel investors found.</p>
+        <div className="text-center py-12 px-4">
+          {error ? (
+            <p className="text-red-500">{error}</p>
+          ) : (
+            <p className="text-gray-500">No angel investors found matching your search criteria.</p>
+          )}
         </div>
       )}
 

@@ -20,6 +20,7 @@ const IncubatorFundingPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selectedIncubator, setSelectedIncubator] = useState<Incubator | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -30,6 +31,7 @@ const IncubatorFundingPage: React.FC = () => {
   const loadIncubators = async () => {
     try {
       setLoading(true);
+      setError(null);
       console.log('Loading Incubators with search:', search);
       
       const params = new URLSearchParams();
@@ -45,11 +47,12 @@ const IncubatorFundingPage: React.FC = () => {
       if (data.success) {
         setIncubators(data.data);
       } else {
-        console.error('Failed to load Incubators:', data.message);
+        setError('Failed to load Incubators: ' + data.message);
         setIncubators([]);
       }
     } catch (error) {
       console.error('Error loading incubators:', error);
+      setError('Error loading incubators. Please try again later.');
       setIncubators([]);
     } finally {
       setLoading(false);
@@ -157,8 +160,12 @@ const IncubatorFundingPage: React.FC = () => {
       </div>
 
       {incubators.length === 0 && !loading && (
-        <div className="text-center py-12">
-          <p className="text-gray-500">No incubators found.</p>
+        <div className="text-center py-12 px-4">
+          {error ? (
+            <p className="text-red-500">{error}</p>
+          ) : (
+            <p className="text-gray-500">No incubators found matching your search criteria.</p>
+          )}
         </div>
       )}
 

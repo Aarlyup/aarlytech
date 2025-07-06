@@ -22,6 +22,7 @@ const VCFundingPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selectedVC, setSelectedVC] = useState<VentureCapital | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -32,6 +33,7 @@ const VCFundingPage: React.FC = () => {
   const loadVCs = async () => {
     try {
       setLoading(true);
+      setError(null);
       console.log('Loading VCs with search:', search);
       
       const params = new URLSearchParams();
@@ -47,11 +49,12 @@ const VCFundingPage: React.FC = () => {
       if (data.success) {
         setVCs(data.data);
       } else {
-        console.error('Failed to load VCs:', data.message);
+        setError('Failed to load VCs: ' + data.message);
         setVCs([]);
       }
     } catch (error) {
       console.error('Error loading VCs:', error);
+      setError('Error loading VCs. Please try again later.');
       setVCs([]);
     } finally {
       setLoading(false);
@@ -178,8 +181,12 @@ const VCFundingPage: React.FC = () => {
       </div>
 
       {vcs.length === 0 && !loading && (
-        <div className="text-center py-12">
-          <p className="text-gray-500">No venture capital firms found.</p>
+        <div className="text-center py-12 px-4">
+          {error ? (
+            <p className="text-red-500">{error}</p>
+          ) : (
+            <p className="text-gray-500">No venture capital firms found matching your search criteria.</p>
+          )}
         </div>
       )}
 
