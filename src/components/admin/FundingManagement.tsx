@@ -458,19 +458,31 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
                     </label>
                     {field.options ? (
                       field.multi ? (
-                        <select
-                          name={field.name}
-                          multiple
-                          value={Array.isArray(formData[field.name]) ? formData[field.name] : []}
-                          onChange={handleChange}
-                          required={field.required}
-                          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${formErrors[field.name] ? 'border-red-500' : 'border-gray-300'}`}
-                          size={Math.min(field.options.length, 6)}
-                        >
+                        <div className="flex flex-wrap gap-2">
                           {field.options.map(option => (
-                            <option key={option} value={option}>{option}</option>
+                            <label key={option} className="flex items-center gap-1 text-sm">
+                              <input
+                                type="checkbox"
+                                name={field.name}
+                                value={option}
+                                checked={Array.isArray(formData[field.name]) && formData[field.name].includes(option)}
+                                onChange={e => {
+                                  const checked = e.target.checked;
+                                  setFormData(prev => {
+                                    const prevArr = Array.isArray(prev[field.name]) ? prev[field.name] : [];
+                                    return {
+                                      ...prev,
+                                      [field.name]: checked
+                                        ? [...prevArr, option]
+                                        : prevArr.filter((v: string) => v !== option)
+                                    };
+                                  });
+                                }}
+                              />
+                              {option}
+                            </label>
                           ))}
-                        </select>
+                        </div>
                       ) : (
                         <select
                           name={field.name}
