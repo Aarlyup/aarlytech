@@ -19,6 +19,8 @@ const acceleratorRoutes = require('./routes/accelerators');
 const incubatorRoutes = require('./routes/incubators');
 const microvcRoutes = require('./routes/microvcs');
 const uploadRoutes = require('./routes/upload');
+const adminRoutes = require('./routes/admin');
+const publicRoutes = require('./routes/public');
 
 const app = express();
 
@@ -121,6 +123,8 @@ app.use('/api/accelerators', acceleratorRoutes);
 app.use('/api/incubators', incubatorRoutes);
 app.use('/api/microvcs', microvcRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/public', publicRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {
