@@ -1,5 +1,3 @@
-// src/components/layout/Header.tsx
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Rocket, Home, LogOut, User } from 'lucide-react';
