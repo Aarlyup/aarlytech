@@ -1,4 +1,4 @@
-const Accelerator = require('../models/Accelerator');
+const Accelerator = require('../models/AcceleratorNew');
 const { validationResult } = require('express-validator');
 
 // Get all accelerators with filtering and pagination
@@ -8,12 +8,9 @@ exports.getAccelerators = async (req, res) => {
       page = 1,
       limit = 12,
       search,
-      affiliation,
-      applicationStatus,
-      tags,
-      equityRange,
-      fundingRange,
-      durationRange
+      hq,
+      stage,
+      sectors
     } = req.query;
 
     // Build filter object
@@ -23,16 +20,16 @@ exports.getAccelerators = async (req, res) => {
       filter.$text = { $search: search };
     }
 
-    if (affiliation) {
-      filter.affiliation = { $in: affiliation.split(',') };
+    if (hq) {
+      filter.hq = { $in: hq.split(',') };
     }
 
-    if (applicationStatus) {
-      filter.application_status = { $in: applicationStatus.split(',') };
+    if (stage) {
+      filter.stage = { $in: stage.split(',') };
     }
 
-    if (tags) {
-      filter.tags = { $in: tags.split(',') };
+    if (sectors) {
+      filter.sectors = { $in: sectors.split(',') };
     }
 
     // Execute query with pagination
