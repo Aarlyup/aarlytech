@@ -48,6 +48,6 @@ const microVCSchema = new mongoose.Schema({
 });
 
 // Index for better search performance
-microVCSchema.index({ name: 'text', location: 'text', sector: 1 });
+microVCSchema.index({ name: 'text', location: 'text' });
 
 module.exports = mongoose.model('MicroVCNew', microVCSchema);

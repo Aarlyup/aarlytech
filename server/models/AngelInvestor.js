@@ -53,6 +53,6 @@ const angelInvestorSchema = new mongoose.Schema({
 });
 
 // Index for better search performance
-angelInvestorSchema.index({ name: 'text', city: 'text', investCategory: 1 });
+angelInvestorSchema.index({ name: 'text', city: 'text' });
 
 module.exports = mongoose.model('AngelInvestor', angelInvestorSchema);

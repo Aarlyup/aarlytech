@@ -97,6 +97,9 @@ exports.getFundingItem = async (req, res) => {
 // Create new item
 exports.createFundingItem = async (req, res) => {
   try {
+    console.log('Create funding item request body:', req.body);
+    console.log('Category:', req.params.category);
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
@@ -118,22 +121,29 @@ exports.createFundingItem = async (req, res) => {
     // Process the data based on category
     const processedData = { ...req.body };
     
-    // Convert comma-separated strings to arrays for specific fields
-    const arrayFields = {
-      'angel-investors': ['investCategory', 'stage'],
-      'venture-capital': ['stageFocus', 'sectorFocus'],
-      'micro-vcs': ['stage', 'sector'],
-      'incubators': [],
-      'accelerators': ['stage', 'sectors'],
-      'govt-grants': ['stage', 'documentsRequired']
-    };
-
-    if (arrayFields[category]) {
-      arrayFields[category].forEach(field => {
-        if (processedData[field] && typeof processedData[field] === 'string') {
-          processedData[field] = processedData[field].split(',').map(s => s.trim()).filter(Boolean);
-        }
-      });
+    try {
+      // Convert comma-separated strings to arrays for specific fields
+      const arrayFields = {
+        'angel-investors': ['investCategory', 'stage'],
+        'venture-capital': ['stageFocus', 'sectorFocus'],
+        'micro-vcs': ['stage', 'sector'],
+        'incubators': [],
+        'accelerators': ['stage', 'sectors'],
+        'govt-grants': ['stage', 'documentsRequired']
+      };
+  
+      if (arrayFields[category]) {
+        arrayFields[category].forEach(field => {
+          if (processedData[field] && typeof processedData[field] === 'string') {
+            processedData[field] = processedData[field].split(',').map(s => s.trim()).filter(Boolean);
+          } else if (!processedData[field]) {
+            // Initialize as empty array if not provided
+            processedData[field] = [];
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error processing array fields:', error);
     }
 
     // Convert numeric fields
@@ -146,13 +156,15 @@ exports.createFundingItem = async (req, res) => {
       'govt-grants': ['grantSize']
     };
 
-    if (numericFields[category]) {
+    if (numericFields[category] && numericFields[category].length > 0) {
       numericFields[category].forEach(field => {
         if (processedData[field]) {
           processedData[field] = Number(processedData[field]);
         }
       });
     }
+
+    console.log('Processed data:', processedData);
 
     const item = new Model(processedData);
     await item.save();
@@ -174,6 +186,8 @@ exports.createFundingItem = async (req, res) => {
 // Update item
 exports.updateFundingItem = async (req, res) => {
   try {
+    console.log('Update funding item request body:', req.body);
+    
     const { category, id } = req.params;
     
     const Model = models[category];
@@ -185,23 +199,30 @@ exports.updateFundingItem = async (req, res) => {
     }
 
     // Process the data same as create
-    const processedData = { ...req.body };
+    let processedData = { ...req.body };
     
-    const arrayFields = {
-      'angel-investors': ['investCategory', 'stage'],
-      'venture-capital': ['stageFocus', 'sectorFocus'],
-      'micro-vcs': ['stage', 'sector'],
-      'incubators': [],
-      'accelerators': ['stage', 'sectors'],
-      'govt-grants': ['stage', 'documentsRequired']
-    };
-
-    if (arrayFields[category]) {
-      arrayFields[category].forEach(field => {
-        if (processedData[field] && typeof processedData[field] === 'string') {
-          processedData[field] = processedData[field].split(',').map(s => s.trim()).filter(Boolean);
-        }
-      });
+    try {
+      const arrayFields = {
+        'angel-investors': ['investCategory', 'stage'],
+        'venture-capital': ['stageFocus', 'sectorFocus'],
+        'micro-vcs': ['stage', 'sector'],
+        'incubators': [],
+        'accelerators': ['stage', 'sectors'],
+        'govt-grants': ['stage', 'documentsRequired']
+      };
+  
+      if (arrayFields[category]) {
+        arrayFields[category].forEach(field => {
+          if (processedData[field] && typeof processedData[field] === 'string') {
+            processedData[field] = processedData[field].split(',').map(s => s.trim()).filter(Boolean);
+          } else if (!processedData[field]) {
+            // Initialize as empty array if not provided
+            processedData[field] = [];
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error processing array fields:', error);
     }
 
     const numericFields = {
@@ -213,13 +234,15 @@ exports.updateFundingItem = async (req, res) => {
       'govt-grants': ['grantSize']
     };
 
-    if (numericFields[category]) {
+    if (numericFields[category] && numericFields[category].length > 0) {
       numericFields[category].forEach(field => {
         if (processedData[field]) {
           processedData[field] = Number(processedData[field]);
         }
       });
     }
+
+    console.log('Processed data for update:', processedData);
 
     const item = await Model.findByIdAndUpdate(
       id,
@@ -251,6 +274,8 @@ exports.updateFundingItem = async (req, res) => {
 // Delete item
 exports.deleteFundingItem = async (req, res) => {
   try {
+    console.log('Delete funding item request params:', req.params);
+    
     const { category, id } = req.params;
     
     const Model = models[category];

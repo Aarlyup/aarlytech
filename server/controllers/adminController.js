@@ -100,7 +100,16 @@ exports.updateInvestorMatch = async (req, res) => {
 // Delete investor match
 exports.deleteInvestorMatch = async (req, res) => {
   try {
-    const match = await InvestorMatch.findById(req.params.id);
+    const { id } = req.params;
+    
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid ID provided'
+      });
+    }
+
+    const match = await InvestorMatch.findById(id);
 
     if (!match) {
       return res.status(404).json({
@@ -109,7 +118,7 @@ exports.deleteInvestorMatch = async (req, res) => {
       });
     }
 
-    await InvestorMatch.findByIdAndDelete(req.params.id);
+    await InvestorMatch.findByIdAndDelete(id);
 
     res.json({
       success: true,
@@ -163,6 +172,9 @@ exports.getNews = async (req, res) => {
 // Create news
 exports.createNews = async (req, res) => {
   try {
+    console.log('Create news request body:', req.body);
+    console.log('Create news request user:', req.user);
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
@@ -193,7 +205,7 @@ exports.createNews = async (req, res) => {
         url: result.secure_url,
         publicId: result.public_id
       },
-      author: req.user._id
+      author: req.user._id.toString()
     };
 
     const news = new News(newsData);
@@ -217,6 +229,9 @@ exports.createNews = async (req, res) => {
 // Update news
 exports.updateNews = async (req, res) => {
   try {
+    console.log('Update news request body:', req.body);
+    console.log('Update news request user:', req.user);
+    
     const news = await News.findById(req.params.id);
 
     if (!news) {

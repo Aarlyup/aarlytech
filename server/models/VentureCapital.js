@@ -57,6 +57,6 @@ const ventureCapitalSchema = new mongoose.Schema({
 });
 
 // Index for better search performance
-ventureCapitalSchema.index({ name: 'text', headOffice: 'text', sectorFocus: 1 });
+ventureCapitalSchema.index({ name: 'text', headOffice: 'text' });
 
 module.exports = mongoose.model('VentureCapital', ventureCapitalSchema);

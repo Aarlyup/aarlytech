@@ -60,6 +60,6 @@ const govtGrantSchema = new mongoose.Schema({
 });
 
 // Index for better search performance
-govtGrantSchema.index({ name: 'text', authority: 1, sector: 1 });
+govtGrantSchema.index({ name: 'text', authority: 'text' });
 
 module.exports = mongoose.model('GovtGrant', govtGrantSchema);

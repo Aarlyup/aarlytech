@@ -56,6 +56,6 @@ const acceleratorSchema = new mongoose.Schema({
 });
 
 // Index for better search performance
-acceleratorSchema.index({ name: 'text', hq: 'text', sectors: 1 });
+acceleratorSchema.index({ name: 'text', hq: 'text' });
 
 module.exports = mongoose.model('AcceleratorNew', acceleratorSchema);
