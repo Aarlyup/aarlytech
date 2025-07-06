@@ -138,18 +138,6 @@ const FundingHeader: React.FC = () => {
                   >
                     Dashboard
                   </Link>
-                  {/* Show Admin link only for admin users */}
-                  {user && ['admin@aarly.co', 'founder@aarly.co', 'teamaarly@gmail.com'].includes(user.email.toLowerCase()) && (
-                    <Link
-                      to="/admin"
-                      className={`font-medium transition-colors ${
-                        location.pathname.startsWith('/admin')
-                          ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
-                      }`}
-                    >
-                      Admin
-                    </Link>
-                  )}
                   <button
                     onClick={handleLogout}
                     className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
@@ -243,16 +231,6 @@ const FundingHeader: React.FC = () => {
                 >
                   Content
                 </Link>
-                {/* Show Admin link only for admin users */}
-                {user && ['admin@aarly.co', 'founder@aarly.co', 'teamaarly@gmail.com'].includes(user.email.toLowerCase()) && (
-                  <Link
-                    to="/admin"
-                    className="text-gray-700 hover:text-blue-600 font-semibold py-3 px-2 rounded-lg transition-colors text-lg"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Admin Panel
-                  </Link>
-                )}
                 <button
                   onClick={handleLogout}
                   className="text-red-600 hover:text-red-700 font-semibold py-3 px-2 rounded-lg transition-colors text-lg"
