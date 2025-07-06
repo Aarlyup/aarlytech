@@ -57,7 +57,7 @@ const NewsManagement: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    console.log('Form data before submission:', formData);
+    console.log('Form data before submission:', JSON.stringify(formData));
     
     try {
       setLoading(true);
@@ -69,7 +69,7 @@ const NewsManagement: React.FC = () => {
         if (key !== 'image' && value !== undefined) {
           if (key === 'isPublished') {
             formDataToSend.append(key, value ? 'true' : 'false');
-          } else {
+          } else if (key !== 'author') { // Skip author field
             formDataToSend.append(key, value.toString());
           }
         }
@@ -87,26 +87,30 @@ const NewsManagement: React.FC = () => {
       const method = editingNews ? 'PUT' : 'POST';
       
       const response = await fetch(url, {
-        headers: {
-          // Don't set Content-Type as FormData will set it with boundary
-        },
+        // Don't set Content-Type as FormData will set it with boundary
         method,
         credentials: 'include',
         body: formDataToSend,
       });
 
       console.log('Response status:', response.status);
-      const data = await response.json();
-      console.log('Response data:', data);
       
-      if (data.success) {
-        await loadNews();
-        setShowForm(false);
-        setEditingNews(null);
-        setFormData({});
-        setImageFile(null);
-      } else {
-        alert(data.message || 'Error saving news. Check console for details.');
+      try {
+        const data = await response.json();
+        console.log('Response data:', JSON.stringify(data));
+        
+        if (data.success) {
+          await loadNews();
+          setShowForm(false);
+          setEditingNews(null);
+          setFormData({});
+          setImageFile(null);
+        } else {
+          alert(data.message || 'Error saving news. Check console for details.');
+        }
+      } catch (jsonError) {
+        console.error('Error parsing JSON response:', jsonError);
+        alert('Error processing server response');
       }
     } catch (error) {
       console.error('Error saving news:', error);

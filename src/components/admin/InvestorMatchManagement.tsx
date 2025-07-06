@@ -98,7 +98,7 @@ const InvestorMatchManagement: React.FC = () => {
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this investor match?')) return;
     
-    console.log('Deleting investor match with ID:', id);
+    console.log(`Deleting investor match with ID: ${id}`);
     
     try {
       setLoading(true);
@@ -107,21 +107,26 @@ const InvestorMatchManagement: React.FC = () => {
         credentials: 'include'
       });
 
-      console.log('Delete response status:', response.status);
+      console.log(`Delete response status: ${response.status}`);
       
-      if (response.ok) {
-        const data = await response.json();
-        
-        console.log('Delete response data:', data);
-        
-        if (data.success) {
-          await loadMatches();
-          alert('Investor match deleted successfully');
+      try {
+        if (response.ok) {
+          const data = await response.json();
+          
+          console.log('Delete response data:', JSON.stringify(data));
+          
+          if (data.success) {
+            await loadMatches();
+            alert('Investor match deleted successfully');
+          } else {
+            alert(data.message || 'Error deleting investor match');
+          }
         } else {
-          alert(data.message || 'Error deleting investor match');
+          alert(`Error deleting investor match: ${response.statusText}`);
         }
-      } else {
-        alert(`Error deleting investor match: ${response.statusText}`);
+      } catch (jsonError) {
+        console.error('Error parsing JSON response:', jsonError);
+        alert('Error processing server response');
       }
     } catch (error) {
       console.error('Error deleting investor match:', error);

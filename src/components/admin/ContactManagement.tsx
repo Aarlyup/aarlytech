@@ -88,7 +88,7 @@ const ContactManagement: React.FC = () => {
   const handleDelete = async (contactId: string) => {
     if (!confirm('Are you sure you want to delete this contact message?')) return;
     
-    console.log('Deleting contact with ID:', contactId);
+    console.log(`Deleting contact with ID: ${contactId}`);
     
     try {
       setLoading(true);
@@ -97,22 +97,28 @@ const ContactManagement: React.FC = () => {
         credentials: 'include'
       });
 
-      console.log('Delete response status:', response.status);
+      console.log(`Delete response status: ${response.status}`);
       
-      if (response.ok) {
-        const data = await response.json();
-        
-        if (data.success) {
-          await loadContacts();
-          if (selectedContact?._id === contactId) {
-            setSelectedContact(null);
-          } 
-          alert('Contact deleted successfully');
+      try {
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Delete response data:', JSON.stringify(data));
+          
+          if (data.success) {
+            await loadContacts();
+            if (selectedContact?._id === contactId) {
+              setSelectedContact(null);
+            } 
+            alert('Contact deleted successfully');
+          } else {
+            alert(data.message || 'Error deleting contact. Check console for details.');
+          }
         } else {
-          alert(data.message || 'Error deleting contact. Check console for details.');
+          alert(`Error deleting contact: ${response.statusText}`);
         }
-      } else {
-        alert(`Error deleting contact: ${response.statusText}`);
+      } catch (jsonError) {
+        console.error('Error parsing JSON response:', jsonError);
+        alert('Error processing server response');
       }
     } catch (error) {
       console.error('Error deleting contact:', error);

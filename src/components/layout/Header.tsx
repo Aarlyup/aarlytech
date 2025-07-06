@@ -135,15 +135,6 @@ const Header: React.FC = () => {
                   >
                     Fin'Newz
                   </Link>
-                  <Link
-                    to="/content"
-                    className={`font-medium transition-colors ${
-                      location.pathname.startsWith('/content')
-                        ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
-                    }`}
-                  >
-                    Content
-                  </Link>
                 </>
               )}
               {!isHomePage && !isAuthenticated && !isAuthPage && (

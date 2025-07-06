@@ -23,19 +23,19 @@ const categoryLabels: Record<string, string> = {
 const categoryFields: Record<string, { name: string; label: string; type?: string; required?: boolean; options?: string[] }[]> = {
   'angel-investors': [
     { name: 'name', label: 'Name', required: true },
-    { name: 'linkedinProfileUrl', label: 'LinkedIn Profile URL' },
+    { name: 'linkedinProfileUrl', label: 'LinkedIn Profile URL (optional)' },
     { name: 'city', label: 'City', required: true },
     { name: 'country', label: 'Country', required: true },
-    { name: 'investCategory', label: 'Investment Categories (comma separated)', options: ['Fintech', 'Consumer', 'SaaS', 'Healthtech', 'Edtech'] },
+    { name: 'investCategory', label: 'Investment Categories (comma separated)', options: ['Fintech', 'Consumer', 'SaaS', 'Healthtech', 'Edtech', 'E-commerce', 'AI/ML', 'Deep Tech', 'Clean Tech', 'Other'] },
     { name: 'ticketSize', label: 'Ticket Size (₹)', type: 'number', required: true },
     { name: 'stage', label: 'Stages (comma separated)', options: ['Idea', 'MVP', 'Pre-revenue', 'Revenue', 'Growth'] },
-    { name: 'preferFounderProfile', label: 'Preferred Founder Profile' },
-    { name: 'portfolioHighlights', label: 'Portfolio Highlights' },
+    { name: 'preferFounderProfile', label: 'Preferred Founder Profile (optional)' },
+    { name: 'portfolioHighlights', label: 'Portfolio Highlights (optional)' },
     { name: 'contact', label: 'Contact', required: true }
   ],
   'venture-capital': [
     { name: 'name', label: 'Name', required: true },
-    { name: 'websiteUrl', label: 'Website URL' },
+    { name: 'websiteUrl', label: 'Website URL (optional)' },
     { name: 'headOffice', label: 'Head Office', required: true },
     { name: 'fundSize', label: 'Fund Size (₹)', type: 'number', required: true },
     { name: 'stageFocus', label: 'Stage Focus (comma separated)', options: ['Pre-seed', 'Seed', 'Series A', 'Series B', 'Series C', 'Growth'] },
@@ -43,43 +43,43 @@ const categoryFields: Record<string, { name: string; label: string; type?: strin
     { name: 'avgTicketSize', label: 'Average Ticket Size (₹)', type: 'number', required: true },
     { name: 'applicationProcess', label: 'Application Process', options: ['Warm intro', 'Direct pitch', 'Online application', 'Referral only'] },
     { name: 'contact', label: 'Contact', required: true },
-    { name: 'portfolioHighlights', label: 'Portfolio Highlights' },
-    { name: 'investmentThesis', label: 'Investment Thesis' }
+    { name: 'portfolioHighlights', label: 'Portfolio Highlights (optional)' },
+    { name: 'investmentThesis', label: 'Investment Thesis (optional)' }
   ],
   'micro-vcs': [
     { name: 'name', label: 'Name', required: true },
-    { name: 'websiteUrl', label: 'Website URL' },
+    { name: 'websiteUrl', label: 'Website URL (optional)' },
     { name: 'location', label: 'Location', required: true },
     { name: 'fundSize', label: 'Fund Size (₹)', type: 'number', required: true },
     { name: 'checkSize', label: 'Check Size (₹)', type: 'number', required: true },
     { name: 'stage', label: 'Stages (comma separated)', options: ['Pre-seed', 'Seed', 'Series A'] },
     { name: 'sector', label: 'Sectors (comma separated)', options: ['Deeptech', 'B2B SaaS', 'Fintech', 'Healthtech', 'Edtech'] },
     { name: 'contact', label: 'Contact', required: true },
-    { name: 'portfolioHighlights', label: 'Portfolio Highlights' }
+    { name: 'portfolioHighlights', label: 'Portfolio Highlights (optional)' }
   ],
   'incubators': [
     { name: 'name', label: 'Name', required: true },
-    { name: 'websiteUrl', label: 'Website URL' },
+    { name: 'websiteUrl', label: 'Website URL (optional)' },
     { name: 'location', label: 'Location', required: true },
     { name: 'fundingSupport', label: 'Funding Support', required: true },
-    { name: 'otherBenefits', label: 'Other Benefits' },
+    { name: 'otherBenefits', label: 'Other Benefits (optional)' },
     { name: 'eligibility', label: 'Eligibility', required: true },
     { name: 'applicationProcess', label: 'Application Process', options: ['Rolling', 'Batch-based', 'Quarterly', 'Bi-annual'] },
     { name: 'contact', label: 'Contact', required: true },
-    { name: 'alumniStartups', label: 'Alumni Startups' }
+    { name: 'alumniStartups', label: 'Alumni Startups (optional)' }
   ],
   'accelerators': [
     { name: 'name', label: 'Name', required: true },
-    { name: 'websiteUrl', label: 'Website URL' },
+    { name: 'websiteUrl', label: 'Website URL (optional)' },
     { name: 'hq', label: 'Headquarters', required: true },
     { name: 'batchFrequency', label: 'Batch Frequency', required: true },
     { name: 'stage', label: 'Stages (comma separated)', options: ['Idea', 'MVP', 'Early Revenue', 'Growth'] },
     { name: 'fundingOffered', label: 'Funding Offered', required: true },
     { name: 'programDuration', label: 'Program Duration', required: true },
-    { name: 'servicesProvided', label: 'Services Provided' },
+    { name: 'servicesProvided', label: 'Services Provided (optional)' },
     { name: 'sectors', label: 'Sectors (comma separated)', options: ['Agnostic', 'Fintech', 'Healthtech', 'Edtech', 'E-commerce', 'SaaS'] },
-    { name: 'applicationLink', label: 'Application Link' },
-    { name: 'pastCohorts', label: 'Past Cohorts' }
+    { name: 'applicationLink', label: 'Application Link (optional)' },
+    { name: 'pastCohorts', label: 'Past Cohorts (optional)' }
   ],
   'govt-grants': [
     { name: 'name', label: 'Name', required: true },
@@ -92,8 +92,8 @@ const categoryFields: Record<string, { name: string; label: string; type?: strin
     { name: 'howToApply', label: 'How to Apply', required: true },
     { name: 'timelines', label: 'Timelines', required: true },
     { name: 'contact', label: 'Contact', required: true },
-    { name: 'documentsRequired', label: 'Documents Required (comma separated)' },
-    { name: 'specialNotes', label: 'Special Notes' }
+    { name: 'documentsRequired', label: 'Documents Required (comma separated, optional)' },
+    { name: 'specialNotes', label: 'Special Notes (optional)' }
   ]
 };
 
@@ -138,7 +138,7 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    console.log('Form data before submission:', formData);
+    console.log('Form data before submission:', JSON.stringify(formData));
     
     try {
       setLoading(true);
@@ -153,6 +153,8 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
       
       // Process array fields before sending
       const processedData = { ...formData };
+      console.log('Initial processed data:', JSON.stringify(processedData));
+      
       const fields = categoryFields[category] || [];
       
       fields.forEach(field => {
@@ -161,12 +163,12 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
             field.name.includes('documentsRequired')) {
           if (processedData[field.name] && typeof processedData[field.name] === 'string') {
             // Keep as string for backend processing
-            processedData[field.name] = processedData[field.name].trim();
+            processedData[field.name] = '';
           }
         }
       });
       
-      console.log('Processed data for submission:', processedData);
+      console.log('Processed data for submission:', JSON.stringify(processedData));
       
       const response = await fetch(url, {
         method,
@@ -178,19 +180,26 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
       });
 
       console.log('Response status:', response.status);
-      const data = await response.json();
-      console.log('Response data:', data);
       
-      if (data.success) {
-        setSuccess(editingItem ? 'Item updated successfully!' : 'Item created successfully!');
-        await loadItems();
-        setShowForm(false);
-        setEditingItem(null);
-        setFormData({});
-        setTimeout(() => setSuccess(''), 3000);
-      } else {
-        setError(data.message || 'Error saving item');
+      try {
+        const data = await response.json();
+        console.log('Response data:', JSON.stringify(data));
+        
+        if (data.success) {
+          setSuccess(editingItem ? 'Item updated successfully!' : 'Item created successfully!');
+          await loadItems();
+          setShowForm(false);
+          setEditingItem(null);
+          setFormData({});
+          setTimeout(() => setSuccess(''), 3000);
+        } else {
+          setError(data.message || 'Error saving item');
+        }
+      } catch (jsonError) {
+        console.error('Error parsing JSON response:', jsonError);
+        setError('Error processing server response');
       }
+      
     } catch (error) {
       console.error('Error saving item:', error);
       setError('Error saving item');
@@ -202,7 +211,9 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
   const handleEdit = (item: FundingItem) => {
     setEditingItem(item);
     
-    // Convert arrays back to comma-separated strings for form
+    console.log('Item to edit:', JSON.stringify(item));
+    
+    // Create a deep copy to avoid modifying the original
     const formattedData = { ...item };
     const fields = categoryFields[category] || [];
     
@@ -211,11 +222,14 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
           field.name.includes('Category') || field.name.includes('Focus') ||
           field.name.includes('documentsRequired')) {
         if (Array.isArray(formattedData[field.name])) {
-          formattedData[field.name] = formattedData[field.name].join(', ');
+          formattedData[field.name] = formattedData[field.name].join(',');
+        } else if (!formattedData[field.name]) {
+          formattedData[field.name] = '';
         }
       }
     });
     
+    console.log('Formatted data for form:', JSON.stringify(formattedData));
     setFormData(formattedData);
     setShowForm(true);
   };
@@ -256,7 +270,7 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
     const { name, value, type } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'number' ? Number(value) : value
+      [name]: type === 'number' ? (value ? Number(value) : 0) : value
     }));
   };
 
@@ -379,7 +393,7 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
                           value={formData[field.name] || ''}
                           onChange={handleChange}
                           required={field.required}
-                          placeholder={`Enter ${field.label.toLowerCase()} separated by commas`}
+                          placeholder={`Enter ${field.label.toLowerCase().replace(' (optional)', '').replace(' (comma separated)', '').replace(' (comma separated, optional)', '')} separated by commas`}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                       ) : (
