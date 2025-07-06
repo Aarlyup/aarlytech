@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Building2, Globe, Mail, ExternalLink, Linkedin, ArrowLeft } from 'lucide-react';
+import { MapPin, Building2, Globe, Mail, ExternalLink, Linkedin, ArrowLeft, Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface Accelerator {
@@ -65,7 +65,16 @@ const AcceleratorDetail: React.FC<AcceleratorDetailProps> = ({ accelerator }) =>
       </button>
 
       {/* Header Section */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+      <div className="relative bg-white/80 backdrop-blur-xl rounded-2xl shadow-md border border-blue-100 p-6 animate-fade-in-up" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07)'}}>
+        {/* Star (Save) Icon */}
+        <button
+          className="absolute top-4 left-4 bg-white rounded-full p-1 shadow hover:bg-yellow-100 transition-colors"
+          title="Save this card"
+          type="button"
+          tabIndex={0}
+        >
+          <Star className="w-5 h-5 text-yellow-400" fill="none" />
+        </button>
         <div className="flex items-start gap-6">
           <div className="w-24 h-24 rounded-xl bg-gray-50 flex items-center justify-center overflow-hidden">
             {accelerator.logo_url ? (
@@ -116,7 +125,7 @@ const AcceleratorDetail: React.FC<AcceleratorDetailProps> = ({ accelerator }) =>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Left Column */}
         <div className="md:col-span-2 space-y-6">
-          {/* Description */}
+          {/* About */}
           {accelerator.description && (
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">About</h2>
@@ -124,7 +133,7 @@ const AcceleratorDetail: React.FC<AcceleratorDetailProps> = ({ accelerator }) =>
             </div>
           )}
 
-          {/* Focus Areas (Supported Areas) */}
+          {/* Focus Areas */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Focus Areas</h2>
             <div className="space-y-4">
@@ -147,11 +156,19 @@ const AcceleratorDetail: React.FC<AcceleratorDetailProps> = ({ accelerator }) =>
               )}
             </div>
           </div>
+
+          {/* How to Apply */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">How to Apply</h2>
+            <div className="text-gray-600 whitespace-pre-line">
+              {accelerator.website_url ? 'Apply via the website link below.' : 'Apply through the website.'}
+            </div>
+          </div>
         </div>
 
         {/* Right Column */}
         <div className="space-y-6">
-          {/* Key Info */}
+          {/* Key Information */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Key Information</h2>
             <div className="space-y-4">
@@ -174,7 +191,7 @@ const AcceleratorDetail: React.FC<AcceleratorDetailProps> = ({ accelerator }) =>
             </div>
           </div>
 
-          {/* Contact Block */}
+          {/* Contact */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Contact</h2>
             <div className="space-y-4">
@@ -193,7 +210,7 @@ const AcceleratorDetail: React.FC<AcceleratorDetailProps> = ({ accelerator }) =>
               {accelerator.company_email && (
                 <a
                   href={`mailto:${accelerator.company_email}`}
-                  className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+                  className="flex items-center gap-2 text-blue-600 hover:text-blue-700"
                 >
                   <Mail className="w-5 h-5" />
                   <span>{accelerator.company_email}</span>
@@ -213,36 +230,6 @@ const AcceleratorDetail: React.FC<AcceleratorDetailProps> = ({ accelerator }) =>
               )}
             </div>
           </div>
-
-          {/* Person of Contact Block */}
-          {(accelerator.poc_email || accelerator.poc_linkedin) && (
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Person of Contact</h2>
-              <div className="space-y-4">
-                {accelerator.poc_email && (
-                  <a
-                    href={`mailto:${accelerator.poc_email}`}
-                    className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
-                  >
-                    <Mail className="w-5 h-5" />
-                    <span>{accelerator.poc_email}</span>
-                  </a>
-                )}
-                {accelerator.poc_linkedin && (
-                  <a
-                    href={accelerator.poc_linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-blue-600 hover:text-blue-700"
-                  >
-                    <Linkedin className="w-5 h-5" />
-                    <span>LinkedIn</span>
-                    <ExternalLink className="w-4 h-4" />
-                  </a>
-                )}
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </div>

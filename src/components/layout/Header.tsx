@@ -164,7 +164,7 @@ const Header: React.FC = () => {
           )}
 
           {/* User Menu or Auth Button */}
-          {isAuthenticated && !location.pathname.startsWith('/funding') ? (
+          {isAuthenticated ? (
             <div className="relative">
               <button
                 onClick={() => setShowUserMenu(!showUserMenu)}

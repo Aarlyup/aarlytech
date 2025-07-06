@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Building2, Globe, Mail, ExternalLink, Linkedin, ArrowLeft, ChevronDown, ChevronUp, Users, DollarSign } from 'lucide-react';
+import { MapPin, Building2, Globe, Mail, ExternalLink, Linkedin, ArrowLeft, ChevronDown, ChevronUp, Users, DollarSign, Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface MicroVC {
@@ -49,7 +49,16 @@ const MicroVCDetail: React.FC<MicroVCDetailProps> = ({ microvc }) => {
       </button>
 
       {/* Header Section */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+      <div className="relative bg-white/80 backdrop-blur-xl rounded-2xl shadow-md border border-blue-100 p-6 animate-fade-in-up" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07)'}}>
+        {/* Star (Save) Icon */}
+        <button
+          className="absolute top-4 left-4 bg-white rounded-full p-1 shadow hover:bg-yellow-100 transition-colors"
+          title="Save this card"
+          type="button"
+          tabIndex={0}
+        >
+          <Star className="w-5 h-5 text-yellow-400" fill="none" />
+        </button>
         <div className="flex items-start gap-6">
           <div className="w-24 h-24 rounded-xl bg-gray-50 flex items-center justify-center overflow-hidden">
             {microvc.logo_url ? (
@@ -86,7 +95,7 @@ const MicroVCDetail: React.FC<MicroVCDetailProps> = ({ microvc }) => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Left Column */}
         <div className="md:col-span-2 space-y-6">
-          {/* Description */}
+          {/* About */}
           {microvc.description && (
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">About</h2>
@@ -133,20 +142,18 @@ const MicroVCDetail: React.FC<MicroVCDetailProps> = ({ microvc }) => {
             </div>
           )}
 
-          {/* Application Method */}
-          {microvc.application_method && (
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">How to Apply</h2>
-              <div className="text-gray-600 whitespace-pre-line">
-                {microvc.application_method}
-              </div>
+          {/* How to Apply */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">How to Apply</h2>
+            <div className="text-gray-600 whitespace-pre-line">
+              {microvc.application_method ? microvc.application_method : 'Apply through the website.'}
             </div>
-          )}
+          </div>
         </div>
 
         {/* Right Column */}
         <div className="space-y-6">
-          {/* Portfolio Stats */}
+          {/* Portfolio */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Portfolio</h2>
             <div className="space-y-4">
@@ -178,7 +185,7 @@ const MicroVCDetail: React.FC<MicroVCDetailProps> = ({ microvc }) => {
             </div>
           </div>
 
-          {/* Contact Block */}
+          {/* Contact */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Contact</h2>
             <div className="space-y-4">
@@ -197,7 +204,7 @@ const MicroVCDetail: React.FC<MicroVCDetailProps> = ({ microvc }) => {
               {microvc.email && (
                 <a
                   href={`mailto:${microvc.email}`}
-                  className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+                  className="flex items-center gap-2 text-blue-600 hover:text-blue-700"
                 >
                   <Mail className="w-5 h-5" />
                   <span>{microvc.email}</span>

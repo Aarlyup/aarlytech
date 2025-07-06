@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Building2, Globe, Mail, ExternalLink, Linkedin, ArrowLeft, ChevronDown, ChevronUp } from 'lucide-react';
+import { MapPin, Building2, Globe, Mail, ExternalLink, Linkedin, ArrowLeft, ChevronDown, ChevronUp, Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface Incubator {
@@ -67,7 +67,16 @@ const IncubatorDetail: React.FC<IncubatorDetailProps> = ({ incubator }) => {
       </button>
 
       {/* Header Section */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+      <div className="relative bg-white/80 backdrop-blur-xl rounded-2xl shadow-md border border-blue-100 p-6 animate-fade-in-up" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07)'}}>
+        {/* Star (Save) Icon */}
+        <button
+          className="absolute top-4 left-4 bg-white rounded-full p-1 shadow hover:bg-yellow-100 transition-colors"
+          title="Save this card"
+          type="button"
+          tabIndex={0}
+        >
+          <Star className="w-5 h-5 text-yellow-400" fill="none" />
+        </button>
         <div className="flex items-start gap-6">
           <div className="w-24 h-24 rounded-xl bg-gray-50 flex items-center justify-center overflow-hidden">
             {incubator.logo_url ? (
@@ -104,7 +113,7 @@ const IncubatorDetail: React.FC<IncubatorDetailProps> = ({ incubator }) => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Left Column */}
         <div className="md:col-span-2 space-y-6">
-          {/* Description */}
+          {/* About */}
           {incubator.description && (
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">About</h2>
@@ -134,7 +143,7 @@ const IncubatorDetail: React.FC<IncubatorDetailProps> = ({ incubator }) => {
             </div>
           )}
 
-          {/* Tags & Sectors */}
+          {/* Focus Areas */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Focus Areas</h2>
             <div className="space-y-4">
@@ -145,7 +154,7 @@ const IncubatorDetail: React.FC<IncubatorDetailProps> = ({ incubator }) => {
                     {incubator.tags.map((tag) => (
                       <span
                         key={tag}
-                        className={`px-3 py-1 rounded-full text-sm font-medium border ${TAG_COLORS[tag] || 'bg-gray-100 text-gray-700 border-gray-200'}`}
+                        className={`px-3 py-1 rounded-full text-sm font-medium border bg-gray-100 text-gray-700 border-gray-200`}
                       >
                         {tag}
                       </span>
@@ -190,32 +199,42 @@ const IncubatorDetail: React.FC<IncubatorDetailProps> = ({ incubator }) => {
               )}
             </div>
           </div>
+
+          {/* How to Apply */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">How to Apply</h2>
+            <div className="text-gray-600 whitespace-pre-line">
+              {incubator.application_status ? incubator.application_status : 'Apply through the website.'}
+            </div>
+          </div>
         </div>
 
         {/* Right Column */}
         <div className="space-y-6">
-          {/* Key Info */}
+          {/* Key Information */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Key Information</h2>
             <div className="space-y-4">
-              {incubator.startup_supporter_label && (
-                <div className="bg-blue-50/50 rounded-xl p-4">
-                  <h3 className="text-sm font-medium text-gray-700 mb-1">Startup Focus</h3>
-                  <p className="text-blue-700 font-semibold">{incubator.startup_supporter_label}</p>
-                </div>
-              )}
-              <div className="bg-green-50/50 rounded-xl p-4">
+              <div className="bg-blue-50/50 rounded-xl p-4">
                 <h3 className="text-sm font-medium text-gray-700 mb-1">Total Startups Supported</h3>
-                <p className="text-green-700 font-semibold">{incubator.total_startups_supported || 0} startups</p>
+                <p className="text-blue-700 font-semibold">{incubator.total_startups_supported} startups</p>
+              </div>
+              <div className="bg-green-50/50 rounded-xl p-4">
+                <h3 className="text-sm font-medium text-gray-700 mb-1">Portfolio Success</h3>
+                <p className="text-green-700 font-semibold">{incubator.funded_startup_percent}% of portfolio funded</p>
               </div>
               <div className="bg-purple-50/50 rounded-xl p-4">
-                <h3 className="text-sm font-medium text-gray-700 mb-1">Portfolio Success</h3>
-                <p className="text-purple-700 font-semibold">{incubator.funded_startup_percent || 0}% of portfolio funded</p>
+                <h3 className="text-sm font-medium text-gray-700 mb-1">Funding Offered</h3>
+                <p className="text-purple-700 font-semibold">{incubator.funding_offered}</p>
+              </div>
+              <div className="bg-orange-50/50 rounded-xl p-4">
+                <h3 className="text-sm font-medium text-gray-700 mb-1">Equity Taken</h3>
+                <p className="text-orange-700 font-semibold">{incubator.equity_taken}</p>
               </div>
             </div>
           </div>
 
-          {/* Contact Block */}
+          {/* Contact */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Contact</h2>
             <div className="space-y-4">
@@ -234,7 +253,7 @@ const IncubatorDetail: React.FC<IncubatorDetailProps> = ({ incubator }) => {
               {incubator.company_email && (
                 <a
                   href={`mailto:${incubator.company_email}`}
-                  className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+                  className="flex items-center gap-2 text-blue-600 hover:text-blue-700"
                 >
                   <Mail className="w-5 h-5" />
                   <span>{incubator.company_email}</span>
@@ -254,41 +273,6 @@ const IncubatorDetail: React.FC<IncubatorDetailProps> = ({ incubator }) => {
               )}
             </div>
           </div>
-
-          {/* Person of Contact Block */}
-          {(incubator.person_of_contact || incubator.person_email || incubator.person_linkedin_url) && (
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Person of Contact</h2>
-              <div className="space-y-4">
-                {incubator.person_of_contact && (
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <span>{incubator.person_of_contact}</span>
-                  </div>
-                )}
-                {incubator.person_email && (
-                  <a
-                    href={`mailto:${incubator.person_email}`}
-                    className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
-                  >
-                    <Mail className="w-5 h-5" />
-                    <span>{incubator.person_email}</span>
-                  </a>
-                )}
-                {incubator.person_linkedin_url && (
-                  <a
-                    href={incubator.person_linkedin_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-blue-600 hover:text-blue-700"
-                  >
-                    <Linkedin className="w-5 h-5" />
-                    <span>LinkedIn</span>
-                    <ExternalLink className="w-4 h-4" />
-                  </a>
-                )}
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </div>

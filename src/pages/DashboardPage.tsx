@@ -182,16 +182,13 @@ const DashboardPage: React.FC = () => {
       </Helmet>
       <div className="max-w-7xl mx-auto px-4 py-10 space-y-12 animate-fade-in" data-aos="fade-in">
         {/* Greeting Block */}
-        <div className="relative bg-white/80 border border-blue-100 shadow-2xl rounded-[2.5rem] p-8 sm:p-12 mb-8 flex flex-col items-center gap-6 overflow-hidden backdrop-blur-xl" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.10), 0 0 60px 0 #3b82f680'}} data-aos="fade-down" data-aos-delay="200">
+        <div className="relative bg-white/80 border border-blue-100 shadow-2xl rounded-3xl p-4 sm:p-8 md:p-12 mb-8 flex flex-col items-center gap-4 sm:gap-6 overflow-hidden backdrop-blur-xl w-full max-w-xl mx-auto" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.10), 0 0 60px 0 #3b82f680'}} data-aos="fade-down" data-aos-delay="200">
           <div className="absolute inset-0 pointer-events-none" style={{background: 'radial-gradient(circle at 30% 20%, #e0e7ff 0%, #fff0 70%)'}}></div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-1 text-blue-900 flex items-center gap-3 drop-shadow-sm z-10">
-            <span>Hi there</span>
-            <span className="text-3xl sm:text-4xl md:text-5xl animate-wiggle inline-block">👋</span>
-            <span className="hidden sm:inline">Welcome to Aarly — your early-stage startup support system.</span>
-            <span className="sm:hidden">Welcome to Aarly</span>
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold mb-1 text-blue-900 text-center z-10">
+            <span className="block">Welcome to Aarly — your early-stage startup support system.</span>
           </h2>
-          <p className="text-gray-700 mb-2 text-base sm:text-lg z-10 text-center max-w-2xl">Here you can manage your saved investors, explore funding blocks, and access tools to build your startup right.</p>
-          <a href="/funding/vc" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-7 py-3 rounded-2xl shadow-lg transition-all text-lg z-10 focus:ring-4 focus:ring-blue-200 group">
+          <p className="text-gray-700 mb-2 text-sm sm:text-base md:text-lg z-10 text-center max-w-xs sm:max-w-md md:max-w-2xl">Here you can manage your saved investors, explore funding blocks, and access tools to build your startup right.</p>
+          <a href="/funding/vc" className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-3 rounded-xl shadow-lg transition-all text-base sm:text-lg z-10 focus:ring-4 focus:ring-blue-200 group w-full sm:w-auto">
             <span className="transition-transform group-hover:scale-110 group-hover:animate-pulse">Browse All Funding Options</span> <ArrowRight size={20} className="transition-transform group-hover:scale-110 group-hover:animate-pulse" />
           </a>
         </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Clock, Calendar, IndianRupee, Percent } from 'lucide-react';
+import { MapPin, Clock, Calendar, IndianRupee, Percent, Star } from 'lucide-react';
 
 interface Accelerator {
   id: string;
@@ -41,7 +41,16 @@ const TAG_COLORS: Record<string, string> = {
 
 const AcceleratorCard: React.FC<AcceleratorCardProps> = ({ accelerator }) => {
   return (
-    <div className="group bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+    <div className="relative bg-white/80 backdrop-blur-xl rounded-2xl shadow-md border border-blue-100 p-6 hover:shadow-xl transition-shadow transition-transform hover:-translate-y-1 animate-fade-in-up" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07)'}}>
+      {/* Star (Save) Icon */}
+      <button
+        className="absolute top-4 left-4 bg-white rounded-full p-1 shadow hover:bg-yellow-100 transition-colors"
+        title="Save this card"
+        type="button"
+        tabIndex={0}
+      >
+        <Star className="w-5 h-5 text-yellow-400" fill="none" />
+      </button>
       <div className="flex items-start gap-4">
         <div className="w-16 h-16 rounded-xl bg-gray-50 flex items-center justify-center overflow-hidden">
           {accelerator.logo_url ? (
