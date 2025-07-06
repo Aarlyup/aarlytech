@@ -20,7 +20,8 @@ const {
   getContacts,
   createContact,
   replyToContact,
-  updateContactStatus
+  updateContactStatus,
+  deleteContact
 } = require('../controllers/adminController');
 
 // Validation rules
