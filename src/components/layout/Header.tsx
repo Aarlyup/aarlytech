@@ -1,3 +1,5 @@
+// src/components/layout/Header.tsx
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Rocket, Home, LogOut, User } from 'lucide-react';
@@ -59,13 +61,11 @@ const Header: React.FC = () => {
           ? 'bg-white/95 backdrop-blur-sm shadow-lg' 
           : 'bg-transparent'
     }`}>
-      {/* More visible white strip at the very top, only on main page and not on auth page */}
       {isHomePage && !isAuthPage && (
         <div className="w-full h-1 bg-white shadow-md" style={{ minHeight: '2px' }}></div>
       )}
       <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
         <Logo imgClassName="h-14 md:h-16 w-auto" />
-        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-8 w-auto">
           {isHomePage ? (
             <>
@@ -148,7 +148,6 @@ const Header: React.FC = () => {
                   </Link>
                 </>
               )}
-              {/* Remove Home button on auth page */}
               {!isHomePage && !isAuthenticated && !isAuthPage && (
                 <button
                   onClick={scrollToTop}
@@ -161,7 +160,6 @@ const Header: React.FC = () => {
             </>
           )}
 
-          {/* User Menu or Auth Button */}
           {isAuthenticated ? (
             <div className="relative">
               <button
@@ -210,7 +208,6 @@ const Header: React.FC = () => {
           ) : null}
         </nav>
 
-        {/* Mobile Menu Button */}
         <button 
           className={`md:hidden p-2 transition-colors w-12 h-12 text-blue-700 font-bold shadow-lg rounded-full flex items-center justify-center bg-white/90 border border-blue-100 ${
             isScrolled 
@@ -225,7 +222,6 @@ const Header: React.FC = () => {
         </button>
       </div>
 
-      {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden fixed top-[70px] left-0 w-screen max-w-none z-50 bg-white backdrop-blur-xl shadow-2xl rounded-b-3xl animate-fade-in-down border-t border-blue-100">
           <div className="px-4 py-6 flex flex-col space-y-5">
@@ -273,9 +269,12 @@ const Header: React.FC = () => {
                   to="/finnewz"
                   className="text-gray-700 hover:text-blue-600 font-semibold py-3 px-2 rounded-lg transition-colors text-lg"
                   onClick={() => setMobileMenuOpen(false)}
+                >
+                  Fin'Newz
+                </Link>
                 <button
                   onClick={handleLogout}
-                  className="text-red-600 hover:text-red-700 font-semibold py-3 px-2 rounded-lg transition-colors text-lg"
+                  className="text-red-600 hover:text-red-700 font-semibold py-3 px-2 rounded-lg transition-colors text-lg flex items-center gap-2"
                 >
                   <LogOut className="w-4 h-4 mr-2" />
                   Sign Out
