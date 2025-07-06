@@ -11,6 +11,10 @@ const Footer: React.FC = () => {
     setTimeout(() => setNewsletterSuccess(false), 2500);
   };
 
+  const scrollToTop = () => {
+    window.scrollTo(0, 0);
+  };
+
   return (
     <footer className="bg-gray-900 text-white pt-10 pb-6 md:pt-20 md:pb-10 lg:pt-6 lg:pb-2 mt-16 border-t border-gray-800 relative overflow-hidden">
       {/* SVG dot pattern background */}
@@ -26,9 +30,9 @@ const Footer: React.FC = () => {
               Find the right investors, grants, and startup support — instantly.
             </p>
             <div className="flex flex-row space-x-4 mt-2">
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-transform hover:scale-110 hover:drop-shadow-md" aria-label="Twitter"><Twitter size={20} /></a>
-              <a href="#" className="text-gray-400 hover:text-blue-500 transition-transform hover:scale-110 hover:drop-shadow-md" aria-label="Linkedin"><Linkedin size={20} /></a>
-              <a href="#" className="text-gray-400 hover:text-pink-400 transition-transform hover:scale-110 hover:drop-shadow-md" aria-label="Instagram"><Instagram size={20} /></a>
+              <a href="#" onClick={scrollToTop} className="text-gray-400 hover:text-blue-400 transition-transform hover:scale-110 hover:drop-shadow-md" aria-label="Twitter"><Twitter size={20} /></a>
+              <a href="#" onClick={scrollToTop} className="text-gray-400 hover:text-blue-500 transition-transform hover:scale-110 hover:drop-shadow-md" aria-label="Linkedin"><Linkedin size={20} /></a>
+              <a href="#" onClick={scrollToTop} className="text-gray-400 hover:text-pink-400 transition-transform hover:scale-110 hover:drop-shadow-md" aria-label="Instagram"><Instagram size={20} /></a>
             </div>
           </div>
 
@@ -36,30 +40,30 @@ const Footer: React.FC = () => {
           <div className="mb-8 md:mb-0">
             <h3 className="text-sm md:text-lg font-semibold mb-3">Platform</h3>
             <ul className="space-y-2 text-xs md:text-base">
-              <li><Link to="/funding/vc" className="text-gray-400 hover:text-white transition-colors">Venture Capital</Link></li>
-              <li><Link to="/funding/microvc" className="text-gray-400 hover:text-white transition-colors">Micro VCs</Link></li>
-              <li><Link to="/funding/angel" className="text-gray-400 hover:text-white transition-colors">Angel Investors</Link></li>
-              <li><Link to="/funding/accelerator" className="text-gray-400 hover:text-white transition-colors">Accelerators</Link></li>
-              <li><Link to="/funding/incubator" className="text-gray-400 hover:text-white transition-colors">Incubators</Link></li>
-              <li><Link to="/funding/grants" className="text-gray-400 hover:text-white transition-colors">Government Grants</Link></li>
+              <li><Link to="/funding/vc" onClick={scrollToTop} className="text-gray-400 hover:text-white transition-colors">Venture Capital</Link></li>
+              <li><Link to="/funding/microvc" onClick={scrollToTop} className="text-gray-400 hover:text-white transition-colors">Micro VCs</Link></li>
+              <li><Link to="/funding/angel" onClick={scrollToTop} className="text-gray-400 hover:text-white transition-colors">Angel Investors</Link></li>
+              <li><Link to="/funding/accelerator" onClick={scrollToTop} className="text-gray-400 hover:text-white transition-colors">Accelerators</Link></li>
+              <li><Link to="/funding/incubator" onClick={scrollToTop} className="text-gray-400 hover:text-white transition-colors">Incubators</Link></li>
+              <li><Link to="/funding/grants" onClick={scrollToTop} className="text-gray-400 hover:text-white transition-colors">Government Grants</Link></li>
             </ul>
           </div>
           {/* Company Links */}
           <div className="mb-8 md:mb-0 ml-0 sm:ml-8">
             <h3 className="text-sm md:text-lg font-semibold mb-3">Company</h3>
             <ul className="space-y-2 text-xs md:text-base">
-              <li><Link to="/about" className="text-gray-400 hover:text-white transition-colors">About Us</Link></li>
-              <li><Link to="/contact" className="text-gray-400 hover:text-white transition-colors">Contact</Link></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Careers</a></li>
+              <li><Link to="/about" onClick={scrollToTop} className="text-gray-400 hover:text-white transition-colors">About Us</Link></li>
+              <li><Link to="/contact" onClick={scrollToTop} className="text-gray-400 hover:text-white transition-colors">Contact</Link></li>
+              <li><a href="#" onClick={scrollToTop} className="text-gray-400 hover:text-white transition-colors">Careers</a></li>
             </ul>
           </div>
           {/* Legal Links */}
           <div className="mb-8 md:mb-0">
             <h3 className="text-sm md:text-lg font-semibold mb-3">Legal</h3>
             <ul className="space-y-2 text-xs md:text-base">
-              <li><Link to="/privacy-policy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</Link></li>
-              <li><Link to="/terms-of-service" className="text-gray-400 hover:text-white transition-colors">Terms of Service</Link></li>
-              <li><Link to="/disclaimer" className="text-gray-400 hover:text-white transition-colors">Disclaimer</Link></li>
+              <li><Link to="/privacy-policy" onClick={scrollToTop} className="text-gray-400 hover:text-white transition-colors">Privacy Policy</Link></li>
+              <li><Link to="/terms-of-service" onClick={scrollToTop} className="text-gray-400 hover:text-white transition-colors">Terms of Service</Link></li>
+              <li><Link to="/disclaimer" onClick={scrollToTop} className="text-gray-400 hover:text-white transition-colors">Disclaimer</Link></li>
             </ul>
           </div>
         </div>
