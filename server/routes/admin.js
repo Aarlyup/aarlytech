@@ -64,6 +64,7 @@ router.delete('/news/:id', adminAuth, deleteNews);
 router.get('/contacts', adminAuth, getContacts);
 router.post('/contacts/reply/:id', adminAuth, replyToContact);
 router.put('/contacts/:id', adminAuth, updateContactStatus);
+router.delete('/contacts/:id', adminAuth, deleteContact);
 
 // Public contact endpoint (no auth required)
 router.post('/contacts', contactValidation, createContact);
