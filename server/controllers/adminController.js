@@ -100,7 +100,7 @@ exports.updateInvestorMatch = async (req, res) => {
 // Delete investor match
 exports.deleteInvestorMatch = async (req, res) => {
   try {
-    const match = await InvestorMatch.findByIdAndDelete(req.params.id);
+    const match = await InvestorMatch.findById(req.params.id);
 
     if (!match) {
       return res.status(404).json({
@@ -109,11 +109,14 @@ exports.deleteInvestorMatch = async (req, res) => {
       });
     }
 
+    await InvestorMatch.findByIdAndDelete(req.params.id);
+
     res.json({
       success: true,
       message: 'Investor match deleted successfully'
     });
   } catch (error) {
+    console.error('Delete investor match error:', error);
     res.status(500).json({
       success: false,
       message: error.message
@@ -455,6 +458,33 @@ exports.updateContactStatus = async (req, res) => {
       message: 'Contact updated successfully'
     });
   } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+// Delete contact
+exports.deleteContact = async (req, res) => {
+  try {
+    const contact = await Contact.findById(req.params.id);
+
+    if (!contact) {
+      return res.status(404).json({
+        success: false,
+        message: 'Contact not found'
+      });
+    }
+
+    await Contact.findByIdAndDelete(req.params.id);
+
+    res.json({
+      success: true,
+      message: 'Contact deleted successfully'
+    });
+  } catch (error) {
+    console.error('Delete contact error:', error);
     res.status(500).json({
       success: false,
       message: error.message
