@@ -99,6 +99,7 @@ exports.createFundingItem = async (req, res) => {
   try {
     console.log('Create funding item request body:', JSON.stringify(req.body));
     console.log('Category:', req.params.category);
+    console.log('Request body type:', typeof req.body);
     
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -119,8 +120,8 @@ exports.createFundingItem = async (req, res) => {
     }
 
     // Process the data based on category
-    const processedData = { ...req.body };
-    console.log('Initial processed data:', JSON.stringify(processedData));
+    let processedData = { ...req.body };
+    console.log('Initial processed data (before processing):', JSON.stringify(processedData));
     
     try {
       // Convert comma-separated strings to arrays for specific fields
@@ -132,15 +133,19 @@ exports.createFundingItem = async (req, res) => {
         'accelerators': ['stage', 'sectors'],
         'govt-grants': ['stage', 'documentsRequired']
       };
-  
-      // Always initialize array fields as empty arrays
+        
+      // Process array fields
       if (arrayFields[category]) {
         arrayFields[category].forEach(field => {
-          if (!processedData[field]) {
+          // If the field doesn't exist, initialize as empty array
+          if (processedData[field] === undefined || processedData[field] === null) {
             processedData[field] = [];
-          } else if (typeof processedData[field] === 'string') {
+          } 
+          // If it's a string, split it into an array
+          else if (typeof processedData[field] === 'string' && processedData[field].trim() !== '') {
             processedData[field] = processedData[field].split(',').map(s => s.trim()).filter(Boolean);
           }
+          // If it's already an array, keep it as is
         });
       }
     } catch (error) {
@@ -150,17 +155,17 @@ exports.createFundingItem = async (req, res) => {
     // Convert numeric fields
     const numericFields = {
       'angel-investors': ['ticketSize'],
-      'venture-capital': ['fundSize', 'avgTicketSize'],
-      'micro-vcs': ['fundSize', 'checkSize'],
+      'venture-capital': ['fundSize', 'avgTicketSize'], 
+      'micro-vcs': ['fundSize', 'checkSize'], 
       'incubators': [],
       'accelerators': [],
       'govt-grants': ['grantSize']
     };
 
-    // Convert numeric fields
+    // Process numeric fields
     if (numericFields[category] && numericFields[category].length > 0) {
       numericFields[category].forEach(field => {
-        if (processedData[field]) {
+        if (processedData[field] !== undefined && processedData[field] !== null) {
           processedData[field] = Number(processedData[field]);
         } else {
           processedData[field] = 0; // Default to 0 if not provided
@@ -168,7 +173,7 @@ exports.createFundingItem = async (req, res) => {
       });
     }
 
-    console.log('Final processed data:', JSON.stringify(processedData));
+    console.log('Final processed data (after processing):', JSON.stringify(processedData));
 
     const item = new Model(processedData);
     await item.save();
@@ -192,6 +197,9 @@ exports.updateFundingItem = async (req, res) => {
   try {
     console.log('Update funding item request body:', JSON.stringify(req.body));
     
+    console.log('Category:', req.params.category);
+    console.log('ID:', req.params.id);
+    
     const { category, id } = req.params;
     
     const Model = models[category];
@@ -202,7 +210,7 @@ exports.updateFundingItem = async (req, res) => {
       });
     }
 
-    // Process the data same as create
+    // Process the data same as create function
     let processedData = { ...req.body };
     
     console.log('Initial processed data for update:', JSON.stringify(processedData));
@@ -216,12 +224,16 @@ exports.updateFundingItem = async (req, res) => {
         'accelerators': ['stage', 'sectors'],
         'govt-grants': ['stage', 'documentsRequired']
       };
-  
+        
+      // Process array fields
       if (arrayFields[category]) {
         arrayFields[category].forEach(field => {
-          if (!processedData[field]) {
+          // If the field doesn't exist, initialize as empty array
+          if (processedData[field] === undefined || processedData[field] === null) {
             processedData[field] = [];
-          } else if (typeof processedData[field] === 'string') {
+          } 
+          // If it's a string, split it into an array
+          else if (typeof processedData[field] === 'string') {
             processedData[field] = processedData[field].split(',').map(s => s.trim()).filter(Boolean);
           }
         });
@@ -230,7 +242,7 @@ exports.updateFundingItem = async (req, res) => {
       console.error('Error processing array fields:', error);
     }
 
-    const numericFields = {
+    const numericFields = { 
       'angel-investors': ['ticketSize'],
       'venture-capital': ['fundSize', 'avgTicketSize'],
       'micro-vcs': ['fundSize', 'checkSize'],
@@ -239,9 +251,9 @@ exports.updateFundingItem = async (req, res) => {
       'govt-grants': ['grantSize']
     };
 
-    if (numericFields[category] && numericFields[category].length > 0) {
+    if (numericFields[category] && numericFields[category].length > 0) { 
       numericFields[category].forEach(field => {
-        if (processedData[field]) {
+        if (processedData[field] !== undefined && processedData[field] !== null) {
           processedData[field] = Number(processedData[field]);
         } else {
           processedData[field] = 0; // Default to 0 if not provided

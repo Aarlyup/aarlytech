@@ -60,6 +60,7 @@ const govtGrantSchema = new mongoose.Schema({
 });
 
 // Index for better search performance (without array fields in text index)
-govtGrantSchema.index({ name: 'text', authority: 'text' });
+// Remove text index that's causing issues with array fields
+govtGrantSchema.index({ name: 1, authority: 1 });
 
 module.exports = mongoose.model('GovtGrant', govtGrantSchema);

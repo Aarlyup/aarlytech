@@ -56,6 +56,7 @@ const acceleratorSchema = new mongoose.Schema({
 });
 
 // Index for better search performance (without array fields in text index)
-acceleratorSchema.index({ name: 'text', hq: 'text' });
+// Remove text index that's causing issues with array fields
+acceleratorSchema.index({ name: 1, hq: 1 });
 
 module.exports = mongoose.model('AcceleratorNew', acceleratorSchema);

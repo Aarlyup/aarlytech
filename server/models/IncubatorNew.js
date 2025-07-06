@@ -49,6 +49,7 @@ const incubatorSchema = new mongoose.Schema({
 });
 
 // Index for better search performance
-incubatorSchema.index({ name: 'text', location: 'text' });
+// Remove text index that's causing issues with array fields
+incubatorSchema.index({ name: 1, location: 1 });
 
 module.exports = mongoose.model('IncubatorNew', incubatorSchema);

@@ -48,6 +48,7 @@ const microVCSchema = new mongoose.Schema({
 });
 
 // Index for better search performance (without array fields in text index)
-microVCSchema.index({ name: 'text', location: 'text' });
+// Remove text index that's causing issues with array fields
+microVCSchema.index({ name: 1, location: 1 });
 
 module.exports = mongoose.model('MicroVCNew', microVCSchema);

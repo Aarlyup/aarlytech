@@ -53,6 +53,7 @@ const angelInvestorSchema = new mongoose.Schema({
 });
 
 // Index for better search performance (without array fields in text index)
-angelInvestorSchema.index({ name: 'text', city: 'text', country: 'text' });
+// Remove text index that's causing issues with array fields
+angelInvestorSchema.index({ name: 1, city: 1, country: 1 });
 
 module.exports = mongoose.model('AngelInvestor', angelInvestorSchema);
