@@ -1,4 +1,4 @@
-const Incubator = require('../models/Incubator');
+const Incubator = require('../models/IncubatorNew');
 const { validationResult } = require('express-validator');
 
 // Get all incubators with filtering and pagination
@@ -8,10 +8,9 @@ exports.getIncubators = async (req, res) => {
       page = 1,
       limit = 12,
       search,
-      affiliation,
-      applicationStatus,
-      sectors,
-      state
+      location,
+      fundingSupport,
+      eligibility
     } = req.query;
 
     // Build filter object
@@ -21,20 +20,16 @@ exports.getIncubators = async (req, res) => {
       filter.$text = { $search: search };
     }
 
-    if (affiliation) {
-      filter.affiliation = { $in: affiliation.split(',') };
+    if (location) {
+      filter.location = { $in: location.split(',') };
     }
 
-    if (applicationStatus) {
-      filter.application_status = { $in: applicationStatus.split(',') };
+    if (fundingSupport) {
+      filter.fundingSupport = { $regex: fundingSupport, $options: 'i' };
     }
 
-    if (sectors) {
-      filter.sectors_supported = { $in: sectors.split(',') };
-    }
-
-    if (state) {
-      filter.state = { $in: state.split(',') };
+    if (eligibility) {
+      filter.eligibility = { $regex: eligibility, $options: 'i' };
     }
 
     // Execute query with pagination
