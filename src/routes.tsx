@@ -29,6 +29,7 @@ import TermsOfServicePage from './pages/TermsOfServicePage';
 import ContactPage from './pages/ContactPage';
 import AboutPage from './pages/AboutPage';
 import DisclaimerPage from './pages/DisclaimerPage';
+import AdminDashboardPage from './pages/AdminDashboardPage';
 
 const NotFound = () => (
   <div style={{ padding: 40, textAlign: 'center' }}>
@@ -117,6 +118,16 @@ export const router = createBrowserRouter([
       <ProtectedRoute>
         <DashboardLayout>
           <ContentComingSoonPage />
+        </DashboardLayout>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/admin',
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout>
+          <AdminDashboardPage />
         </DashboardLayout>
       </ProtectedRoute>
     ),

@@ -3,11 +3,51 @@ import { Linkedin, Instagram, Twitter, CheckCircle } from 'lucide-react';
 
 const ContactPage: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+    
+    setLoading(true);
+    try {
+      const response = await fetch(`${API_URL}/admin/contacts`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        setSubmitted(true);
+        setFormData({ name: '', email: '', subject: '', message: '' });
+        setTimeout(() => setSubmitted(false), 5000);
+      } else {
+        alert('Failed to send message. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+      alert('Failed to send message. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -22,10 +62,49 @@ const ContactPage: React.FC = () => {
           </div>
         )}
         <form className="space-y-4 sm:space-y-5" onSubmit={handleSubmit}>
-          <input type="text" placeholder="Your Name" className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm text-sm sm:text-base" required />
-          <input type="email" placeholder="Your Email" className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm text-sm sm:text-base" required />
-          <textarea placeholder="Your Message" className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm text-sm sm:text-base resize-none" rows={4} required />
-          <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 sm:py-3 rounded-lg shadow-md transition-colors text-base sm:text-lg">Send Message</button>
+          <input 
+            type="text" 
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Your Name" 
+            className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm text-sm sm:text-base" 
+            required 
+          />
+          <input 
+            type="email" 
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Your Email" 
+            className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm text-sm sm:text-base" 
+            required 
+          />
+          <input 
+            type="text" 
+            name="subject"
+            value={formData.subject}
+            onChange={handleChange}
+            placeholder="Subject" 
+            className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm text-sm sm:text-base" 
+            required 
+          />
+          <textarea 
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
+            placeholder="Your Message" 
+            className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm text-sm sm:text-base resize-none" 
+            rows={4} 
+            required 
+          />
+          <button 
+            type="submit" 
+            disabled={loading}
+            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-2 sm:py-3 rounded-lg shadow-md transition-colors text-base sm:text-lg"
+          >
+            {loading ? 'Sending...' : 'Send Message'}
+          </button>
         </form>
         <div className="mt-8 sm:mt-10 text-center">
           <p className="text-gray-500 mb-2 sm:mb-3 text-sm sm:text-base">Or connect with us:</p>

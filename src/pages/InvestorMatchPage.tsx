@@ -3,33 +3,79 @@ import Button from '../components/ui/Button';
 import { ArrowRight, User } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 
-const demoInvestors = [
-  { name: 'Blue Ocean Ventures', stage: 'Seed', industry: 'Fintech', traction: 'MVP', history: 'Invested in early-stage fintech startups with MVP.' },
-  { name: 'GrowthX Capital', stage: 'Series A', industry: 'Healthtech', traction: 'Revenue', history: 'Prefers healthtech startups with revenue.' },
-  { name: 'Angel Syndicate', stage: 'Pre-Seed', industry: 'Edtech', traction: 'Idea', history: 'Backs edtech founders at idea stage.' },
-  { name: 'NextGen Angels', stage: 'Seed', industry: 'Fintech', traction: 'Users', history: 'Invests in fintech with user traction.' },
-];
+interface InvestorMatch {
+  _id: string;
+  name: string;
+  stage: string;
+  industry: string;
+  traction: string;
+  description: string;
+  checkSize: string;
+  location: string;
+  website?: string;
+  email?: string;
+  linkedin?: string;
+}
 
-const stages = ['Pre-Seed', 'Seed', 'Series A'];
-const industries = ['Fintech', 'Healthtech', 'Edtech'];
-const tractions = ['Idea', 'MVP', 'Users', 'Revenue'];
+const stages = ['Pre-Seed', 'Seed', 'Series A', 'Series B', 'Series C+'];
+const tractions = ['Idea', 'MVP', 'Users', 'Revenue', 'Profitable'];
 
 const InvestorMatchPage: React.FC = () => {
   const [form, setForm] = useState({ stage: '', industry: '', traction: '' });
-  const [matches, setMatches] = useState<typeof demoInvestors>([]);
+  const [matches, setMatches] = useState<InvestorMatch[]>([]);
+  const [industries, setIndustries] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
+  // Load unique industries from backend
+  React.useEffect(() => {
+    loadIndustries();
+  }, []);
+
+  const loadIndustries = async () => {
+    try {
+      const response = await fetch(`${API_URL}/public/investor-matches`);
+      const data = await response.json();
+      if (data.success) {
+        const uniqueIndustries = [...new Set(data.data.map((item: InvestorMatch) => item.industry))];
+        setIndustries(uniqueIndustries);
+      }
+    } catch (error) {
+      console.error('Error loading industries:', error);
+      // Fallback industries
+      setIndustries(['Fintech', 'Healthtech', 'Edtech', 'E-commerce', 'SaaS', 'AI/ML']);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const filtered = demoInvestors.filter(inv =>
-      (form.stage && inv.stage === form.stage) ||
-      (form.industry && inv.industry === form.industry) ||
-      (form.traction && inv.traction === form.traction)
-    );
-    setMatches(filtered);
+    
+    setLoading(true);
+    try {
+      const queryParams = new URLSearchParams();
+      if (form.stage) queryParams.append('stage', form.stage);
+      if (form.industry) queryParams.append('industry', form.industry);
+      if (form.traction) queryParams.append('traction', form.traction);
+
+      const response = await fetch(`${API_URL}/public/investor-matches?${queryParams.toString()}`);
+      const data = await response.json();
+      
+      if (data.success) {
+        setMatches(data.data);
+      } else {
+        setMatches([]);
+      }
+    } catch (error) {
+      console.error('Error fetching matches:', error);
+      setMatches([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -83,14 +129,41 @@ const InvestorMatchPage: React.FC = () => {
                       <User size={24} className="text-blue-500" />
                       <span className="font-bold text-base sm:text-lg text-blue-900">{inv.name}</span>
                     </div>
-                    <div className="text-xs sm:text-sm text-gray-700 mb-1">Stage: <span className="font-semibold text-blue-700">{inv.stage}</span> | Industry: <span className="font-semibold text-blue-700">{inv.industry}</span> | Traction: <span className="font-semibold text-blue-700">{inv.traction}</span></div>
-                    <div className="text-gray-600 text-xs sm:text-sm">{inv.history}</div>
+                    <div className="text-xs sm:text-sm text-gray-700 mb-2">
+                      <div>Stage: <span className="font-semibold text-blue-700">{inv.stage}</span></div>
+                      <div>Industry: <span className="font-semibold text-blue-700">{inv.industry}</span></div>
+                      <div>Traction: <span className="font-semibold text-blue-700">{inv.traction}</span></div>
+                      <div>Check Size: <span className="font-semibold text-green-700">{inv.checkSize}</span></div>
+                      <div>Location: <span className="font-semibold text-purple-700">{inv.location}</span></div>
+                    </div>
+                    <div className="text-gray-600 text-xs sm:text-sm mb-3">{inv.description}</div>
+                    {(inv.website || inv.email || inv.linkedin) && (
+                      <div className="flex gap-2 text-xs">
+                        {inv.website && (
+                          <a href={inv.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                            Website
+                          </a>
+                        )}
+                        {inv.email && (
+                          <a href={`mailto:${inv.email}`} className="text-blue-600 hover:underline">
+                            Email
+                          </a>
+                        )}
+                        {inv.linkedin && (
+                          <a href={inv.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                            LinkedIn
+                          </a>
+                        )}
+                      </div>
+                    )}
                   </li>
                 ))}
               </ul>
             </div>
           ) : (
-            <div className="text-gray-400 text-center text-sm sm:text-base">No matches yet. Fill the form and click Find Investors.</div>
+            <div className="text-gray-400 text-center text-sm sm:text-base">
+              {loading ? 'Searching for matches...' : 'No matches yet. Fill the form and click Find Investors.'}
+            </div>
           )}
         </div>
       </div>

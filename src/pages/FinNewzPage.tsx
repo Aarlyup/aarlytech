@@ -2,35 +2,58 @@ import React, { useEffect, useState } from 'react';
 import { Newspaper, RefreshCw, ArrowRight } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 
-const NEWSAPI_KEY = 'aad0474192134b3187ad14b6f7b3aab9';
-const NEWSAPI_URL = `https://newsapi.org/v2/top-headlines?category=business&language=en&pageSize=12&apiKey=${NEWSAPI_KEY}`;
-
-const fetchJSON = async (url: string) => {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error('Failed to fetch');
-  return res.json();
-};
+interface NewsItem {
+  _id: string;
+  title: string;
+  description: string;
+  image: {
+    url: string;
+    publicId: string;
+  };
+  category: string;
+  publishedAt: string;
+  author: {
+    name: string;
+  };
+}
 
 const FinNewzPage: React.FC = () => {
-  const [articles, setArticles] = useState<any[]>([]);
+  const [articles, setArticles] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedArticle, setSelectedArticle] = useState<NewsItem | null>(null);
+
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
   useEffect(() => {
     const fetchNews = async () => {
       setLoading(true);
       setError(null);
       try {
-        const data = await fetchJSON(NEWSAPI_URL);
-        setArticles(data.articles || []);
+        const response = await fetch(`${API_URL}/public/news`);
+        const data = await response.json();
+        
+        if (data.success) {
+          setArticles(data.data);
+        } else {
+          setError('Failed to load news articles');
+        }
       } catch (err: any) {
-        setError('Could not load news. Please try again later.');
+        setError('Could not load news articles. Please try again later.');
       } finally {
         setLoading(false);
       }
     };
     fetchNews();
   }, []);
+
+  const handleArticleClick = (article: NewsItem) => {
+    setSelectedArticle(article);
+  };
+
+  const closeModal = () => {
+    setSelectedArticle(null);
+  };
 
   return (
     <>
@@ -53,7 +76,7 @@ const FinNewzPage: React.FC = () => {
               <span className="block h-1 w-20 bg-gradient-to-r from-blue-400 to-indigo-400 rounded-full mt-1 mx-auto animate-underline"></span>
             </h1>
           </div>
-          <p className="text-base sm:text-lg md:text-xl text-gray-700 text-center mb-4 sm:mb-6">Latest business and finance news headlines — powered by NewsAPI.org.</p>
+          <p className="text-base sm:text-lg md:text-xl text-gray-700 text-center mb-4 sm:mb-6">Latest startup funding and business news from our editorial team.</p>
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 w-full py-6 sm:py-8">
               {[...Array(4)].map((_, i) => (
@@ -70,39 +93,93 @@ const FinNewzPage: React.FC = () => {
           ) : (
             <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
               {articles.map((article, i) => (
-                <a
+                <div
                   key={i}
-                  href={article.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group block bg-white/90 rounded-xl p-3 sm:p-4 border border-blue-100 shadow hover:shadow-2xl hover:bg-white/100 transition-all fade-in-up overflow-hidden relative"
+                  onClick={() => handleArticleClick(article)}
+                  className="group block bg-white/90 rounded-xl p-3 sm:p-4 border border-blue-100 shadow hover:shadow-2xl hover:bg-white/100 transition-all fade-in-up overflow-hidden relative cursor-pointer"
                   style={{animationDelay: `${i * 80}ms`}}
                 >
-                  {article.urlToImage && (
+                  {article.image?.url && (
                     <div className="overflow-hidden rounded mb-2 sm:mb-3 h-28 sm:h-40 w-full">
                       <img
-                        src={article.urlToImage}
+                        src={article.image.url}
                         alt={article.title}
                         className="w-full h-28 sm:h-40 object-cover rounded transition-transform duration-300 group-hover:scale-105"
                       />
                     </div>
                   )}
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="bg-blue-100 text-blue-700 text-xs font-semibold px-2 py-0.5 rounded-full">{article.source?.name}</span>
-                    <span className="text-gray-400 text-xs">{new Date(article.publishedAt).toLocaleString()}</span>
+                    <span className="bg-blue-100 text-blue-700 text-xs font-semibold px-2 py-0.5 rounded-full">{article.category}</span>
+                    <span className="text-gray-400 text-xs">{new Date(article.publishedAt).toLocaleDateString()}</span>
                   </div>
                   <div className="font-semibold text-gray-900 mb-1 text-base sm:text-lg line-clamp-2">{article.title}</div>
-                  <div className="text-gray-700 text-sm sm:text-base line-clamp-3 mb-2">{article.description}</div>
+                  <div className="text-gray-700 text-sm sm:text-base line-clamp-3 mb-2">
+                    {article.description.length > 150 
+                      ? `${article.description.substring(0, 150)}...` 
+                      : article.description
+                    }
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-gray-500">By {article.author.name}</span>
                   <span className="inline-flex items-center gap-1 text-blue-600 font-medium text-xs sm:text-sm mt-1 opacity-80 group-hover:opacity-100 transition-all group/readmore">
                     Read More
                     <ArrowRight size={14} className="transform translate-x-0 group-hover/readmore:translate-x-1 transition-transform duration-200" />
                   </span>
-                </a>
+                  </div>
+                </div>
               ))}
             </div>
           )}
         </div>
       </div>
+
+      {/* Article Modal */}
+      {selectedArticle && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex justify-between items-start mb-4">
+                <div className="flex items-center gap-2">
+                  <span className="bg-blue-100 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
+                    {selectedArticle.category}
+                  </span>
+                  <span className="text-gray-500 text-sm">
+                    {new Date(selectedArticle.publishedAt).toLocaleDateString()}
+                  </span>
+                </div>
+                <button
+                  onClick={closeModal}
+                  className="text-gray-500 hover:text-gray-700 text-2xl"
+                >
+                  ×
+                </button>
+              </div>
+              
+              {selectedArticle.image?.url && (
+                <img
+                  src={selectedArticle.image.url}
+                  alt={selectedArticle.title}
+                  className="w-full h-64 object-cover rounded-lg mb-4"
+                />
+              )}
+              
+              <h1 className="text-2xl font-bold text-gray-900 mb-4">
+                {selectedArticle.title}
+              </h1>
+              
+              <div className="text-gray-700 leading-relaxed whitespace-pre-line">
+                {selectedArticle.description}
+              </div>
+              
+              <div className="mt-6 pt-4 border-t border-gray-200">
+                <p className="text-sm text-gray-500">
+                  Written by {selectedArticle.author.name}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
