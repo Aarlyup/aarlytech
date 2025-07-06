@@ -148,28 +148,6 @@ const Header: React.FC = () => {
                   >
                     Content
                   </Link>
-                  {/* Show Admin link only for admin users */}
-                  {user && ['admin@aarly.co', 'founder@aarly.co', 'teamaarly@gmail.com'].includes(user.email.toLowerCase()) && (
-                    <Link
-                      to="/admin"
-                      className="text-gray-700 hover:text-blue-600 font-semibold py-3 px-2 rounded-lg transition-colors text-lg"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Admin Panel
-                    </Link>
-                  )}
-                  {/* Show Admin link only for admin users */}
-                  {user && ['admin@aarly.co', 'founder@aarly.co', 'teamaarly@gmail.com'].includes(user.email.toLowerCase()) && (
-                    <Link
-                      to="/admin"
-                      className={`font-medium transition-colors ${
-                        location.pathname.startsWith('/admin')
-                          ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
-                      }`}
-                    >
-                      Admin
-                    </Link>
-                  )}
                 </>
               )}
               {/* Remove Home button on auth page */}
@@ -297,16 +275,6 @@ const Header: React.FC = () => {
                   to="/finnewz"
                   className="text-gray-700 hover:text-blue-600 font-semibold py-3 px-2 rounded-lg transition-colors text-lg"
                   onClick={() => setMobileMenuOpen(false)}
-                >
-                  Fin'Newz
-                </Link>
-                <Link
-                  to="/content"
-                  className="text-gray-700 hover:text-blue-600 font-semibold py-3 px-2 rounded-lg transition-colors text-lg"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Content
-                </Link>
                 <button
                   onClick={handleLogout}
                   className="text-red-600 hover:text-red-700 font-semibold py-3 px-2 rounded-lg transition-colors text-lg"
