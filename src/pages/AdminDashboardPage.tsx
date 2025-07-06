@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
 import { 
   Users, 
   Newspaper, 
@@ -68,7 +67,6 @@ interface Contact {
 
 const AdminDashboardPage: React.FC = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'investor-match' | 'news' | 'contacts'>('investor-match');
   const [loading, setLoading] = useState(false);
 
@@ -89,22 +87,10 @@ const AdminDashboardPage: React.FC = () => {
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
-  // Check if user is admin
+  // Load data when component mounts or tab changes
   useEffect(() => {
-    if (!user) {
-      navigate('/auth');
-      return;
-    }
-
-    // This check will be done on the backend, but we can add a basic check here
-    const adminEmails = ['admin@aarly.co', 'founder@aarly.co']; // This should come from backend
-    if (!adminEmails.includes(user.email.toLowerCase())) {
-      navigate('/dashboard');
-      return;
-    }
-
     loadData();
-  }, [user, navigate, activeTab]);
+  }, [activeTab]);
 
   const loadData = async () => {
     setLoading(true);

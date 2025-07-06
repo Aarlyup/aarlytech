@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import HomeLayout from './components/layout/HomeLayout';
 import AppLayout from './components/layout/AppLayout';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import AdminRoute from './components/auth/AdminRoute';
 import HomePage from './pages/HomePage';
 import IncubatorDetailPage from './pages/IncubatorDetailPage';
 import IncubatorsPage from './pages/IncubatorsPage';
@@ -125,11 +126,11 @@ export const router = createBrowserRouter([
   {
     path: '/admin',
     element: (
-      <ProtectedRoute>
+      <AdminRoute>
         <DashboardLayout>
           <AdminDashboardPage />
         </DashboardLayout>
-      </ProtectedRoute>
+      </AdminRoute>
     ),
   },
   
