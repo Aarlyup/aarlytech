@@ -20,80 +20,80 @@ const categoryLabels: Record<string, string> = {
   'govt-grants': 'Government Grants'
 };
 
-const categoryFields: Record<string, { name: string; label: string; type?: string; required?: boolean; options?: string[] }[]> = {
+const categoryFields: Record<string, { name: string; label: string; type?: string; required?: boolean; options?: string[]; multi?: boolean }[]> = {
   'angel-investors': [
     { name: 'name', label: 'Name', required: true },
-    { name: 'linkedinProfileUrl', label: 'LinkedIn Profile URL (optional)' },
+    { name: 'linkedinProfileUrl', label: 'LinkedIn Profile URL' },
     { name: 'city', label: 'City', required: true },
     { name: 'country', label: 'Country', required: true },
-    { name: 'investCategory', label: 'Investment Categories (comma separated)', options: ['Fintech', 'Consumer', 'SaaS', 'Healthtech', 'Edtech', 'E-commerce', 'AI/ML', 'Deep Tech', 'Clean Tech', 'Other'] },
+    { name: 'investCategory', label: 'Investment Categories', required: true, options: ['Fintech', 'Consumer', 'SaaS', 'Healthtech', 'Edtech', 'E-commerce', 'AI/ML', 'Deep Tech', 'Clean Tech', 'Other'], multi: true },
     { name: 'ticketSize', label: 'Ticket Size (₹)', type: 'number', required: true },
-    { name: 'stage', label: 'Stages (comma separated)', options: ['Idea', 'MVP', 'Pre-revenue', 'Revenue', 'Growth'] },
-    { name: 'preferFounderProfile', label: 'Preferred Founder Profile (optional)' },
-    { name: 'portfolioHighlights', label: 'Portfolio Highlights (optional)' },
+    { name: 'stage', label: 'Stages', required: true, options: ['Idea', 'MVP', 'Pre-revenue', 'Revenue', 'Growth'], multi: true },
+    { name: 'preferFounderProfile', label: 'Preferred Founder Profile' },
+    { name: 'portfolioHighlights', label: 'Portfolio Highlights' },
     { name: 'contact', label: 'Contact', required: true }
   ],
   'venture-capital': [
     { name: 'name', label: 'Name', required: true },
-    { name: 'websiteUrl', label: 'Website URL (optional)' },
+    { name: 'websiteUrl', label: 'Website URL' },
     { name: 'headOffice', label: 'Head Office', required: true },
     { name: 'fundSize', label: 'Fund Size (₹)', type: 'number', required: true },
-    { name: 'stageFocus', label: 'Stage Focus (comma separated)', options: ['Pre-seed', 'Seed', 'Series A', 'Series B', 'Series C', 'Growth'] },
-    { name: 'sectorFocus', label: 'Sector Focus (comma separated)', options: ['SaaS', 'Fintech', 'D2C', 'Healthtech', 'Edtech', 'E-commerce'] },
+    { name: 'stageFocus', label: 'Stage Focus', required: true, options: ['Pre-seed', 'Seed', 'Series A', 'Series B', 'Series C', 'Growth'], multi: true },
+    { name: 'sectorFocus', label: 'Sector Focus', required: true, options: ['SaaS', 'Fintech', 'D2C', 'Healthtech', 'Edtech', 'E-commerce', 'AI/ML', 'Deep Tech', 'Clean Tech', 'Other'], multi: true },
     { name: 'avgTicketSize', label: 'Average Ticket Size (₹)', type: 'number', required: true },
     { name: 'applicationProcess', label: 'Application Process', options: ['Warm intro', 'Direct pitch', 'Online application', 'Referral only'] },
     { name: 'contact', label: 'Contact', required: true },
-    { name: 'portfolioHighlights', label: 'Portfolio Highlights (optional)' },
-    { name: 'investmentThesis', label: 'Investment Thesis (optional)' }
+    { name: 'portfolioHighlights', label: 'Portfolio Highlights' },
+    { name: 'investmentThesis', label: 'Investment Thesis' }
   ],
   'micro-vcs': [
     { name: 'name', label: 'Name', required: true },
-    { name: 'websiteUrl', label: 'Website URL (optional)' },
+    { name: 'websiteUrl', label: 'Website URL' },
     { name: 'location', label: 'Location', required: true },
     { name: 'fundSize', label: 'Fund Size (₹)', type: 'number', required: true },
     { name: 'checkSize', label: 'Check Size (₹)', type: 'number', required: true },
-    { name: 'stage', label: 'Stages (comma separated)', options: ['Pre-seed', 'Seed', 'Series A'] },
-    { name: 'sector', label: 'Sectors (comma separated)', options: ['Deeptech', 'B2B SaaS', 'Fintech', 'Healthtech', 'Edtech'] },
+    { name: 'stage', label: 'Stages', required: true, options: ['Pre-seed', 'Seed', 'Series A'], multi: true },
+    { name: 'sector', label: 'Sectors', required: true, options: ['Deeptech', 'B2B SaaS', 'Fintech', 'Healthtech', 'Edtech', 'AI/ML', 'Clean Tech', 'Other'], multi: true },
     { name: 'contact', label: 'Contact', required: true },
-    { name: 'portfolioHighlights', label: 'Portfolio Highlights (optional)' }
+    { name: 'portfolioHighlights', label: 'Portfolio Highlights' }
   ],
   'incubators': [
     { name: 'name', label: 'Name', required: true },
-    { name: 'websiteUrl', label: 'Website URL (optional)' },
+    { name: 'websiteUrl', label: 'Website URL' },
     { name: 'location', label: 'Location', required: true },
     { name: 'fundingSupport', label: 'Funding Support', required: true },
-    { name: 'otherBenefits', label: 'Other Benefits (optional)' },
+    { name: 'otherBenefits', label: 'Other Benefits' },
     { name: 'eligibility', label: 'Eligibility', required: true },
     { name: 'applicationProcess', label: 'Application Process', options: ['Rolling', 'Batch-based', 'Quarterly', 'Bi-annual'] },
     { name: 'contact', label: 'Contact', required: true },
-    { name: 'alumniStartups', label: 'Alumni Startups (optional)' }
+    { name: 'alumniStartups', label: 'Alumni Startups' }
   ],
   'accelerators': [
     { name: 'name', label: 'Name', required: true },
-    { name: 'websiteUrl', label: 'Website URL (optional)' },
+    { name: 'websiteUrl', label: 'Website URL' },
     { name: 'hq', label: 'Headquarters', required: true },
     { name: 'batchFrequency', label: 'Batch Frequency', required: true },
-    { name: 'stage', label: 'Stages (comma separated)', options: ['Idea', 'MVP', 'Early Revenue', 'Growth'] },
+    { name: 'stage', label: 'Stages', required: true, options: ['Idea', 'MVP', 'Early Revenue', 'Growth'], multi: true },
     { name: 'fundingOffered', label: 'Funding Offered', required: true },
     { name: 'programDuration', label: 'Program Duration', required: true },
-    { name: 'servicesProvided', label: 'Services Provided (optional)' },
-    { name: 'sectors', label: 'Sectors (comma separated)', options: ['Agnostic', 'Fintech', 'Healthtech', 'Edtech', 'E-commerce', 'SaaS'] },
-    { name: 'applicationLink', label: 'Application Link (optional)' },
-    { name: 'pastCohorts', label: 'Past Cohorts (optional)' }
+    { name: 'servicesProvided', label: 'Services Provided' },
+    { name: 'sectors', label: 'Sectors', required: true, options: ['Agnostic', 'Fintech', 'Healthtech', 'Edtech', 'E-commerce', 'SaaS', 'AI/ML', 'Deep Tech', 'Clean Tech', 'Other'], multi: true },
+    { name: 'applicationLink', label: 'Application Link' },
+    { name: 'pastCohorts', label: 'Past Cohorts' }
   ],
   'govt-grants': [
     { name: 'name', label: 'Name', required: true },
     { name: 'authority', label: 'Authority', required: true, options: ['DPIIT', 'DST', 'MSME', 'BIRAC', 'SERB', 'CSIR', 'Other'] },
-    { name: 'stage', label: 'Stages (comma separated)', options: ['Idea', 'MVP', 'Pre-revenue', 'Revenue', 'Growth'] },
-    { name: 'sector', label: 'Sector', options: ['Open', 'Fintech', 'Healthtech', 'Edtech', 'E-commerce', 'SaaS', 'AI/ML', 'Deep Tech'] },
+    { name: 'stage', label: 'Stages', required: true, options: ['Idea', 'MVP', 'Pre-revenue', 'Revenue', 'Growth'], multi: true },
+    { name: 'sector', label: 'Sector', options: ['Open', 'Fintech', 'Healthtech', 'Edtech', 'E-commerce', 'SaaS', 'AI/ML', 'Deep Tech', 'Clean Tech', 'Manufacturing', 'Agriculture', 'Other'] },
     { name: 'grantSize', label: 'Grant Size (₹)', type: 'number', required: true },
     { name: 'equityDilution', label: 'Equity Dilution' },
     { name: 'eligibility', label: 'Eligibility', required: true },
     { name: 'howToApply', label: 'How to Apply', required: true },
     { name: 'timelines', label: 'Timelines', required: true },
     { name: 'contact', label: 'Contact', required: true },
-    { name: 'documentsRequired', label: 'Documents Required (comma separated, optional)' },
-    { name: 'specialNotes', label: 'Special Notes (optional)' }
+    { name: 'documentsRequired', label: 'Documents Required (optional, comma separated)' },
+    { name: 'specialNotes', label: 'Special Notes' }
   ]
 };
 
@@ -124,6 +124,7 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
   const [search, setSearch] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -173,8 +174,34 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
     }
   };
 
+  const validateForm = () => {
+    const errors: Record<string, string> = {};
+    fields.forEach(field => {
+      const value = formData[field.name];
+      if (field.required && (!value || (Array.isArray(value) && value.length === 0))) {
+        errors[field.name] = `${field.label} is required.`;
+      }
+      if (field.type === 'number' && value && isNaN(Number(value))) {
+        errors[field.name] = `${field.label} must be a number.`;
+      }
+      if (field.options && value && !field.name.includes('stage') && !field.name.includes('sector') && !field.name.includes('Category') && !field.name.includes('Focus') && !field.name.includes('documentsRequired')) {
+        if (!field.options.includes(value)) {
+          errors[field.name] = `Invalid value for ${field.label}.`;
+        }
+      }
+    });
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setSuccess('');
+    if (!validateForm()) {
+      setError('Please fix the errors in the form.');
+      return;
+    }
     
     console.log('Form data before submission:', JSON.stringify(formData));
     
@@ -184,21 +211,9 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
     // Process array fields before sending
     const fields = categoryFields[category] || [];
     fields.forEach(field => {
-      if (field.name.includes('stage') || field.name.includes('sector') || 
-          field.name.includes('Category') || field.name.includes('Focus') ||
-          field.name.includes('documentsRequired')) {
-        
-        // If it's a string, convert to array
-        if (typeof processedData[field.name] === 'string' && processedData[field.name].trim() !== '') {
-          processedData[field.name] = processedData[field.name].split(',').map((item: string) => item.trim());
-        } 
-        // Ensure it's an array
-        else if (!Array.isArray(processedData[field.name])) {
-          processedData[field.name] = [];
-        }
+      if (field.multi && typeof processedData[field.name] === 'string') {
+        processedData[field.name] = processedData[field.name] ? [processedData[field.name]] : [];
       }
-      
-      // Convert numeric fields
       if (field.type === 'number' && processedData[field.name]) {
         processedData[field.name] = Number(processedData[field.name]);
       }
@@ -219,6 +234,15 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
       
       console.log('Final data being sent to API:', JSON.stringify(processedData));
       try {
+        const response = await fetch(url, {
+          method,
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include',
+          body: JSON.stringify(processedData)
+        });
+        
         const data = await response.json();
         console.log('Response data:', JSON.stringify(data));
         
@@ -433,25 +457,27 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
                       {field.label} {field.required && <span className="text-red-500">*</span>}
                     </label>
                     {field.options ? (
-                      field.name.includes('stage') || field.name.includes('sector') || 
-                      field.name.includes('Category') || field.name.includes('Focus') ||
-                      field.name.includes('documentsRequired') ? (
-                        <input
-                          type="text"
+                      field.multi ? (
+                        <select
                           name={field.name}
-                          value={formData[field.name] || ''}
+                          multiple
+                          value={Array.isArray(formData[field.name]) ? formData[field.name] : []}
                           onChange={handleChange}
                           required={field.required}
-                          placeholder={`Enter ${field.label.toLowerCase().replace(' (optional)', '').replace(' (comma separated)', '').replace(' (comma separated, optional)', '')} separated by commas`}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
+                          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${formErrors[field.name] ? 'border-red-500' : 'border-gray-300'}`}
+                          size={Math.min(field.options.length, 6)}
+                        >
+                          {field.options.map(option => (
+                            <option key={option} value={option}>{option}</option>
+                          ))}
+                        </select>
                       ) : (
                         <select
                           name={field.name}
                           value={formData[field.name] || ''}
                           onChange={handleChange}
                           required={field.required}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${formErrors[field.name] ? 'border-red-500' : 'border-gray-300'}`}
                         >
                           <option value="">Select {field.label}</option>
                           {field.options.map(option => (
@@ -459,37 +485,39 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
                           ))}
                         </select>
                       )
+                    ) : field.type === 'number' ? (
+                      <input
+                        type="number"
+                        name={field.name}
+                        value={formData[field.name] || ''}
+                        onChange={handleChange}
+                        required={field.required}
+                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${formErrors[field.name] ? 'border-red-500' : 'border-gray-300'}`}
+                      />
                     ) : field.name.includes('description') || field.name.includes('highlights') || 
-                       field.name.includes('notes') || field.name.includes('eligibility') ||
-                       field.name.includes('benefits') || field.name.includes('services') ||
-                       field.name.includes('howToApply') || field.name.includes('timelines') ? (
+                      field.name.includes('notes') || field.name.includes('eligibility') ||
+                      field.name.includes('benefits') || field.name.includes('services') ||
+                      field.name.includes('howToApply') || field.name.includes('timelines') ? (
                       <textarea
                         name={field.name}
                         value={formData[field.name] || ''}
                         onChange={handleChange}
-                    {!field.required && <span className="text-gray-400 text-xs ml-1">(optional)</span>}
                         required={field.required}
                         rows={3}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${formErrors[field.name] ? 'border-red-500' : 'border-gray-300'}`}
                       />
-                      <div>
-                        <select
-                          name={field.name}
-                          multiple
-                          value={Array.isArray(formData[field.name]) ? formData[field.name] : []}
-                          onChange={handleChange}
-                          required={field.required}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          size={Math.min(field.options.length, 5)}
-                        >
-                          {field.options.map(option => (
-                            <option key={option} value={option}>{option}</option>
-                          ))}
-                        </select>
-                        <p className="text-xs text-gray-500 mt-1">
-                          Hold Ctrl (or Cmd on Mac) to select multiple options
-                        </p>
-                      </div>
+                    ) : (
+                      <input
+                        type="text"
+                        name={field.name}
+                        value={formData[field.name] || ''}
+                        onChange={handleChange}
+                        required={field.required}
+                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${formErrors[field.name] ? 'border-red-500' : 'border-gray-300'}`}
+                      />
+                    )}
+                    {formErrors[field.name] && (
+                      <p className="text-xs text-red-600 mt-1">{formErrors[field.name]}</p>
                     )}
                   </div>
                 ))}
