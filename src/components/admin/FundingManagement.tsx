@@ -102,7 +102,25 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editingItem, setEditingItem] = useState<FundingItem | null>(null);
-  const [formData, setFormData] = useState<Record<string, any>>({});
+  const [formData, setFormData] = useState<Record<string, any>>(() => {
+    // Initialize with empty arrays for array fields based on category
+    const initialData: Record<string, any> = {};
+    const fields = categoryFields[category] || [];
+    
+    fields.forEach(field => {
+      if (field.name.includes('stage') || field.name.includes('sector') || 
+          field.name.includes('Category') || field.name.includes('Focus') ||
+          field.name.includes('documentsRequired')) {
+        initialData[field.name] = [];
+      } else if (field.type === 'number') {
+        initialData[field.name] = 0;
+      } else {
+        initialData[field.name] = '';
+      }
+    });
+    
+    return initialData;
+  });
   const [search, setSearch] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -112,12 +130,32 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
   useEffect(() => {
     loadItems();
   }, [category]);
+  
+  // Reset form data when category changes
+  useEffect(() => {
+    const initialData: Record<string, any> = {};
+    const fields = categoryFields[category] || [];
+    
+    fields.forEach(field => {
+      if (field.name.includes('stage') || field.name.includes('sector') || 
+          field.name.includes('Category') || field.name.includes('Focus') ||
+          field.name.includes('documentsRequired')) {
+        initialData[field.name] = [];
+      } else if (field.type === 'number') {
+        initialData[field.name] = 0;
+      } else {
+        initialData[field.name] = '';
+      }
+    });
+    
+    setFormData(initialData);
+  }, [category]);
 
   const loadItems = async () => {
     try {
       setLoading(true);
       setError('');
-      const response = await fetch(`${API_URL}/funding/admin/${category}`, {
+      const response = await fetch(`${API_URL}/funding/admin/${category}?limit=50`, {
         credentials: 'include'
       });
       const data = await response.json();
@@ -140,6 +178,34 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
     
     console.log('Form data before submission:', JSON.stringify(formData));
     
+    // Create a copy of the form data to process
+    const processedData = { ...formData };
+    
+    // Process array fields before sending
+    const fields = categoryFields[category] || [];
+    fields.forEach(field => {
+      if (field.name.includes('stage') || field.name.includes('sector') || 
+          field.name.includes('Category') || field.name.includes('Focus') ||
+          field.name.includes('documentsRequired')) {
+        
+        // If it's a string, convert to array
+        if (typeof processedData[field.name] === 'string' && processedData[field.name].trim() !== '') {
+          processedData[field.name] = processedData[field.name].split(',').map((item: string) => item.trim());
+        } 
+        // Ensure it's an array
+        else if (!Array.isArray(processedData[field.name])) {
+          processedData[field.name] = [];
+        }
+      }
+      
+      // Convert numeric fields
+      if (field.type === 'number' && processedData[field.name]) {
+        processedData[field.name] = Number(processedData[field.name]);
+      }
+    });
+    
+    console.log('Processed data for submission:', JSON.stringify(processedData));
+    
     try {
       setLoading(true);
       setError('');
@@ -151,36 +217,7 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
       
       const method = editingItem ? 'PUT' : 'POST';
       
-      // Process array fields before sending
-      const processedData = { ...formData };
-      console.log('Initial processed data:', JSON.stringify(processedData));
-      
-      const fields = categoryFields[category] || [];
-      
-      fields.forEach(field => {
-        if (field.name.includes('stage') || field.name.includes('sector') || 
-            field.name.includes('Category') || field.name.includes('Focus') ||
-            field.name.includes('documentsRequired')) {
-          if (processedData[field.name] && typeof processedData[field.name] === 'string') {
-            // Keep as string for backend processing
-            processedData[field.name] = '';
-          }
-        }
-      });
-      
-      console.log('Processed data for submission:', JSON.stringify(processedData));
-      
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(processedData),
-      });
-
-      console.log('Response status:', response.status);
-      
+      console.log('Final data being sent to API:', JSON.stringify(processedData));
       try {
         const data = await response.json();
         console.log('Response data:', JSON.stringify(data));
@@ -213,16 +250,18 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
     
     console.log('Item to edit:', JSON.stringify(item));
     
-    // Create a deep copy to avoid modifying the original
-    const formattedData = { ...item };
-    const fields = categoryFields[category] || [];
+    // Format the data for the form
+    const formattedData: Record<string, any> = { ...item };
     
+    // Convert arrays to comma-separated strings for the form
+    const fields = categoryFields[category] || [];
     fields.forEach(field => {
       if (field.name.includes('stage') || field.name.includes('sector') || 
           field.name.includes('Category') || field.name.includes('Focus') ||
           field.name.includes('documentsRequired')) {
         if (Array.isArray(formattedData[field.name])) {
-          formattedData[field.name] = formattedData[field.name].join(',');
+          // Join array values with commas for display in the form
+          formattedData[field.name] = formattedData[field.name].join(', ');
         } else if (!formattedData[field.name]) {
           formattedData[field.name] = '';
         }
@@ -230,7 +269,7 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
     });
     
     console.log('Formatted data for form:', JSON.stringify(formattedData));
-    setFormData(formattedData);
+    setFormData({ ...formattedData });
     setShowForm(true);
   };
 
@@ -267,11 +306,21 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value, type } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'number' ? (value ? Number(value) : 0) : value
-    }));
+    const { name, value } = e.target;
+    
+    // For multi-select fields
+    if (e.target.multiple) {
+      const selectedOptions = Array.from((e.target as HTMLSelectElement).selectedOptions).map(option => option.value);
+      setFormData(prev => ({
+        ...prev,
+        [name]: selectedOptions
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
 
   const filteredItems = items.filter(item =>
@@ -418,19 +467,29 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
                         name={field.name}
                         value={formData[field.name] || ''}
                         onChange={handleChange}
+                    {!field.required && <span className="text-gray-400 text-xs ml-1">(optional)</span>}
                         required={field.required}
                         rows={3}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
-                    ) : (
-                      <input
-                        type={field.type || 'text'}
-                        name={field.name}
-                        value={formData[field.name] || ''}
-                        onChange={handleChange}
-                        required={field.required}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
+                      <div>
+                        <select
+                          name={field.name}
+                          multiple
+                          value={Array.isArray(formData[field.name]) ? formData[field.name] : []}
+                          onChange={handleChange}
+                          required={field.required}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          size={Math.min(field.options.length, 5)}
+                        >
+                          {field.options.map(option => (
+                            <option key={option} value={option}>{option}</option>
+                          ))}
+                        </select>
+                        <p className="text-xs text-gray-500 mt-1">
+                          Hold Ctrl (or Cmd on Mac) to select multiple options
+                        </p>
+                      </div>
                     )}
                   </div>
                 ))}
