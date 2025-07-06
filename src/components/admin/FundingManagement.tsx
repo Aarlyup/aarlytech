@@ -269,33 +269,33 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
     }
   };
 
-  const handleEdit = (item: FundingItem) => {
-    setEditingItem(item);
-    
-    console.log('Item to edit:', JSON.stringify(item));
-    
-    // Format the data for the form
-    const formattedData: Record<string, any> = { ...item };
-    
-    // Convert arrays to comma-separated strings for the form
-    const fields = categoryFields[category] || [];
-    fields.forEach(field => {
-      if (field.name.includes('stage') || field.name.includes('sector') || 
-          field.name.includes('Category') || field.name.includes('Focus') ||
-          field.name.includes('documentsRequired')) {
-        if (Array.isArray(formattedData[field.name])) {
-          // Join array values with commas for display in the form
-          formattedData[field.name] = formattedData[field.name].join(', ');
-        } else if (!formattedData[field.name]) {
-          formattedData[field.name] = '';
-        }
+const handleEdit = (item: FundingItem) => {
+  setEditingItem(item);
+  const formattedData: Record<string, any> = { ...item };
+  const fields = categoryFields[category] || [];
+
+  fields.forEach(field => {
+    // Convert only documentsRequired into a comma string
+    if (field.name === 'documentsRequired') {
+      if (Array.isArray(formattedData[field.name])) {
+        formattedData[field.name] = formattedData[field.name].join(', ');
+      } else {
+        formattedData[field.name] = formattedData[field.name] || '';
       }
-    });
-    
-    console.log('Formatted data for form:', JSON.stringify(formattedData));
-    setFormData({ ...formattedData });
-    setShowForm(true);
-  };
+    }
+    // Ensure multi‐select fields stay as arrays
+    if (field.multi) {
+      if (!Array.isArray(formattedData[field.name])) {
+        formattedData[field.name] = formattedData[field.name]
+          ? [formattedData[field.name]]
+          : [];
+      }
+    }
+  });
+
+  setFormData({ ...formattedData });
+  setShowForm(true);
+};
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this item?')) return;
