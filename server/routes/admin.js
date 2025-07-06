@@ -67,4 +67,17 @@ router.put('/contacts/:id', adminAuth, updateContactStatus);
 // Public contact endpoint (no auth required)
 router.post('/contacts', contactValidation, createContact);
 
+// Test endpoint to check admin access
+router.get('/test', adminAuth, (req, res) => {
+  res.json({
+    success: true,
+    message: 'Admin access working',
+    user: {
+      id: req.user._id,
+      name: req.user.name,
+      email: req.user.email
+    }
+  });
+});
+
 module.exports = router;
