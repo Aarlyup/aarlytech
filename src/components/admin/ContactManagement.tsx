@@ -90,20 +90,24 @@ const ContactManagement: React.FC = () => {
     
     try {
       setLoading(true);
-      const response = await fetch(`${API_URL}/admin/contacts/${contactId}`, {
+      const response = await fetch(`${API_URL}/admin/contacts/${contactId}`, { 
         method: 'DELETE',
         credentials: 'include'
       });
 
-      const data = await response.json();
-      
-      if (data.success) {
-        await loadContacts();
-        if (selectedContact?._id === contactId) {
-          setSelectedContact(null);
+      if (response.ok) {
+        const data = await response.json();
+        
+        if (data.success) {
+          await loadContacts();
+          if (selectedContact?._id === contactId) {
+            setSelectedContact(null);
+          }
+        } else {
+          alert(data.message || 'Error deleting contact');
         }
       } else {
-        alert(data.message || 'Error deleting contact');
+        alert(`Error deleting contact: ${response.statusText}`);
       }
     } catch (error) {
       console.error('Error deleting contact:', error);

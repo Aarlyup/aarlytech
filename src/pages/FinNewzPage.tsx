@@ -30,13 +30,20 @@ const FinNewzPage: React.FC = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`${API_URL}/public/news`);
-        const data = await response.json();
+        const response = await fetch(`${API_URL}/public/news`, {
+          credentials: 'include'
+        });
         
-        if (data.success) {
-          setArticles(data.data);
+        if (response.ok) {
+          const data = await response.json();
+          
+          if (data.success) {
+            setArticles(data.data);
+          } else {
+            setError('Failed to load news articles');
+          }
         } else {
-          setError('Failed to load news articles');
+          setError(`Failed to load news articles: ${response.statusText}`);
         }
       } catch (err: any) {
         setError('Could not load news articles. Please try again later.');

@@ -80,17 +80,17 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <FundingLayout>
-          <Placeholder title="Funding" />
+          <VCFundingPage />
         </FundingLayout>
       </ProtectedRoute>
     ),
     children: [
-      { path: 'vc', element: <MicroVCsPage /> },
-      { path: 'microvc', element: <MicroVCsPage /> },
-      { path: 'incubator', element: <IncubatorsPage /> },
-      { path: 'accelerator', element: <AcceleratorsPage /> },
-      { path: 'angel', element: <MicroVCsPage /> },
-      { path: 'grants', element: <IncubatorsPage /> },
+      { path:  'vc', element: <VCFundingPage /> },
+      { path: 'microvc', element: <MicroVCFundingPage /> },
+      { path: 'incubator', element: <IncubatorFundingPage /> },
+      { path: 'accelerator', element: <AcceleratorFundingPage /> },
+      { path: 'angel', element: <AngelFundingPage /> },
+      { path: 'grants', element: <GrantsFundingPage /> },
     ]
   },
   {

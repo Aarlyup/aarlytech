@@ -100,21 +100,28 @@ const InvestorMatchManagement: React.FC = () => {
     
     try {
       setLoading(true);
+      setError('');
       const response = await fetch(`${API_URL}/admin/investor-matches/${id}`, {
         method: 'DELETE',
         credentials: 'include'
       });
 
-      const data = await response.json();
-      
-      if (data.success) {
-        await loadMatches();
+      if (response.ok) {
+        const data = await response.json();
+        
+        if (data.success) {
+          await loadMatches();
+          setSuccess('Investor match deleted successfully');
+          setTimeout(() => setSuccess(''), 3000);
+        } else {
+          setError(data.message || 'Error deleting investor match');
+        }
       } else {
-        alert(data.message || 'Error deleting investor match');
+        setError(`Error deleting investor match: ${response.statusText}`);
       }
     } catch (error) {
       console.error('Error deleting investor match:', error);
-      alert('Error deleting investor match');
+      setError('Error deleting investor match');
     } finally {
       setLoading(false);
     }

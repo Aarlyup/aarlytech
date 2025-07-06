@@ -20,15 +20,15 @@ const categoryLabels: Record<string, string> = {
   'govt-grants': 'Government Grants'
 };
 
-const categoryFields: Record<string, { name: string; label: string; type?: string; required?: boolean }[]> = {
+const categoryFields: Record<string, { name: string; label: string; type?: string; required?: boolean; options?: string[] }[]> = {
   'angel-investors': [
     { name: 'name', label: 'Name', required: true },
     { name: 'linkedinProfileUrl', label: 'LinkedIn Profile URL' },
     { name: 'city', label: 'City', required: true },
     { name: 'country', label: 'Country', required: true },
-    { name: 'investCategory', label: 'Investment Categories (comma separated)' },
-    { name: 'ticketSize', label: 'Ticket Size', type: 'number', required: true },
-    { name: 'stage', label: 'Stages (comma separated)' },
+    { name: 'investCategory', label: 'Investment Categories (comma separated)', options: ['Fintech', 'Consumer', 'SaaS', 'Healthtech', 'Edtech'] },
+    { name: 'ticketSize', label: 'Ticket Size (₹)', type: 'number', required: true },
+    { name: 'stage', label: 'Stages (comma separated)', options: ['Idea', 'MVP', 'Pre-revenue', 'Revenue', 'Growth'] },
     { name: 'preferFounderProfile', label: 'Preferred Founder Profile' },
     { name: 'portfolioHighlights', label: 'Portfolio Highlights' },
     { name: 'contact', label: 'Contact', required: true }
@@ -37,11 +37,11 @@ const categoryFields: Record<string, { name: string; label: string; type?: strin
     { name: 'name', label: 'Name', required: true },
     { name: 'websiteUrl', label: 'Website URL' },
     { name: 'headOffice', label: 'Head Office', required: true },
-    { name: 'fundSize', label: 'Fund Size', type: 'number', required: true },
-    { name: 'stageFocus', label: 'Stage Focus (comma separated)' },
-    { name: 'sectorFocus', label: 'Sector Focus (comma separated)' },
-    { name: 'avgTicketSize', label: 'Average Ticket Size', type: 'number', required: true },
-    { name: 'applicationProcess', label: 'Application Process' },
+    { name: 'fundSize', label: 'Fund Size (₹)', type: 'number', required: true },
+    { name: 'stageFocus', label: 'Stage Focus (comma separated)', options: ['Pre-seed', 'Seed', 'Series A', 'Series B', 'Series C', 'Growth'] },
+    { name: 'sectorFocus', label: 'Sector Focus (comma separated)', options: ['SaaS', 'Fintech', 'D2C', 'Healthtech', 'Edtech', 'E-commerce'] },
+    { name: 'avgTicketSize', label: 'Average Ticket Size (₹)', type: 'number', required: true },
+    { name: 'applicationProcess', label: 'Application Process', options: ['Warm intro', 'Direct pitch', 'Online application', 'Referral only'] },
     { name: 'contact', label: 'Contact', required: true },
     { name: 'portfolioHighlights', label: 'Portfolio Highlights' },
     { name: 'investmentThesis', label: 'Investment Thesis' }
@@ -50,10 +50,10 @@ const categoryFields: Record<string, { name: string; label: string; type?: strin
     { name: 'name', label: 'Name', required: true },
     { name: 'websiteUrl', label: 'Website URL' },
     { name: 'location', label: 'Location', required: true },
-    { name: 'fundSize', label: 'Fund Size', type: 'number', required: true },
-    { name: 'checkSize', label: 'Check Size', type: 'number', required: true },
-    { name: 'stage', label: 'Stages (comma separated)' },
-    { name: 'sector', label: 'Sectors (comma separated)' },
+    { name: 'fundSize', label: 'Fund Size (₹)', type: 'number', required: true },
+    { name: 'checkSize', label: 'Check Size (₹)', type: 'number', required: true },
+    { name: 'stage', label: 'Stages (comma separated)', options: ['Pre-seed', 'Seed', 'Series A'] },
+    { name: 'sector', label: 'Sectors (comma separated)', options: ['Deeptech', 'B2B SaaS', 'Fintech', 'Healthtech', 'Edtech'] },
     { name: 'contact', label: 'Contact', required: true },
     { name: 'portfolioHighlights', label: 'Portfolio Highlights' }
   ],
@@ -64,7 +64,7 @@ const categoryFields: Record<string, { name: string; label: string; type?: strin
     { name: 'fundingSupport', label: 'Funding Support', required: true },
     { name: 'otherBenefits', label: 'Other Benefits' },
     { name: 'eligibility', label: 'Eligibility', required: true },
-    { name: 'applicationProcess', label: 'Application Process' },
+    { name: 'applicationProcess', label: 'Application Process', options: ['Rolling', 'Batch-based', 'Quarterly', 'Bi-annual'] },
     { name: 'contact', label: 'Contact', required: true },
     { name: 'alumniStartups', label: 'Alumni Startups' }
   ],
@@ -73,20 +73,20 @@ const categoryFields: Record<string, { name: string; label: string; type?: strin
     { name: 'websiteUrl', label: 'Website URL' },
     { name: 'hq', label: 'Headquarters', required: true },
     { name: 'batchFrequency', label: 'Batch Frequency', required: true },
-    { name: 'stage', label: 'Stages (comma separated)' },
+    { name: 'stage', label: 'Stages (comma separated)', options: ['Idea', 'MVP', 'Early Revenue', 'Growth'] },
     { name: 'fundingOffered', label: 'Funding Offered', required: true },
     { name: 'programDuration', label: 'Program Duration', required: true },
     { name: 'servicesProvided', label: 'Services Provided' },
-    { name: 'sectors', label: 'Sectors (comma separated)' },
+    { name: 'sectors', label: 'Sectors (comma separated)', options: ['Agnostic', 'Fintech', 'Healthtech', 'Edtech', 'E-commerce', 'SaaS'] },
     { name: 'applicationLink', label: 'Application Link' },
     { name: 'pastCohorts', label: 'Past Cohorts' }
   ],
   'govt-grants': [
     { name: 'name', label: 'Name', required: true },
-    { name: 'authority', label: 'Authority', required: true },
-    { name: 'stage', label: 'Stages (comma separated)' },
-    { name: 'sector', label: 'Sector' },
-    { name: 'grantSize', label: 'Grant Size', type: 'number', required: true },
+    { name: 'authority', label: 'Authority', required: true, options: ['DPIIT', 'DST', 'MSME', 'BIRAC', 'SERB', 'CSIR', 'Other'] },
+    { name: 'stage', label: 'Stages (comma separated)', options: ['Idea', 'MVP', 'Pre-revenue', 'Revenue', 'Growth'] },
+    { name: 'sector', label: 'Sector', options: ['Open', 'Fintech', 'Healthtech', 'Edtech', 'E-commerce', 'SaaS', 'AI/ML', 'Deep Tech'] },
+    { name: 'grantSize', label: 'Grant Size (₹)', type: 'number', required: true },
     { name: 'equityDilution', label: 'Equity Dilution' },
     { name: 'eligibility', label: 'Eligibility', required: true },
     { name: 'howToApply', label: 'How to Apply', required: true },
@@ -104,6 +104,8 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
   const [editingItem, setEditingItem] = useState<FundingItem | null>(null);
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [search, setSearch] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -114,6 +116,7 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
   const loadItems = async () => {
     try {
       setLoading(true);
+      setError('');
       const response = await fetch(`${API_URL}/funding/admin/${category}`, {
         credentials: 'include'
       });
@@ -121,9 +124,12 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
       
       if (data.success) {
         setItems(data.data);
+      } else {
+        setError(data.message || 'Failed to load items');
       }
     } catch (error) {
       console.error('Error loading items:', error);
+      setError('Failed to load items');
     } finally {
       setLoading(false);
     }
@@ -134,21 +140,9 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
     
     try {
       setLoading(true);
+      setError('');
+      setSuccess('');
       
-      // Process array fields
-      const processedData = { ...formData };
-      const fields = categoryFields[category] || [];
-      
-      fields.forEach(field => {
-        if (field.name.includes('stage') || field.name.includes('sector') || 
-            field.name.includes('Category') || field.name.includes('Focus') ||
-            field.name.includes('documentsRequired')) {
-          if (processedData[field.name] && typeof processedData[field.name] === 'string') {
-            processedData[field.name] = processedData[field.name].split(',').map((s: string) => s.trim()).filter(Boolean);
-          }
-        }
-      });
-
       const url = editingItem 
         ? `${API_URL}/funding/admin/${category}/${editingItem._id}`
         : `${API_URL}/funding/admin/${category}`;
@@ -161,22 +155,24 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify(processedData),
+        body: JSON.stringify(formData),
       });
 
       const data = await response.json();
       
       if (data.success) {
+        setSuccess(editingItem ? 'Item updated successfully!' : 'Item created successfully!');
         await loadItems();
         setShowForm(false);
         setEditingItem(null);
         setFormData({});
+        setTimeout(() => setSuccess(''), 3000);
       } else {
-        alert(data.message || 'Error saving item');
+        setError(data.message || 'Error saving item');
       }
     } catch (error) {
       console.error('Error saving item:', error);
-      alert('Error saving item');
+      setError('Error saving item');
     } finally {
       setLoading(false);
     }
@@ -208,6 +204,7 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
     
     try {
       setLoading(true);
+      setError('');
       const response = await fetch(`${API_URL}/funding/admin/${category}/${id}`, {
         method: 'DELETE',
         credentials: 'include'
@@ -216,19 +213,21 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
       const data = await response.json();
       
       if (data.success) {
+        setSuccess('Item deleted successfully!');
         await loadItems();
+        setTimeout(() => setSuccess(''), 3000);
       } else {
-        alert(data.message || 'Error deleting item');
+        setError(data.message || 'Error deleting item');
       }
     } catch (error) {
       console.error('Error deleting item:', error);
-      alert('Error deleting item');
+      setError('Error deleting item');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -253,6 +252,8 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
             setEditingItem(null);
             setFormData({});
             setShowForm(true);
+            setError('');
+            setSuccess('');
           }}
           className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         >
@@ -260,6 +261,19 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
           Add New
         </button>
       </div>
+
+      {/* Success/Error Messages */}
+      {success && (
+        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
+          {success}
+        </div>
+      )}
+      
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+          {error}
+        </div>
+      )}
 
       {/* Search */}
       <div className="relative">
@@ -330,9 +344,37 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       {field.label} {field.required && <span className="text-red-500">*</span>}
                     </label>
-                    {field.name.includes('description') || field.name.includes('highlights') || 
-                     field.name.includes('notes') || field.name.includes('eligibility') ||
-                     field.name.includes('benefits') || field.name.includes('services') ? (
+                    {field.options ? (
+                      field.name.includes('stage') || field.name.includes('sector') || 
+                      field.name.includes('Category') || field.name.includes('Focus') ||
+                      field.name.includes('documentsRequired') ? (
+                        <input
+                          type="text"
+                          name={field.name}
+                          value={formData[field.name] || ''}
+                          onChange={handleChange}
+                          required={field.required}
+                          placeholder={`Enter ${field.label.toLowerCase()} separated by commas`}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      ) : (
+                        <select
+                          name={field.name}
+                          value={formData[field.name] || ''}
+                          onChange={handleChange}
+                          required={field.required}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                          <option value="">Select {field.label}</option>
+                          {field.options.map(option => (
+                            <option key={option} value={option}>{option}</option>
+                          ))}
+                        </select>
+                      )
+                    ) : field.name.includes('description') || field.name.includes('highlights') || 
+                       field.name.includes('notes') || field.name.includes('eligibility') ||
+                       field.name.includes('benefits') || field.name.includes('services') ||
+                       field.name.includes('howToApply') || field.name.includes('timelines') ? (
                       <textarea
                         name={field.name}
                         value={formData[field.name] || ''}
@@ -368,6 +410,8 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
                       setShowForm(false);
                       setEditingItem(null);
                       setFormData({});
+                      setError('');
+                      setSuccess('');
                     }}
                     className="flex-1 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
                   >

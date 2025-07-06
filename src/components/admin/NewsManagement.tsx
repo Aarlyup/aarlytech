@@ -121,16 +121,22 @@ const NewsManagement: React.FC = () => {
         credentials: 'include'
       });
 
-      const data = await response.json();
-      
-      if (data.success) {
-        await loadNews();
+      if (response.ok) {
+        const data = await response.json();
+        
+        if (data.success) {
+          await loadNews();
+          setSuccess('News article deleted successfully');
+          setTimeout(() => setSuccess(''), 3000);
+        } else {
+          setError(data.message || 'Error deleting news');
+        }
       } else {
-        alert(data.message || 'Error deleting news');
+        setError(`Error deleting news: ${response.statusText}`);
       }
     } catch (error) {
       console.error('Error deleting news:', error);
-      alert('Error deleting news');
+      setError('Error deleting news');
     } finally {
       setLoading(false);
     }

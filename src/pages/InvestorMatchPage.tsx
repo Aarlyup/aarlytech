@@ -36,10 +36,16 @@ const InvestorMatchPage: React.FC = () => {
   const loadIndustries = async () => {
     try {
       const response = await fetch(`${API_URL}/public/investor-matches`);
-      const data = await response.json();
-      if (data.success) {
-        const uniqueIndustries = [...new Set(data.data.map((item: InvestorMatch) => item.industry))];
-        setIndustries(uniqueIndustries);
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          const uniqueIndustries = [...new Set(data.data.map((item: InvestorMatch) => item.industry))];
+          setIndustries(uniqueIndustries);
+        }
+      } else {
+        console.error('Error loading industries:', response.statusText);
+        // Fallback industries
+        setIndustries(['Fintech', 'Healthtech', 'Edtech', 'E-commerce', 'SaaS', 'AI/ML']);
       }
     } catch (error) {
       console.error('Error loading industries:', error);
@@ -63,11 +69,16 @@ const InvestorMatchPage: React.FC = () => {
       if (form.traction) queryParams.append('traction', form.traction);
 
       const response = await fetch(`${API_URL}/public/investor-matches?${queryParams.toString()}`);
-      const data = await response.json();
-      
-      if (data.success) {
-        setMatches(data.data);
+      if (response.ok) {
+        const data = await response.json();
+        
+        if (data.success) {
+          setMatches(data.data);
+        } else {
+          setMatches([]);
+        }
       } else {
+        console.error('Error fetching matches:', response.statusText);
         setMatches([]);
       }
     } catch (error) {
