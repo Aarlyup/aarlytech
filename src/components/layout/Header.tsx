@@ -130,8 +130,10 @@ const Header: React.FC = () => {
                   </Link>
                   <Link
                     to="/finnewz"
-                    className="text-gray-700 hover:text-blue-600 font-semibold py-3 px-2 rounded-lg transition-colors text-lg"
-                    onClick={() => setMobileMenuOpen(false)}
+                    className={`font-medium transition-colors ${
+                      location.pathname.startsWith('/finnewz')
+                        ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
+                    }`}
                   >
                     Fin'Newz
                   </Link>
