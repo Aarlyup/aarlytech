@@ -16,7 +16,6 @@ import AngelFundingPage from './pages/funding/AngelFundingPage';
 import GrantsFundingPage from './pages/funding/GrantsFundingPage';
 import FinNewzPage from './pages/FinNewzPage';
 import InvestorMatchPage from './pages/InvestorMatchPage';
-import ContentComingSoonPage from './pages/ContentComingSoonPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import TermsOfServicePage from './pages/TermsOfServicePage';
 import ContactPage from './pages/ContactPage';
@@ -92,16 +91,6 @@ export const router = createBrowserRouter([
       <ProtectedRoute>
         <DashboardLayout>
           <InvestorMatchPage />
-        </DashboardLayout>
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: '/content',
-    element: (
-      <ProtectedRoute>
-        <DashboardLayout>
-          <ContentComingSoonPage />
         </DashboardLayout>
       </ProtectedRoute>
     ),
