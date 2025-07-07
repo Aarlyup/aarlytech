@@ -177,7 +177,13 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
   const validateForm = () => {
     const errors: Record<string, string> = {};
     fields.forEach(field => {
-      const value = formData[field.name];
+      let value = formData[field.name];
+      
+      // Handle array fields
+      if (field.multi && typeof value === 'string') {
+        value = value ? value.split(',').map(s => s.trim()).filter(Boolean) : [];
+      }
+      
       if (field.required && (!value || (Array.isArray(value) && value.length === 0))) {
         errors[field.name] = `${field.label} is required.`;
       }
@@ -210,10 +216,16 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
     
     // Process array fields before sending
     const fields = categoryFields[category] || [];
+    
     fields.forEach(field => {
-      if (field.multi && typeof processedData[field.name] === 'string') {
-        processedData[field.name] = processedData[field.name] ? [processedData[field.name]] : [];
+      // Convert comma-separated strings to arrays for multi-select fields
+      if (field.multi && typeof processedData[field.name] === 'string' && processedData[field.name]) {
+        processedData[field.name] = processedData[field.name]
+          .split(',')
+          .map((item: string) => item.trim())
+          .filter(Boolean);
       }
+      
       if (field.type === 'number' && processedData[field.name]) {
         processedData[field.name] = Number(processedData[field.name]);
       }
@@ -271,24 +283,22 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
 
 const handleEdit = (item: FundingItem) => {
   setEditingItem(item);
-  const formattedData: Record<string, any> = { ...item };
+  const formattedData: Record<string, any> = {};
+  
+  // Copy all properties from the item
+  Object.keys(item).forEach(key => {
+    formattedData[key] = item[key];
+  });
+  
   const fields = categoryFields[category] || [];
 
   fields.forEach(field => {
-    // Convert only documentsRequired into a comma string
-    if (field.name === 'documentsRequired') {
-      if (Array.isArray(formattedData[field.name])) {
-        formattedData[field.name] = formattedData[field.name].join(', ');
+    // Convert all array fields to comma-separated strings for editing
+    if (field.multi || field.name === 'documentsRequired') {
+      if (Array.isArray(item[field.name])) {
+        formattedData[field.name] = item[field.name].join(', ');
       } else {
-        formattedData[field.name] = formattedData[field.name] || '';
-      }
-    }
-    // Ensure multi‐select fields stay as arrays
-    if (field.multi) {
-      if (!Array.isArray(formattedData[field.name])) {
-        formattedData[field.name] = formattedData[field.name]
-          ? [formattedData[field.name]]
-          : [];
+        formattedData[field.name] = '';
       }
     }
   });
@@ -487,7 +497,13 @@ const handleEdit = (item: FundingItem) => {
                         <select
                           name={field.name}
                           value={formData[field.name] || ''}
-                          onChange={handleChange}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setFormData(prev => ({
+                              ...prev,
+                              [field.name]: value
+                            }));
+                          }}
                           required={field.required}
                           className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${formErrors[field.name] ? 'border-red-500' : 'border-gray-300'}`}
                         >
@@ -500,6 +516,7 @@ const handleEdit = (item: FundingItem) => {
                     ) : field.type === 'number' ? (
                       <input
                         type="number"
+                        min="0"
                         name={field.name}
                         value={formData[field.name] || ''}
                         onChange={handleChange}
@@ -509,7 +526,8 @@ const handleEdit = (item: FundingItem) => {
                     ) : field.name.includes('description') || field.name.includes('highlights') || 
                       field.name.includes('notes') || field.name.includes('eligibility') ||
                       field.name.includes('benefits') || field.name.includes('services') ||
-                      field.name.includes('howToApply') || field.name.includes('timelines') ? (
+                      field.name.includes('howToApply') || field.name.includes('timelines') ||
+                      field.name.includes('documentsRequired') ? (
                       <textarea
                         name={field.name}
                         value={formData[field.name] || ''}
@@ -518,6 +536,19 @@ const handleEdit = (item: FundingItem) => {
                         rows={3}
                         className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${formErrors[field.name] ? 'border-red-500' : 'border-gray-300'}`}
                       />
+                    ) : field.multi ? (
+                      <div>
+                        <textarea
+                          name={field.name}
+                          value={formData[field.name] || ''}
+                          onChange={handleChange}
+                          required={field.required}
+                          rows={2}
+                          placeholder="Enter comma-separated values"
+                          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${formErrors[field.name] ? 'border-red-500' : 'border-gray-300'}`}
+                        />
+                        <p className="text-xs text-gray-500 mt-1">Enter comma-separated values (e.g., "Value1, Value2, Value3")</p>
+                      </div>
                     ) : (
                       <input
                         type="text"
