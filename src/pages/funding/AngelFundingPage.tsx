@@ -142,7 +142,7 @@ const AngelFundingPage: React.FC = () => {
               <div className="mt-4 grid grid-cols-1 gap-2">
                 <div className="flex items-center gap-2 text-sm">
                   <DollarSign className="w-4 h-4 text-green-600" />
-                  <span className="font-medium text-gray-900">₹{(angel.ticketSize / 100000).toFixed(0)}L Ticket</span>
+                  <span className="font-medium text-gray-900">₹{(angel.ticketSize).toFixed(0)} Ticket</span>
                 </div>
                 {angel.investCategory && angel.investCategory.length > 0 && (
                   <div className="flex items-center gap-2 text-sm">
@@ -219,7 +219,7 @@ const AngelFundingPage: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div className="bg-green-50 rounded-xl p-4">
                   <h3 className="font-semibold text-green-900 mb-2">Ticket Size</h3>
-                  <p className="text-green-700 text-xl font-bold">₹{(selectedAngel.ticketSize / 100000).toFixed(0)} Lakhs</p>
+                  <p className="text-green-700 text-xl font-bold">₹{(selectedAngel.ticketSize).toFixed(0)} </p>
                 </div>
                 {selectedAngel.investCategory && selectedAngel.investCategory.length > 0 && (
                   <div className="bg-blue-50 rounded-xl p-4">
@@ -269,17 +269,6 @@ const AngelFundingPage: React.FC = () => {
                   >
                     <Linkedin className="w-4 h-4" />
                     LinkedIn Profile
-                  </a>
-                )}
-                {selectedAngel.contact && (
-                  <a
-                    href={selectedAngel.contact.includes('@') ? `mailto:${selectedAngel.contact}` : selectedAngel.contact}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-                  >
-                    {selectedAngel.contact.includes('@') ? <Mail className="w-4 h-4" /> : <ExternalLink className="w-4 h-4" />}
-                    Contact
                   </a>
                 )}
               </div>

@@ -47,7 +47,18 @@ const VCFundingPage: React.FC = () => {
       console.log('VC data response:', data);
       
       if (data.success) {
-        setVCs(data.data);
+        // Ensure fundSize and avgTicketSize are numbers and log them for debugging
+        const mapped = data.data.map((vc: any) => {
+          const fundSize = Number(vc.fundSize);
+          const avgTicketSize = Number(vc.avgTicketSize);
+          console.log('VC:', vc.name, 'fundSize:', fundSize, 'avgTicketSize:', avgTicketSize);
+          return {
+            ...vc,
+            fundSize,
+            avgTicketSize,
+          };
+        });
+        setVCs(mapped);
       } else {
         setError('Failed to load VCs: ' + data.message);
         setVCs([]);
@@ -143,11 +154,11 @@ const VCFundingPage: React.FC = () => {
               <div className="mt-4 grid grid-cols-2 gap-4">
                 <div className="flex items-center gap-2 text-sm">
                   <DollarSign className="w-4 h-4 text-green-600" />
-                  <span className="font-medium text-gray-900">₹{(vc.fundSize / 10000000).toFixed(0)}Cr Fund</span>
+                  <span className="font-medium text-gray-900">₹{(vc.fundSize).toFixed(0)} Fund</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <Users className="w-4 h-4 text-purple-600" />
-                  <span className="font-medium text-gray-900">₹{(vc.avgTicketSize / 10000000).toFixed(1)}Cr Avg</span>
+                  <span className="font-medium text-gray-900">₹{(vc.avgTicketSize).toFixed(0)} Avg</span>
                 </div>
               </div>
 
@@ -219,11 +230,15 @@ const VCFundingPage: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div className="bg-blue-50 rounded-xl p-4">
                   <h3 className="font-semibold text-blue-900 mb-2">Fund Size</h3>
-                  <p className="text-blue-700 text-xl font-bold">₹{(selectedVC.fundSize / 10000000).toFixed(0)} Crores</p>
+                  <p className="text-blue-700 text-xl font-bold">
+                    ₹{Number(selectedVC.fundSize).toFixed(0)}
+                  </p>
                 </div>
                 <div className="bg-green-50 rounded-xl p-4">
                   <h3 className="font-semibold text-green-900 mb-2">Avg Ticket Size</h3>
-                  <p className="text-green-700 text-xl font-bold">₹{(selectedVC.avgTicketSize / 10000000).toFixed(1)} Crores</p>
+                  <p className="text-green-700 text-xl font-bold">
+                    ₹{Number(selectedVC.avgTicketSize).toFixed(0)}
+                  </p>
                 </div>
               </div>
 
@@ -281,17 +296,6 @@ const VCFundingPage: React.FC = () => {
                   >
                     <ExternalLink className="w-4 h-4" />
                     Visit Website
-                  </a>
-                )}
-                {selectedVC.contact && (
-                  <a
-                    href={selectedVC.contact.includes('@') ? `mailto:${selectedVC.contact}` : selectedVC.contact}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-                  >
-                    {selectedVC.contact.includes('@') ? <Mail className="w-4 h-4" /> : <Linkedin className="w-4 h-4" />}
-                    Contact
                   </a>
                 )}
               </div>

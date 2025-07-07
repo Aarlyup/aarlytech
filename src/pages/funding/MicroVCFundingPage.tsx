@@ -141,11 +141,11 @@ const MicroVCFundingPage: React.FC = () => {
               <div className="mt-4 grid grid-cols-2 gap-4">
                 <div className="flex items-center gap-2 text-sm">
                   <DollarSign className="w-4 h-4 text-green-600" />
-                  <span className="font-medium text-gray-900">₹{(microvc.fundSize / 10000000).toFixed(0)}Cr Fund</span>
+                  <span className="font-medium text-gray-900">₹{(microvc.fundSize).toFixed(0)} Fund</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <Users className="w-4 h-4 text-purple-600" />
-                  <span className="font-medium text-gray-900">₹{(microvc.checkSize / 100000).toFixed(0)}L Check</span>
+                  <span className="font-medium text-gray-900">₹{(microvc.checkSize).toFixed(0)} Check</span>
                 </div>
               </div>
 
@@ -216,11 +216,11 @@ const MicroVCFundingPage: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div className="bg-green-50 rounded-xl p-4">
                   <h3 className="font-semibold text-green-900 mb-2">Fund Size</h3>
-                  <p className="text-green-700 text-xl font-bold">₹{(selectedMicroVC.fundSize / 10000000).toFixed(0)} Crores</p>
+                  <p className="text-green-700 text-xl font-bold">₹{(selectedMicroVC.fundSize).toFixed(0)} </p>
                 </div>
                 <div className="bg-blue-50 rounded-xl p-4">
                   <h3 className="font-semibold text-blue-900 mb-2">Check Size</h3>
-                  <p className="text-blue-700 text-xl font-bold">₹{(selectedMicroVC.checkSize / 100000).toFixed(0)} Lakhs</p>
+                  <p className="text-blue-700 text-xl font-bold">₹{(selectedMicroVC.checkSize).toFixed(0)} </p>
                 </div>
               </div>
 
@@ -273,17 +273,6 @@ const MicroVCFundingPage: React.FC = () => {
                   >
                     <ExternalLink className="w-4 h-4" />
                     Visit Website
-                  </a>
-                )}
-                {selectedMicroVC.contact && (
-                  <a
-                    href={selectedMicroVC.contact.includes('@') ? `mailto:${selectedMicroVC.contact}` : selectedMicroVC.contact}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-                  >
-                    {selectedMicroVC.contact.includes('@') ? <Mail className="w-4 h-4" /> : <Linkedin className="w-4 h-4" />}
-                    Contact
                   </a>
                 )}
               </div>

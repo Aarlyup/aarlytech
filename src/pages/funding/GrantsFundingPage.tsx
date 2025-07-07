@@ -159,7 +159,7 @@ const GrantsFundingPage: React.FC = () => {
               <div className="mt-4 grid grid-cols-1 gap-2">
                 <div className="flex items-center gap-2 text-sm">
                   <DollarSign className="w-4 h-4 text-green-600" />
-                  <span className="font-medium text-gray-900">₹{(grant.grantSize / 100000).toFixed(0)} Lakhs</span>
+                  <span className="font-medium text-gray-900">₹{(grant.grantSize).toFixed(0)} </span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <Calendar className="w-4 h-4 text-blue-600" />
@@ -234,7 +234,7 @@ const GrantsFundingPage: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <div className="bg-green-50 rounded-xl p-4">
                   <h3 className="font-semibold text-green-900 mb-2">Grant Size</h3>
-                  <p className="text-green-700 text-xl font-bold">₹{(selectedGrant.grantSize / 100000).toFixed(0)} Lakhs</p>
+                  <p className="text-green-700 text-xl font-bold">₹{(selectedGrant.grantSize).toFixed(0)} </p>
                 </div>
                 <div className="bg-blue-50 rounded-xl p-4">
                   <h3 className="font-semibold text-blue-900 mb-2">Equity Dilution</h3>
