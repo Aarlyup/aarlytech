@@ -1,14 +1,14 @@
 import React from 'react';
 import FundingSidebar from './FundingSidebar';
 import { Outlet } from 'react-router-dom';
-import FundingHeader from './FundingHeader';
+import Header from './Header';
 
 const FundingLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <FundingHeader />
+      <Header />
       <div className="flex flex-1 w-full">
         {/* Sidebar: hidden on mobile, visible on md+ */}
         <div className="hidden md:block">
@@ -31,4 +31,4 @@ const FundingLayout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   );
 };
 
-export default FundingLayout; 
+export default FundingLayout;
