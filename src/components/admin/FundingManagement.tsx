@@ -107,17 +107,17 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
     const initialData: Record<string, any> = {};
     const fields = categoryFields[category] || [];
     
-    fields.forEach(field => {
-      if (field.name.includes('stage') || field.name.includes('sector') || 
-          field.name.includes('Category') || field.name.includes('Focus') ||
-          field.name.includes('documentsRequired')) {
-        initialData[field.name] = [];
-      } else if (field.type === 'number') {
-        initialData[field.name] = 0;
+  fields.forEach(field => {
+    // Keep multi-select fields as arrays so checkboxes stay checked
+    if (field.multi || field.name === 'documentsRequired') {
+      if (Array.isArray(item[field.name])) {
+        formattedData[field.name] = [...item[field.name]];
       } else {
-        initialData[field.name] = '';
+        formattedData[field.name] = [];
       }
-    });
+    }
+  });
+
     
     return initialData;
   });
