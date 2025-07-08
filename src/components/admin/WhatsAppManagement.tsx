@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MessageCircle, Send, Trash2, Search, Phone, User, Calendar, CheckSquare, Square, RefreshCw } from 'lucide-react';
+import { MessageCircle, Send, Trash2, Search, Phone, User, Calendar, CheckSquare, Square, RefreshCw, Settings, TestTube, CheckCircle, XCircle } from 'lucide-react';
 
 interface WhatsAppSubscription {
   _id: string;
@@ -26,6 +26,13 @@ interface WhatsAppMessage {
   sentAt: string;
 }
 
+interface WhatsAppConfig {
+  configured: boolean;
+  phoneNumberId?: string;
+  phoneInfo?: any;
+  apiVersion: string;
+}
+
 const WhatsAppManagement: React.FC = () => {
   const [subscriptions, setSubscriptions] = useState<WhatsAppSubscription[]>([]);
   const [messages, setMessages] = useState<WhatsAppMessage[]>([]);
@@ -38,13 +45,17 @@ const WhatsAppManagement: React.FC = () => {
   const [selectAll, setSelectAll] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [activeTab, setActiveTab] = useState<'subscriptions' | 'messages'>('subscriptions');
+  const [activeTab, setActiveTab] = useState<'subscriptions' | 'messages' | 'config'>('subscriptions');
+  const [config, setConfig] = useState<WhatsAppConfig | null>(null);
+  const [testPhoneNumber, setTestPhoneNumber] = useState('');
+  const [testLoading, setTestLoading] = useState(false);
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
   useEffect(() => {
     loadSubscriptions();
     loadMessages();
+    loadConfig();
   }, []);
 
   const loadSubscriptions = async () => {
@@ -83,6 +94,59 @@ const WhatsAppManagement: React.FC = () => {
       }
     } catch (error) {
       console.error('Error loading messages:', error);
+    }
+  };
+
+  const loadConfig = async () => {
+    try {
+      const response = await fetch(`${API_URL}/whatsapp/admin/config`, {
+        credentials: 'include'
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        setConfig(data.data);
+      }
+    } catch (error) {
+      console.error('Error loading config:', error);
+    }
+  };
+
+  const handleTestConfig = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!testPhoneNumber.trim()) {
+      setError('Test phone number is required');
+      return;
+    }
+
+    try {
+      setTestLoading(true);
+      setError('');
+      
+      const response = await fetch(`${API_URL}/whatsapp/admin/test-config`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ testPhoneNumber }),
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        setSuccess('Test message sent successfully! Check your WhatsApp.');
+        setTestPhoneNumber('');
+        setTimeout(() => setSuccess(''), 5000);
+      } else {
+        setError(data.message || 'Failed to send test message');
+      }
+    } catch (error) {
+      console.error('Error testing config:', error);
+      setError('Error testing configuration');
+    } finally {
+      setTestLoading(false);
     }
   };
 
@@ -239,6 +303,16 @@ const WhatsAppManagement: React.FC = () => {
           >
             Message History ({messages.length})
           </button>
+          <button
+            onClick={() => setActiveTab('config')}
+            className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              activeTab === 'config'
+                ? 'border-green-500 text-green-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            }`}
+          >
+            Configuration
+          </button>
         </nav>
       </div>
 
@@ -388,6 +462,144 @@ const WhatsAppManagement: React.FC = () => {
               ))}
             </div>
           )}
+        </div>
+      )}
+
+      {activeTab === 'config' && (
+        <div className="space-y-6">
+          {/* Configuration Status */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <Settings className="w-5 h-5" />
+              WhatsApp Business API Configuration
+            </h3>
+            
+            {config && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  {config.configured ? (
+                    <CheckCircle className="w-6 h-6 text-green-600" />
+                  ) : (
+                    <XCircle className="w-6 h-6 text-red-600" />
+                  )}
+                  <span className={`font-medium ${config.configured ? 'text-green-800' : 'text-red-800'}`}>
+                    {config.configured ? 'WhatsApp API Configured' : 'WhatsApp API Not Configured'}
+                  </span>
+                </div>
+                
+                {config.configured && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <span className="font-medium text-green-900">Phone Number ID:</span>
+                        <p className="text-green-700">{config.phoneNumberId}</p>
+                      </div>
+                      <div>
+                        <span className="font-medium text-green-900">API Version:</span>
+                        <p className="text-green-700">{config.apiVersion}</p>
+                      </div>
+                      {config.phoneInfo && (
+                        <div className="md:col-span-2">
+                          <span className="font-medium text-green-900">Phone Number:</span>
+                          <p className="text-green-700">{config.phoneInfo.display_phone_number}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+                
+                {!config.configured && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <h4 className="font-medium text-red-900 mb-2">Setup Required</h4>
+                    <p className="text-red-700 text-sm mb-3">
+                      To enable WhatsApp messaging, you need to configure the following environment variables:
+                    </p>
+                    <ul className="text-red-700 text-sm space-y-1 list-disc list-inside">
+                      <li>WHATSAPP_ACCESS_TOKEN</li>
+                      <li>WHATSAPP_PHONE_NUMBER_ID</li>
+                      <li>WHATSAPP_BUSINESS_ACCOUNT_ID</li>
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Test Configuration */}
+          {config?.configured && (
+            <div className="bg-white rounded-lg shadow p-6">
+              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <TestTube className="w-5 h-5" />
+                Test Configuration
+              </h3>
+              
+              <form onSubmit={handleTestConfig} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Test Phone Number
+                  </label>
+                  <input
+                    type="tel"
+                    value={testPhoneNumber}
+                    onChange={(e) => setTestPhoneNumber(e.target.value)}
+                    placeholder="+91 9876543210"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    required
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Enter your phone number to receive a test message
+                  </p>
+                </div>
+                
+                <button
+                  type="submit"
+                  disabled={testLoading}
+                  className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+                >
+                  {testLoading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      Sending Test...
+                    </>
+                  ) : (
+                    <>
+                      <TestTube className="w-4 h-4" />
+                      Send Test Message
+                    </>
+                  )}
+                </button>
+              </form>
+            </div>
+          )}
+
+          {/* Setup Instructions */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <h3 className="text-lg font-semibold mb-4">Setup Instructions</h3>
+            <div className="prose prose-sm max-w-none">
+              <ol className="space-y-3">
+                <li>
+                  <strong>Create a Meta Business Account:</strong>
+                  <p className="text-gray-600">Visit <a href="https://business.facebook.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">business.facebook.com</a> and create a business account.</p>
+                </li>
+                <li>
+                  <strong>Set up WhatsApp Business API:</strong>
+                  <p className="text-gray-600">Go to <a href="https://developers.facebook.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">developers.facebook.com</a>, create an app, and add WhatsApp product.</p>
+                </li>
+                <li>
+                  <strong>Get your credentials:</strong>
+                  <ul className="list-disc list-inside ml-4 text-gray-600">
+                    <li>Access Token from your WhatsApp Business app</li>
+                    <li>Phone Number ID from your WhatsApp Business phone number</li>
+                    <li>Business Account ID from your Meta Business account</li>
+                  </ul>
+                </li>
+                <li>
+                  <strong>Add to environment variables:</strong>
+                  <p className="text-gray-600">Add the credentials to your server's .env file and restart the application.</p>
+                </li>
+              </ol>
+            </div>
+          </div>
         </div>
       )}
 
