@@ -53,6 +53,7 @@ router.get('/investor-matches', adminAuth, getInvestorMatches);
 router.post('/investor-matches', adminAuth, investorMatchValidation, createInvestorMatch);
 router.put('/investor-matches/:id', adminAuth, investorMatchValidation, updateInvestorMatch);
 router.delete('/investor-matches/:id', adminAuth, deleteInvestorMatch);
+router.delete('/investor-matches/bulk/all', adminAuth, require('../controllers/adminController').bulkDeleteInvestorMatches);
 
 // ============ NEWS ROUTES ============
 router.get('/news', adminAuth, getNews);

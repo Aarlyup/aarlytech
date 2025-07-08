@@ -85,6 +85,7 @@ router.post('/admin/:category', adminAuth, (req, res, next) => {
 }, createFundingItem);
 router.put('/admin/:category/:id', adminAuth, updateFundingItem);
 router.delete('/admin/:category/:id', adminAuth, deleteFundingItem);
+router.delete('/admin/:category/bulk/all', adminAuth, require('../controllers/fundingController').bulkDeleteFundingItems);
 
 // Public routes (for user-facing pages)
 router.get('/public/:category', getPublicFundingItems);

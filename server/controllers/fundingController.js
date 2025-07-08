@@ -13,7 +13,8 @@ const models = {
   'micro-vcs': MicroVCNew,
   'incubators': IncubatorNew,
   'accelerators': AcceleratorNew,
-  'govt-grants': GovtGrant
+  'govt-grants': GovtGrant,
+  'investor-matches': require('../models/InvestorMatch')
 };
 
 // Get all items for a category (Admin)
@@ -382,6 +383,35 @@ exports.getPublicFundingItems = async (req, res) => {
     });
   } catch (error) {
     console.error('Get public funding items error:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+// Bulk delete all items in a category
+exports.bulkDeleteFundingItems = async (req, res) => {
+  try {
+    const { category } = req.params;
+    
+    const Model = models[category];
+    if (!Model) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid category'
+      });
+    }
+
+    const result = await Model.deleteMany({});
+
+    res.json({
+      success: true,
+      message: `Deleted ${result.deletedCount} items successfully`,
+      deletedCount: result.deletedCount
+    });
+  } catch (error) {
+    console.error('Bulk delete funding items error:', error);
     res.status(500).json({
       success: false,
       message: error.message

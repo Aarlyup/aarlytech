@@ -133,6 +133,25 @@ exports.deleteInvestorMatch = async (req, res) => {
   }
 };
 
+// Bulk delete all investor matches
+exports.bulkDeleteInvestorMatches = async (req, res) => {
+  try {
+    const result = await InvestorMatch.deleteMany({});
+
+    res.json({
+      success: true,
+      message: `Deleted ${result.deletedCount} investor matches successfully`,
+      deletedCount: result.deletedCount
+    });
+  } catch (error) {
+    console.error('Bulk delete investor matches error:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
 // ============ NEWS CONTROLLERS ============
 
 // Get all news
