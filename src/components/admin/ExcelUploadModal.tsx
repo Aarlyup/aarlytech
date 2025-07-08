@@ -15,9 +15,9 @@ const categoryTemplates: Record<string, any> = {
     linkedinProfileUrl: 'LinkedIn URL',
     city: 'City',
     country: 'Country',
-    investCategory: 'Fintech&SaaS&AI/ML',
+    investCategory: 'Fintech&SaaS,AI/ML', // Use & or , as separator
     ticketSize: '500000',
-    stage: 'Seed&Series A',
+    stage: 'Seed&Series A', // Use & or , as separator
     preferFounderProfile: 'Tech founders with domain expertise',
     portfolioHighlights: 'Invested in 50+ startups',
     contact: 'angel@example.com'
@@ -173,7 +173,114 @@ const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
     const template = categoryTemplates[category];
     const headers = Object.keys(template);
 
-    // Dedicated strict parsing for investor-matches (all fields string, no arrays, enums as single string)
+    // Dedicated parsing for each funding category
+    if (category === 'angel-investors') {
+      return jsonData.slice(1).map((row: any[]) => {
+        const item: any = {};
+        headers.forEach((header, index) => {
+          let value = row[index];
+          if (value === undefined || value === null) value = '';
+          if (["investCategory", "stage"].includes(header)) {
+            // Accept both & and , as delimiters, always send as array
+            value = typeof value === 'string' ? value.split(/[&,]/).map(v => v.trim()).filter(Boolean) : [];
+          } else if (header === 'ticketSize') {
+            value = Number(value) || 0;
+          } else {
+            value = String(value).trim();
+          }
+          item[header] = value;
+        });
+        if (item.name && item.city && item.country && item.ticketSize && item.contact) return item;
+        return null;
+      }).filter(Boolean);
+    }
+    if (category === 'venture-capital') {
+      return jsonData.slice(1).map((row: any[]) => {
+        const item: any = {};
+        headers.forEach((header, index) => {
+          let value = row[index];
+          if (value === undefined || value === null) value = '';
+          if (["stageFocus", "sectorFocus"].includes(header)) {
+            value = typeof value === 'string' ? value.split('&').map(v => v.trim()).filter(Boolean) : [];
+          } else if (["fundSize", "avgTicketSize"].includes(header)) {
+            value = Number(value) || 0;
+          } else {
+            value = String(value).trim();
+          }
+          item[header] = value;
+        });
+        if (item.name && item.headOffice && item.fundSize && item.avgTicketSize && item.contact) return item;
+        return null;
+      }).filter(Boolean);
+    }
+    if (category === 'micro-vcs') {
+      return jsonData.slice(1).map((row: any[]) => {
+        const item: any = {};
+        headers.forEach((header, index) => {
+          let value = row[index];
+          if (value === undefined || value === null) value = '';
+          if (["stage", "sector"].includes(header)) {
+            value = typeof value === 'string' ? value.split('&').map(v => v.trim()).filter(Boolean) : [];
+          } else if (["fundSize", "checkSize"].includes(header)) {
+            value = Number(value) || 0;
+          } else {
+            value = String(value).trim();
+          }
+          item[header] = value;
+        });
+        if (item.name && item.location && item.fundSize && item.checkSize && item.contact) return item;
+        return null;
+      }).filter(Boolean);
+    }
+    if (category === 'incubators') {
+      return jsonData.slice(1).map((row: any[]) => {
+        const item: any = {};
+        headers.forEach((header, index) => {
+          let value = row[index];
+          if (value === undefined || value === null) value = '';
+          value = String(value).trim();
+          item[header] = value;
+        });
+        if (item.name && item.location && item.fundingSupport && item.eligibility && item.contact) return item;
+        return null;
+      }).filter(Boolean);
+    }
+    if (category === 'accelerators') {
+      return jsonData.slice(1).map((row: any[]) => {
+        const item: any = {};
+        headers.forEach((header, index) => {
+          let value = row[index];
+          if (value === undefined || value === null) value = '';
+          if (["stage", "sectors"].includes(header)) {
+            value = typeof value === 'string' ? value.split('&').map(v => v.trim()).filter(Boolean) : [];
+          } else {
+            value = String(value).trim();
+          }
+          item[header] = value;
+        });
+        if (item.name && item.hq && item.batchFrequency && item.fundingOffered && item.programDuration) return item;
+        return null;
+      }).filter(Boolean);
+    }
+    if (category === 'govt-grants') {
+      return jsonData.slice(1).map((row: any[]) => {
+        const item: any = {};
+        headers.forEach((header, index) => {
+          let value = row[index];
+          if (value === undefined || value === null) value = '';
+          if (["stage", "documentsRequired"].includes(header)) {
+            value = typeof value === 'string' ? value.split('&').map(v => v.trim()).filter(Boolean) : [];
+          } else if (header === 'grantSize') {
+            value = Number(value) || 0;
+          } else {
+            value = String(value).trim();
+          }
+          item[header] = value;
+        });
+        if (item.name && item.authority && item.grantSize && item.eligibility && item.howToApply && item.timelines && item.contact) return item;
+        return null;
+      }).filter(Boolean);
+    }
     if (category === 'investor-matches') {
       return jsonData.slice(1).map((row: any[]) => {
         const item: any = {};
@@ -181,63 +288,18 @@ const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
           let value = row[index];
           if (value === undefined || value === null) value = '';
           value = String(value).trim();
-          // For stage and traction, only take the first value if '&' is present
           if (header === 'stage' || header === 'traction') {
             value = value.includes('&') ? value.split('&')[0].trim() : value;
           }
-          // checkSize must be string (even if number in Excel)
-          if (header === 'checkSize') {
-            value = value;
-          }
           item[header] = value;
         });
-        // Only include if all required fields are present and non-empty
-        if (
-          item.name && item.stage && item.industry && item.traction && item.description && item.checkSize && item.location
-        ) {
-          return item;
-        }
+        if (item.name && item.stage && item.industry && item.traction && item.description && item.checkSize && item.location) return item;
         return null;
       }).filter(Boolean);
     }
 
-    // All other categories handled by default logic below (completely isolated)
-    return jsonData.slice(1).map((row: any[]) => {
-      const item: any = {};
-      headers.forEach((header, index) => {
-        let value = row[index];
-        if (value === undefined || value === null || value === '') {
-          if (header === 'ticketSize' || header === 'fundSize' || header === 'checkSize' || 
-              header === 'avgTicketSize' || header === 'grantSize') {
-            value = 0;
-          } else if (header.includes('stage') || header.includes('sector') || 
-                    header.includes('Category') || header.includes('Focus') ||
-                    header === 'documentsRequired') {
-            value = [];
-          } else {
-            value = '';
-          }
-        } else {
-          if (header.includes('stage') || header.includes('sector') || 
-              header.includes('Category') || header.includes('Focus') ||
-              header === 'documentsRequired') {
-            if (typeof value === 'string' && value.includes('&')) {
-              value = value.split('&').map((s: string) => s.trim()).filter(Boolean);
-            } else if (typeof value === 'string') {
-              value = value ? [value.trim()] : [];
-            } else {
-              value = [];
-            }
-          }
-          if (header === 'ticketSize' || header === 'fundSize' || header === 'checkSize' || 
-              header === 'avgTicketSize' || header === 'grantSize') {
-            value = Number(value) || 0;
-          }
-        }
-        item[header] = value;
-      });
-      return item;
-    }).filter((item: any) => item.name && item.name.trim() !== '');
+    // fallback (should never hit)
+    return [];
   };
 
   const handleUpload = async () => {
@@ -411,7 +473,7 @@ const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
             <ul className="text-blue-800 text-sm space-y-1">
               <li>• First row will be ignored (use for column headers)</li>
               <li>• Data will be read from second row onwards</li>
-              <li>• Use "&" to separate multiple values (e.g., "Fintech&SaaS&AI/ML")</li>
+              <li>• Use comma (,) to separate multiple values (e.g., "Fintech,SaaS,AI/ML")</li>
               <li>• Empty rows will be skipped automatically</li>
               <li>• Download template below to see the exact format required</li>
             </ul>
