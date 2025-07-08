@@ -11,6 +11,7 @@ interface FundingCardProps {
   sector?: string[];
   stage?: string[];
   onClick: () => void;
+  showCategoryLabel?: boolean;
 }
 
 const getCategoryIcon = (category?: string) => {
@@ -44,7 +45,8 @@ const FundingCard: React.FC<FundingCardProps> = ({
   amount,
   sector = [],
   stage = [],
-  onClick
+  onClick,
+  showCategoryLabel = false
 }) => {
   return (
     <div
@@ -74,6 +76,11 @@ const FundingCard: React.FC<FundingCardProps> = ({
             <MapPin className="w-4 h-4" />
             <span>{location}</span>
           </div>
+          {showCategoryLabel && category && (
+            <div className="mt-1 text-xs font-semibold text-blue-500 uppercase tracking-wide">
+              {category.replace(/-/g, ' ')}
+            </div>
+          )}
         </div>
       </div>
 
