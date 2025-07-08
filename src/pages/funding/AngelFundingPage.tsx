@@ -85,7 +85,7 @@ const AngelFundingPage: React.FC = () => {
 
       {/* Angel Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-2 md:px-6 pb-8">
-        {loading ? (
+        {(loading && filteredAngels.length === 0) ? (
           <LoadingGrid count={6} columns={2} />
         ) : (
           filteredAngels.map((angel) => (
