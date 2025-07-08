@@ -72,8 +72,19 @@ export const FundingProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const loadFundingData = async () => {
     if (loading) return; // Prevent multiple simultaneous loads
-    
-    setLoading(true);
+    // Only set loading to true if there is no cached data
+    const cached = localStorage.getItem('aarly_funding_data');
+    let hasCache = false;
+    if (cached) {
+      try {
+        const { data, timestamp } = JSON.parse(cached);
+        const isStale = Date.now() - timestamp > 60 * 60 * 1000; // 60 minutes
+        if (!isStale) {
+          hasCache = true;
+        }
+      } catch {}
+    }
+    if (!hasCache) setLoading(true);
     setError(null);
 
     try {
@@ -144,7 +155,7 @@ export const FundingProvider: React.FC<{ children: React.ReactNode }> = ({ child
         const cached = localStorage.getItem('aarly_funding_data');
         if (cached) {
           const { data, timestamp } = JSON.parse(cached);
-          const isStale = Date.now() - timestamp > 5 * 60 * 1000; // 5 minutes
+          const isStale = Date.now() - timestamp > 60 * 60 * 1000; // 60 minutes
           
           if (!isStale) {
             setFundingData(data);
