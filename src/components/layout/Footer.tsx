@@ -114,11 +114,12 @@ const Footer: React.FC = () => {
             <form onSubmit={handleWhatsAppSubscribe} className="space-y-2">
               <input
                 type="tel"
-                placeholder="+91 9876543210"
+                placeholder="9876543210"
                 value={whatsappForm.phoneNumber}
                 onChange={(e) => setWhatsappForm({ phoneNumber: e.target.value })}
                 className="w-full px-3 py-2 text-sm bg-gray-800 border border-gray-600 rounded focus:outline-none focus:border-green-400 text-white placeholder-gray-400"
                 required
+                maxLength={10}
               />
               <button
                 type="submit"
