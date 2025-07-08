@@ -9,7 +9,9 @@ const {
   getWhatsAppSubscriptions,
   sendWhatsAppMessage,
   getWhatsAppMessages,
-  deleteWhatsAppSubscription
+  deleteWhatsAppSubscription,
+  getWhatsAppConfig,
+  testWhatsAppConfig
 } = require('../controllers/whatsappController');
 
 // Validation rules
@@ -39,5 +41,7 @@ router.get('/admin/subscriptions', adminAuth, getWhatsAppSubscriptions);
 router.post('/admin/send-message', adminAuth, messageValidation, sendWhatsAppMessage);
 router.get('/admin/messages', adminAuth, getWhatsAppMessages);
 router.delete('/admin/subscriptions/:id', adminAuth, deleteWhatsAppSubscription);
+router.get('/admin/config', adminAuth, getWhatsAppConfig);
+router.post('/admin/test-config', adminAuth, testWhatsAppConfig);
 
 module.exports = router;
