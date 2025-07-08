@@ -23,6 +23,7 @@ const adminRoutes = require('./routes/admin');
 const publicRoutes = require('./routes/public');
 const fundingRoutes = require('./routes/funding');
 const newsletterRoutes = require('./routes/newsletter');
+const whatsappRoutes = require('./routes/whatsapp');
 
 const app = express();
 
@@ -129,6 +130,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/public', publicRoutes);
 app.use('/api/funding', fundingRoutes);
 app.use('/api/newsletter', newsletterRoutes);
+app.use('/api/whatsapp', whatsappRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {
