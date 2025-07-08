@@ -1,6 +1,7 @@
 const WhatsAppSubscription = require('../models/WhatsAppSubscription');
 const WhatsAppMessage = require('../models/WhatsAppMessage');
 const User = require('../models/User');
+const whatsappService = require('../config/whatsapp');
 const { validationResult } = require('express-validator');
 
 // Subscribe to WhatsApp updates
@@ -176,21 +177,24 @@ exports.sendWhatsAppMessage = async (req, res) => {
         const subscription = subscriptions[i];
         
         try {
-          // Simulate WhatsApp API call
-          // In a real implementation, you would use WhatsApp Business API
-          console.log(`Sending WhatsApp message to ${subscription.phoneNumber}: ${message}`);
+          // Format phone number
+          const formattedNumber = whatsappService.formatPhoneNumber(subscription.phoneNumber);
           
           // Add opt-out instructions to the message
-          const fullMessage = `${message}\n\n---\nTo stop receiving updates, reply with: STOP ${subscription.optOutToken}`;
+          const fullMessage = `${message}\n\n---\nTo stop receiving updates, visit: ${process.env.FRONTEND_URL}/whatsapp/opt-out/${subscription.optOutToken}`;
           
-          // Simulate API call delay
-          await new Promise(resolve => setTimeout(resolve, 100));
+          // Send WhatsApp message using the service
+          const result = await whatsappService.sendMessage(formattedNumber, fullMessage);
           
-          // Update last message sent
-          subscription.lastMessageSent = new Date();
-          await subscription.save();
-          
-          successCount++;
+          if (result.success) {
+            // Update last message sent
+            subscription.lastMessageSent = new Date();
+            await subscription.save();
+            successCount++;
+          } else {
+            console.error(`Failed to send WhatsApp message to ${subscription.phoneNumber}:`, result.error);
+            failureCount++;
+          }
         } catch (error) {
           console.error(`Failed to send WhatsApp message to ${subscription.phoneNumber}:`, error);
           failureCount++;
@@ -287,6 +291,66 @@ exports.deleteWhatsAppSubscription = async (req, res) => {
     });
   } catch (error) {
     console.error('Delete WhatsApp subscription error:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+// Get WhatsApp configuration status (Admin)
+exports.getWhatsAppConfig = async (req, res) => {
+  try {
+    const phoneInfo = await whatsappService.getPhoneNumberInfo();
+    
+    res.json({
+      success: true,
+      data: {
+        configured: !!process.env.WHATSAPP_ACCESS_TOKEN && !!process.env.WHATSAPP_PHONE_NUMBER_ID,
+        phoneNumberId: process.env.WHATSAPP_PHONE_NUMBER_ID,
+        phoneInfo: phoneInfo.success ? phoneInfo.data : null,
+        apiVersion: process.env.WHATSAPP_API_VERSION || 'v18.0'
+      }
+    });
+  } catch (error) {
+    console.error('Get WhatsApp config error:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+// Test WhatsApp configuration (Admin)
+exports.testWhatsAppConfig = async (req, res) => {
+  try {
+    const { testPhoneNumber } = req.body;
+    
+    if (!testPhoneNumber) {
+      return res.status(400).json({
+        success: false,
+        message: 'Test phone number is required'
+      });
+    }
+
+    const testMessage = 'This is a test message from Aarly WhatsApp system. Configuration is working correctly!';
+    const result = await whatsappService.sendMessage(testPhoneNumber, testMessage);
+    
+    if (result.success) {
+      res.json({
+        success: true,
+        message: 'Test message sent successfully',
+        data: result
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: 'Failed to send test message',
+        error: result.error
+      });
+    }
+  } catch (error) {
+    console.error('Test WhatsApp config error:', error);
     res.status(500).json({
       success: false,
       message: error.message
