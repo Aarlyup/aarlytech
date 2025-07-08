@@ -23,15 +23,6 @@ const AdminRoute: React.FC<AdminRouteProps> = ({ children }) => {
     return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 
-  // Check if user is admin (this should match backend logic)
-  const adminEmails = ['admin@aarly.co', 'founder@aarly.co', 'teamaarly@gmail.com']; // Add your admin emails here
-  const isAdmin = adminEmails.includes(user.email.toLowerCase());
-
-  if (!isAdmin) {
-    // Redirect to dashboard if not admin
-    return <Navigate to="/dashboard" replace />;
-  }
-
   return <>{children}</>;
 };
 
