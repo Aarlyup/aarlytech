@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Search } from 'lucide-react';
+import { Plus, Edit, Trash2, Search, Upload } from 'lucide-react';
+import ExcelUploadModal from './ExcelUploadModal';
 
 interface FundingItem {
   _id: string;
@@ -125,6 +126,7 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [showExcelUpload, setShowExcelUpload] = useState(false);
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -359,19 +361,28 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
         <h2 className="text-2xl font-bold text-gray-900">
           {categoryLabels[category] || 'Funding Items'}
         </h2>
-        <button
-          onClick={() => {
-            setEditingItem(null);
-            setFormData({});
-            setShowForm(true);
-            setError('');
-            setSuccess('');
-          }}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          <Plus className="w-4 h-4" />
-          Add New
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={() => setShowExcelUpload(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+          >
+            <Upload className="w-4 h-4" />
+            Excel Upload
+          </button>
+          <button
+            onClick={() => {
+              setEditingItem(null);
+              setFormData({});
+              setShowForm(true);
+              setError('');
+              setSuccess('');
+            }}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            <Plus className="w-4 h-4" />
+            Add New
+          </button>
+        </div>
       </div>
 
       {/* Success/Error Messages */}
@@ -582,6 +593,17 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
           </div>
         </div>
       )}
+
+      {/* Excel Upload Modal */}
+      <ExcelUploadModal
+        isOpen={showExcelUpload}
+        onClose={() => setShowExcelUpload(false)}
+        category={category}
+        onUploadSuccess={() => {
+          loadItems();
+          setShowExcelUpload(false);
+        }}
+      />
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Search, Target } from 'lucide-react';
+import { Plus, Edit, Trash2, Search, Target, Upload } from 'lucide-react';
+import ExcelUploadModal from './ExcelUploadModal';
 
 interface InvestorMatch {
   _id: string;
@@ -25,6 +26,7 @@ const InvestorMatchManagement: React.FC = () => {
   const [editingMatch, setEditingMatch] = useState<InvestorMatch | null>(null);
   const [formData, setFormData] = useState<Partial<InvestorMatch>>({});
   const [search, setSearch] = useState('');
+  const [showExcelUpload, setShowExcelUpload] = useState(false);
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -150,17 +152,26 @@ const InvestorMatchManagement: React.FC = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-gray-900">Investor Matches</h2>
-        <button
-          onClick={() => {
-            setEditingMatch(null);
-            setFormData({});
-            setShowForm(true);
-          }}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          <Plus className="w-4 h-4" />
-          Add New Match
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={() => setShowExcelUpload(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+          >
+            <Upload className="w-4 h-4" />
+            Excel Upload
+          </button>
+          <button
+            onClick={() => {
+              setEditingMatch(null);
+              setFormData({});
+              setShowForm(true);
+            }}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            <Plus className="w-4 h-4" />
+            Add New Match
+          </button>
+        </div>
       </div>
 
       {/* Search */}
@@ -417,6 +428,17 @@ const InvestorMatchManagement: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Excel Upload Modal */}
+      <ExcelUploadModal
+        isOpen={showExcelUpload}
+        onClose={() => setShowExcelUpload(false)}
+        category="investor-matches"
+        onUploadSuccess={() => {
+          loadMatches();
+          setShowExcelUpload(false);
+        }}
+      />
     </div>
   );
 };
