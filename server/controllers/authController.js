@@ -415,6 +415,13 @@ const googleSuccess = async (req, res) => {
   }
 };
 
+// Check if user is admin (emails from env)
+const isAdmin = (req, res) => {
+  const adminEmails = (process.env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase());
+  const isAdmin = req.user && adminEmails.includes(req.user.email.toLowerCase());
+  res.json({ isAdmin });
+};
+
 module.exports = {
   register,
   verifyEmail,
@@ -422,5 +429,6 @@ module.exports = {
   login,
   logout,
   getMe,
-  googleSuccess
+  googleSuccess,
+  isAdmin
 };
