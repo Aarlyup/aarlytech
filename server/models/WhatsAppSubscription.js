@@ -6,6 +6,7 @@ const whatsAppSubscriptionSchema = new mongoose.Schema({
     required: true,
     unique: true,
     trim: true,
+    maxlength: 10,
     validate: {
       validator: function(v) {
         return /^\+?[1-9]\d{1,14}$/.test(v);
