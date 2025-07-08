@@ -65,13 +65,13 @@ const FinNewzPage: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Fin'Newz - Startup Funding News | Aarly</title>
-        <meta name="description" content="Stay updated with the latest startup funding news, trends, and insights on Aarly Fin'Newz." />
-        <link rel="canonical" href="https://aarly.co/finnewz" />
-        <meta property="og:title" content="Fin'Newz - Startup Funding News | Aarly" />
-        <meta property="og:description" content="Stay updated with the latest startup funding news, trends, and insights on Aarly Fin'Newz." />
+        <title>Content - Startup News | Aarly</title>
+        <meta name="description" content="Stay updated with the latest startup news, trends, and insights on Aarly Content." />
+        <link rel="canonical" href="https://aarly.co/content" />
+        <meta property="og:title" content="Content - Startup News | Aarly" />
+        <meta property="og:description" content="Stay updated with the latest startup news, trends, and insights on Aarly Content." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://aarly.co/finnewz" />
+        <meta property="og:url" content="https://aarly.co/content" />
         <meta property="og:image" content="/Screenshot 2025-06-29 140116.png" />
       </Helmet>
       <div className="flex flex-col items-center justify-center min-h-[60vh] px-2 sm:px-4 md:px-8">
@@ -79,11 +79,11 @@ const FinNewzPage: React.FC = () => {
           <div className="flex flex-col sm:flex-row items-center gap-3 mb-4">
             <Newspaper size={40} className="text-blue-500 transition-transform hover:scale-110 hover:animate-pulse" />
             <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-blue-700 text-center relative">
-              Fin'Newz
+              Content
               <span className="block h-1 w-20 bg-gradient-to-r from-blue-400 to-indigo-400 rounded-full mt-1 mx-auto animate-underline"></span>
             </h1>
           </div>
-          <p className="text-base sm:text-lg md:text-xl text-gray-700 text-center mb-4 sm:mb-6">Latest startup funding and business news from our editorial team.</p>
+          <p className="text-base sm:text-lg md:text-xl text-gray-700 text-center mb-4 sm:mb-6">Latest startup and business news from our editorial team.</p>
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 w-full py-6 sm:py-8">
               {[...Array(4)].map((_, i) => (

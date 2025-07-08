@@ -75,7 +75,7 @@ const DashboardPage: React.FC = () => {
       </Helmet>
       <div className="max-w-7xl mx-auto px-4 py-10 space-y-12 animate-fade-in" data-aos="fade-in">
         {/* Greeting Block */}
-        <div className="relative bg-white/80 border border-blue-100 shadow-2xl rounded-3xl p-4 sm:p-8 md:p-12 mb-8 flex flex-col items-center gap-4 sm:gap-6 overflow-hidden backdrop-blur-xl w-full max-w-xl mx-auto" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.10), 0 0 60px 0 #3b82f680'}} data-aos="fade-down" data-aos-delay="200">
+        <div className="relative bg-white/80 border border-blue-100 shadow-2xl rounded-3xl p-4 sm:p-8 md:p-12 mb-8 flex flex-col items-center gap-4 sm:gap-6 overflow-hidden backdrop-blur-xl w-full lg:max-w-none mx-auto" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.10), 0 0 60px 0 #3b82f680'}} data-aos="fade-down" data-aos-delay="200">
           <div className="absolute inset-0 pointer-events-none" style={{background: 'radial-gradient(circle at 30% 20%, #e0e7ff 0%, #fff0 70%)'}}></div>
           <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold mb-1 text-blue-900 text-center z-10">
             <span className="block">Welcome to Aarly — your early-stage startup support system.</span>
