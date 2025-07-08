@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Building2, MapPin, DollarSign, Calendar, ExternalLink, Mail, Star } from 'lucide-react';
 import { useFunding } from '../../contexts/FundingContext';
 import LoadingGrid from '../../components/ui/LoadingGrid';
 import EmptyState from '../../components/ui/EmptyState';
+import { FundingMobileNav } from '../../components/layout/FundingSidebar';
 
 interface Incubator {
   _id: string;
@@ -24,6 +25,7 @@ const IncubatorFundingPage: React.FC = () => {
   const [filteredIncubators, setFilteredIncubators] = useState<Incubator[]>([]);
   const [search, setSearch] = useState('');
   const [selectedIncubator, setSelectedIncubator] = useState<Incubator | null>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
 
   useEffect(() => {
@@ -61,6 +63,7 @@ const IncubatorFundingPage: React.FC = () => {
         <meta name="description" content="Discover startup incubators offering funding, mentorship, and resources for early-stage companies." />
       </Helmet>
       
+      <FundingMobileNav />
       <div className="mb-8 px-2 md:px-6 pt-4 md:pt-8">
         <h1 className="text-2xl font-bold mb-2">Startup Incubators</h1>
         <p className="text-gray-600">
@@ -120,7 +123,6 @@ const IncubatorFundingPage: React.FC = () => {
 
               <div className="mt-4 space-y-2">
                 <div className="flex items-center gap-2 text-sm">
-                  <DollarSign className="w-4 h-4 text-green-600" />
                   <span className="font-medium text-gray-900">{incubator.fundingSupport}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
@@ -149,75 +151,79 @@ const IncubatorFundingPage: React.FC = () => {
 
       {/* Incubator Detail Modal */}
       {selectedIncubator && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <div className="flex justify-between items-start mb-4">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center">
-                    <Building2 className="w-8 h-8 text-purple-600" />
-                  </div>
-                  <div>
-                    <h1 className="text-2xl font-bold text-gray-900">{selectedIncubator.name}</h1>
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <MapPin className="w-4 h-4" />
-                      <span>{selectedIncubator.location}</span>
-                    </div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-fade-in" onClick={closeModal}>
+          <div
+            className="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full animate-slide-up mt-12"
+            onClick={e => e.stopPropagation()}
+            tabIndex={-1}
+            ref={modalRef}
+          >
+            {/* Sticky Header */}
+            <div className="sticky top-0 z-20 bg-white rounded-t-2xl flex items-center justify-between px-4 py-3 border-b border-gray-100 shadow-sm">
+              <button
+                onClick={closeModal}
+                className="flex items-center gap-1 text-gray-500 hover:text-blue-600 font-medium text-base px-1 py-1 rounded-lg transition-colors focus:outline-none"
+                aria-label="Back"
+              >
+                <span className="text-lg">←</span>
+              </button>
+              <div className="flex items-center gap-2 mx-auto">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center">
+                  <Building2 className="w-5 h-5 text-purple-600" />
+                </div>
+                <div className="text-center">
+                  <h1 className="text-base font-bold text-gray-900 leading-tight">{selectedIncubator.name}</h1>
+                  <div className="flex items-center gap-1 text-gray-500 text-xs justify-center">
+                    <MapPin className="w-3 h-3" />
+                    <span>{selectedIncubator.location}</span>
                   </div>
                 </div>
-                <button
-                  onClick={closeModal}
-                  className="text-gray-500 hover:text-gray-700 text-2xl"
-                >
-                  ×
-                </button>
               </div>
-
-              <div className="space-y-6">
-                <div className="bg-green-50 rounded-xl p-4">
-                  <h3 className="font-semibold text-green-900 mb-2">Funding Support</h3>
-                  <p className="text-green-700">{selectedIncubator.fundingSupport}</p>
+              <button
+                onClick={closeModal}
+                className="text-gray-400 hover:text-red-500 text-xl px-1 py-1 rounded-lg transition-colors focus:outline-none"
+                aria-label="Close"
+              >
+                ×
+              </button>
+            </div>
+            <div className="p-4 sm:p-6 space-y-6">
+              <div className="bg-green-50 rounded-xl p-4 flex flex-col items-start shadow-sm">
+                <span className="text-xs font-semibold text-green-700 mb-1 uppercase tracking-wide">Funding Support</span>
+                <span className="text-lg font-bold text-green-900">{selectedIncubator.fundingSupport}</span>
+              </div>
+              {selectedIncubator.otherBenefits && (
+                <div className="bg-blue-50 rounded-xl p-4 flex flex-col items-start shadow-sm">
+                  <span className="text-xs font-semibold text-blue-700 mb-1 uppercase tracking-wide">Other Benefits</span>
+                  <span className="text-sm text-blue-900">{selectedIncubator.otherBenefits}</span>
                 </div>
-
-                {selectedIncubator.otherBenefits && (
-                  <div className="bg-blue-50 rounded-xl p-4">
-                    <h3 className="font-semibold text-blue-900 mb-2">Other Benefits</h3>
-                    <p className="text-blue-700">{selectedIncubator.otherBenefits}</p>
-                  </div>
-                )}
-
+              )}
+              <div>
+                <h3 className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Eligibility</h3>
+                <p className="text-gray-700 leading-relaxed text-sm">{selectedIncubator.eligibility}</p>
+              </div>
+              <div className="bg-purple-50 rounded-xl p-4 flex flex-col items-start shadow-sm">
+                <span className="text-xs font-semibold text-purple-700 mb-1 uppercase tracking-wide">Application Process</span>
+                <span className="text-sm text-purple-900">{selectedIncubator.applicationProcess}</span>
+              </div>
+              {selectedIncubator.alumniStartups && (
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-3">Eligibility</h3>
-                  <p className="text-gray-700 leading-relaxed">{selectedIncubator.eligibility}</p>
+                  <h3 className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Alumni Startups</h3>
+                  <p className="text-gray-700 leading-relaxed text-sm">{selectedIncubator.alumniStartups}</p>
                 </div>
-
-                <div className="bg-purple-50 rounded-xl p-4">
-                  <h3 className="font-semibold text-purple-900 mb-2">Application Process</h3>
-                  <p className="text-purple-700">{selectedIncubator.applicationProcess}</p>
-                </div>
-
-                {selectedIncubator.alumniStartups && (
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-3">Alumni Startups</h3>
-                    <p className="text-gray-700 leading-relaxed">{selectedIncubator.alumniStartups}</p>
-                  </div>
+              )}
+              <div className="flex flex-col sm:flex-row gap-4 pt-2">
+                {selectedIncubator.websiteUrl && (
+                  <a
+                    href={selectedIncubator.websiteUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow w-full sm:w-auto"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    Visit Website
+                  </a>
                 )}
-              </div>
-
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <div className="flex flex-wrap gap-4">
-                  {selectedIncubator.websiteUrl && (
-                    <a
-                      href={selectedIncubator.websiteUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                      Visit Website
-                    </a>
-                  )}
-                </div>
               </div>
             </div>
           </div>

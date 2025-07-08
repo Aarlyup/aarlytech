@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Award, Building, DollarSign, Calendar, FileText, ExternalLink, Mail, Star } from 'lucide-react';
 import { useFunding } from '../../contexts/FundingContext';
 import LoadingGrid from '../../components/ui/LoadingGrid';
 import EmptyState from '../../components/ui/EmptyState';
+import { FundingMobileNav } from '../../components/layout/FundingSidebar';
 
 interface GovtGrant {
   _id: string;
@@ -27,6 +28,7 @@ const GrantsFundingPage: React.FC = () => {
   const [filteredGrants, setFilteredGrants] = useState<GovtGrant[]>([]);
   const [search, setSearch] = useState('');
   const [selectedGrant, setSelectedGrant] = useState<GovtGrant | null>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
 
   useEffect(() => {
@@ -77,6 +79,7 @@ const GrantsFundingPage: React.FC = () => {
         <meta name="description" content="Discover government grants and schemes for startups. Find funding opportunities from DPIIT, DST, MSME and other authorities." />
       </Helmet>
       
+      <FundingMobileNav />
       <div className="mb-8 px-2 md:px-6 pt-4 md:pt-8">
         <h1 className="text-2xl font-bold mb-2">Government Grants & Schemes</h1>
         <p className="text-gray-600">
@@ -138,10 +141,6 @@ const GrantsFundingPage: React.FC = () => {
 
               <div className="mt-4 grid grid-cols-1 gap-2">
                 <div className="flex items-center gap-2 text-sm">
-                  <DollarSign className="w-4 h-4 text-green-600" />
-                  <span className="font-medium text-gray-900">₹{(grant.grantSize).toFixed(0)} </span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
                   <Calendar className="w-4 h-4 text-blue-600" />
                   <span className="font-medium text-gray-900">{grant.timelines}</span>
                 </div>
@@ -186,52 +185,58 @@ const GrantsFundingPage: React.FC = () => {
 
       {/* Grant Detail Modal */}
       {selectedGrant && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <div className="flex justify-between items-start mb-4">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-green-100 to-blue-100 flex items-center justify-center">
-                    <Award className="w-8 h-8 text-green-600" />
-                  </div>
-                  <div>
-                    <h1 className="text-2xl font-bold text-gray-900">{selectedGrant.name}</h1>
-                    <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getAuthorityColor(selectedGrant.authority)}`}>
-                      {selectedGrant.authority}
-                    </span>
-                  </div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-fade-in" onClick={closeModal}>
+          <div
+            className="relative bg-white rounded-2xl shadow-2xl max-w-3xl w-full animate-slide-up mt-12"
+            onClick={e => e.stopPropagation()}
+            tabIndex={-1}
+            ref={modalRef}
+          >
+            {/* Sticky Header */}
+            <div className="sticky top-0 z-20 bg-white rounded-t-2xl flex items-center justify-between px-4 py-3 border-b border-gray-100 shadow-sm">
+              <button
+                onClick={closeModal}
+                className="flex items-center gap-1 text-gray-500 hover:text-blue-600 font-medium text-base px-1 py-1 rounded-lg transition-colors focus:outline-none"
+                aria-label="Back"
+              >
+                <span className="text-lg">←</span>
+              </button>
+              <div className="flex items-center gap-2 mx-auto">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-green-100 to-blue-100 flex items-center justify-center">
+                  <Award className="w-5 h-5 text-green-600" />
                 </div>
-                <button
-                  onClick={closeModal}
-                  className="text-gray-500 hover:text-gray-700 text-2xl"
-                >
-                  ×
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                <div className="bg-green-50 rounded-xl p-4">
-                  <h3 className="font-semibold text-green-900 mb-2">Grant Size</h3>
-                  <p className="text-green-700 text-xl font-bold">₹{(selectedGrant.grantSize).toFixed(0)} </p>
-                </div>
-                <div className="bg-blue-50 rounded-xl p-4">
-                  <h3 className="font-semibold text-blue-900 mb-2">Equity Dilution</h3>
-                  <p className="text-blue-700 font-bold">{selectedGrant.equityDilution}</p>
-                </div>
-                <div className="bg-purple-50 rounded-xl p-4">
-                  <h3 className="font-semibold text-purple-900 mb-2">Sector</h3>
-                  <p className="text-purple-700 font-bold">{selectedGrant.sector}</p>
+                <div className="text-center">
+                  <h1 className="text-base font-bold text-gray-900 leading-tight">{selectedGrant.name}</h1>
+                  <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getAuthorityColor(selectedGrant.authority)}`}>{selectedGrant.authority}</span>
                 </div>
               </div>
-
+              <button
+                onClick={closeModal}
+                className="text-gray-400 hover:text-red-500 text-xl px-1 py-1 rounded-lg transition-colors focus:outline-none"
+                aria-label="Close"
+              >
+                ×
+              </button>
+            </div>
+            <div className="p-4 sm:p-6 space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="bg-green-50 rounded-xl p-4 flex flex-col items-start shadow-sm">
+                  <span className="text-xs font-semibold text-green-700 mb-1 uppercase tracking-wide">Grant Size</span>
+                  <span className="text-2xl font-bold text-green-900">₹{Number(selectedGrant.grantSize).toLocaleString()}</span>
+                </div>
+                <div className="bg-blue-50 rounded-xl p-4 flex flex-col items-start shadow-sm">
+                  <span className="text-xs font-semibold text-blue-700 mb-1 uppercase tracking-wide">Equity Dilution</span>
+                  <span className="text-lg text-blue-900">{selectedGrant.equityDilution}</span>
+                </div>
+              </div>
               {selectedGrant.stage && selectedGrant.stage.length > 0 && (
-                <div className="mb-6">
-                  <h3 className="font-semibold text-gray-900 mb-3">Eligible Stages</h3>
+                <div>
+                  <h3 className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Stage Focus</h3>
                   <div className="flex flex-wrap gap-2">
                     {selectedGrant.stage.map((stage) => (
                       <span
                         key={stage}
-                        className="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-700"
+                        className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 border border-blue-200"
                       >
                         {stage}
                       </span>
@@ -239,59 +244,44 @@ const GrantsFundingPage: React.FC = () => {
                   </div>
                 </div>
               )}
-
-              <div className="space-y-6">
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-3">Eligibility Criteria</h3>
-                  <p className="text-gray-700 leading-relaxed">{selectedGrant.eligibility}</p>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-3">How to Apply</h3>
-                  <p className="text-gray-700 leading-relaxed">{selectedGrant.howToApply}</p>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-3">Timelines</h3>
-                  <p className="text-gray-700 leading-relaxed">{selectedGrant.timelines}</p>
-                </div>
-
-                {selectedGrant.documentsRequired && selectedGrant.documentsRequired.length > 0 && (
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-3">Documents Required</h3>
-                    <ul className="list-disc list-inside text-gray-700 space-y-1">
-                      {selectedGrant.documentsRequired.map((doc, index) => (
-                        <li key={index}>{doc}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {selectedGrant.specialNotes && (
-                  <div className="bg-yellow-50 rounded-xl p-4">
-                    <h3 className="font-semibold text-yellow-900 mb-2 flex items-center gap-2">
-                      <FileText className="w-4 h-4" />
-                      Special Notes
-                    </h3>
-                    <p className="text-yellow-800">{selectedGrant.specialNotes}</p>
-                  </div>
-                )}
+              <div>
+                <h3 className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Sector</h3>
+                <span className="px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-700 border border-purple-200">{selectedGrant.sector}</span>
               </div>
-
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <div className="flex flex-wrap gap-4">
-                  {selectedGrant.contact && (
-                    <a
-                      href={selectedGrant.contact.includes('@') ? `mailto:${selectedGrant.contact}` : selectedGrant.contact}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      {selectedGrant.contact.includes('@') ? <Mail className="w-4 h-4" /> : <ExternalLink className="w-4 h-4" />}
-                      Contact
-                    </a>
-                  )}
+              <div>
+                <h3 className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Eligibility</h3>
+                <p className="text-gray-700 leading-relaxed text-sm">{selectedGrant.eligibility}</p>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-4 flex flex-col items-start shadow-sm">
+                <span className="text-xs font-semibold text-gray-700 mb-1 uppercase tracking-wide">How to Apply</span>
+                <span className="text-sm text-gray-900">{selectedGrant.howToApply}</span>
+              </div>
+              {selectedGrant.documentsRequired && selectedGrant.documentsRequired.length > 0 && (
+                <div>
+                  <h3 className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Documents Required</h3>
+                  <ul className="list-disc list-inside text-sm text-gray-700">
+                    {selectedGrant.documentsRequired.map((doc, idx) => (
+                      <li key={idx}>{doc}</li>
+                    ))}
+                  </ul>
                 </div>
+              )}
+              {selectedGrant.specialNotes && (
+                <div>
+                  <h3 className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Special Notes</h3>
+                  <p className="text-gray-700 leading-relaxed text-sm">{selectedGrant.specialNotes}</p>
+                </div>
+              )}
+              <div className="flex flex-col sm:flex-row gap-4 pt-2">
+                {selectedGrant.contact && (
+                  <a
+                    href={`mailto:${selectedGrant.contact}`}
+                    className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow w-full sm:w-auto"
+                  >
+                    <Mail className="w-4 h-4" />
+                    Contact
+                  </a>
+                )}
               </div>
             </div>
           </div>
