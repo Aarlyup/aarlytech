@@ -31,7 +31,7 @@ const Hero: React.FC = () => {
               data-aos="fade-up"
               data-aos-delay="200"
               data-aos-easing="ease-out-cubic"
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-8"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6 md:mb-8 tracking-tight"
             >
               Find the right investors, grants, and startup support — <span className="text-blue-300">instantly.</span>
             </h1>
@@ -40,20 +40,12 @@ const Hero: React.FC = () => {
               data-aos="fade-up"
               data-aos-delay="300"
               data-aos-easing="ease-out-cubic"
-              className="text-base sm:text-lg md:text-xl text-blue-100 mb-6 max-w-2xl"
+              className="text-base sm:text-lg md:text-xl text-blue-100 mb-8 md:mb-10 max-w-2xl leading-relaxed md:leading-loose"
             >
               A curated database of 300+ real funding options tailored for Indian & global founders at every stage.
             </p>
 
-            <div 
-              data-aos="fade-up"
-              data-aos-delay="400"
-              data-aos-easing="ease-out-cubic"
-              className="inline-flex items-center px-4 py-2 rounded-lg bg-blue-800/30 text-blue-100 text-lg font-medium mb-10 transition-colors duration-300 hover:bg-blue-700/40 hover:text-white cursor-default"
-            >
-              <span className="w-2 h-2 rounded-full bg-blue-400 mr-2 transition-colors duration-300 group-hover:bg-blue-300"></span>
-              Everything is absolutely free and login-free! Just click and explore. 🚀
-            </div>
+            {/* Removed the free/login-free info bar for a cleaner look */}
             
             <Link 
               to="/auth"
@@ -63,7 +55,7 @@ const Hero: React.FC = () => {
             >
               <Button
                 size="lg"
-                className="group w-full sm:w-auto"
+                className="group w-full sm:w-auto mt-2 md:mt-4 shadow-lg"
               >
                 <Rocket size={20} className="mr-2 -rotate-[deg]" />
                 Explore Now

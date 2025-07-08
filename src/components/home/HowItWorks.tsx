@@ -76,7 +76,7 @@ const HowItWorks: React.FC = () => {
                 style={{ pointerEvents: idx === current ? 'auto' : 'none' }}
               >
                 <div className="h-16 w-16 rounded-full bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100 flex items-center justify-center mb-6 shadow-md">
-                  {React.cloneElement(feature.icon, { size: 32 })}
+                  {feature.icon}
                 </div>
                 <h3 className="text-xl font-bold mb-3 text-blue-900">{feature.title}</h3>
                 <p className="text-gray-600 text-base leading-relaxed">{feature.description}</p>
@@ -105,7 +105,7 @@ const HowItWorks: React.FC = () => {
               data-aos-delay={index * 100}
             >
               <div className="h-16 w-16 rounded-full bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100 flex items-center justify-center mb-6 shadow-md">
-                {React.cloneElement(feature.icon, { size: 32 })}
+                {feature.icon}
               </div>
               <h3 className="text-xl font-bold mb-3 text-blue-900">{feature.title}</h3>
               <p className="text-gray-600 text-base leading-relaxed">{feature.description}</p>
