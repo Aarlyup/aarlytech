@@ -84,7 +84,7 @@ const FundingCard: React.FC<FundingCardProps> = ({
             <span className="font-medium text-gray-900">{amount}</span>
           </div>
         )}
-        {sector.length > 0 && (
+        {Array.isArray(sector) && sector.length > 0 && (
           <div className="text-sm text-gray-600">
             <span className="font-medium">Sectors: </span>
             {sector.slice(0, 2).join(', ')}
