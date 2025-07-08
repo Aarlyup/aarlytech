@@ -22,6 +22,7 @@ import ContactPage from './pages/ContactPage';
 import AboutPage from './pages/AboutPage';
 import DisclaimerPage from './pages/DisclaimerPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
+import WhatsAppOptOutPage from './pages/WhatsAppOptOutPage';
 
 const NotFound = () => (
   <div style={{ padding: 40, textAlign: 'center' }}>
@@ -43,6 +44,7 @@ export const router = createBrowserRouter([
       { path: 'privacy-policy', element: <PrivacyPolicyPage /> },
       { path: 'terms-of-service', element: <TermsOfServicePage /> },
       { path: 'disclaimer', element: <DisclaimerPage /> },
+      { path: 'whatsapp/opt-out/:token', element: <WhatsAppOptOutPage /> },
     ]
   },
   

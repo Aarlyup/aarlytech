@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Target, Newspaper, Mail, DollarSign, Send } from 'lucide-react';
+import { Target, Newspaper, Mail, DollarSign, Send, MessageCircle } from 'lucide-react';
 import InvestorMatchManagement from '../components/admin/InvestorMatchManagement';
 import NewsManagement from '../components/admin/NewsManagement';
 import ContactManagement from '../components/admin/ContactManagement';
 import FundingManagement from '../components/admin/FundingManagement';
 import NewsletterManagement from '../components/admin/NewsletterManagement';
+import WhatsAppManagement from '../components/admin/WhatsAppManagement';
 
-type TabType = 'investor-match' | 'news' | 'contacts' | 'funding' | 'newsletter';
+type TabType = 'investor-match' | 'news' | 'contacts' | 'funding' | 'newsletter' | 'whatsapp';
 
 const fundingCategories = [
   { value: 'angel-investors', label: 'Angel Investors' },
@@ -27,6 +28,7 @@ const AdminDashboardPage: React.FC = () => {
     { id: 'contacts', label: 'Contacts', icon: Mail },
     { id: 'funding', label: 'Funding', icon: DollarSign },
     { id: 'newsletter', label: 'Newsletter', icon: Send },
+    { id: 'whatsapp', label: 'WhatsApp', icon: MessageCircle },
   ];
 
   const renderContent = () => {
@@ -60,6 +62,8 @@ const AdminDashboardPage: React.FC = () => {
         );
       case 'newsletter':
         return <NewsletterManagement />;
+      case 'whatsapp':
+        return <WhatsAppManagement />;
       default:
         return <div>Select a tab</div>;
     }
