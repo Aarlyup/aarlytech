@@ -14,7 +14,7 @@ import IncubatorFundingPage from './pages/funding/IncubatorFundingPage';
 import AcceleratorFundingPage from './pages/funding/AcceleratorFundingPage';
 import AngelFundingPage from './pages/funding/AngelFundingPage';
 import GrantsFundingPage from './pages/funding/GrantsFundingPage';
-import FinNewzPage from './pages/FinNewzPage';
+import ContentPage from './pages/FinNewzPage';
 import InvestorMatchPage from './pages/InvestorMatchPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import TermsOfServicePage from './pages/TermsOfServicePage';
@@ -78,11 +78,11 @@ export const router = createBrowserRouter([
     ]
   },
   {
-    path: '/finnewz',
+    path: '/content',
     element: (
       <ProtectedRoute>
         <DashboardLayout>
-          <FinNewzPage />
+          <ContentPage />
         </DashboardLayout>
       </ProtectedRoute>
     ),
