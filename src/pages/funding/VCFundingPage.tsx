@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Building2, MapPin, DollarSign, Users, ExternalLink, Mail, Linkedin, Star } from 'lucide-react';
+import { useFunding } from '../../contexts/FundingContext';
+import LoadingGrid from '../../components/ui/LoadingGrid';
+import EmptyState from '../../components/ui/EmptyState';
 
 interface VentureCapital {
   _id: string;
@@ -18,60 +21,34 @@ interface VentureCapital {
 }
 
 const VCFundingPage: React.FC = () => {
+  const { getFundingByCategory, loading, error } = useFunding();
   const [vcs, setVCs] = useState<VentureCapital[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [filteredVCs, setFilteredVCs] = useState<VentureCapital[]>([]);
   const [search, setSearch] = useState('');
   const [selectedVC, setSelectedVC] = useState<VentureCapital | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
   useEffect(() => {
-    loadVCs();
-  }, [search]);
+    // Get VCs from centralized funding context
+    const vcData = getFundingByCategory('venture-capital') as VentureCapital[];
+    setVCs(vcData);
+    setFilteredVCs(vcData);
+  }, [getFundingByCategory]);
 
-  const loadVCs = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      console.log('Loading VCs with search:', search);
-      
-      const params = new URLSearchParams();
-      if (search) params.append('search', search);
-      
-      const response = await fetch(`${API_URL}/funding/public/venture-capital?${params.toString()}`, {
-        credentials: 'include'
-      });
-      const data = await response.json();
-      
-      console.log('VC data response:', data);
-      
-      if (data.success) {
-        // Ensure fundSize and avgTicketSize are numbers and log them for debugging
-        const mapped = data.data.map((vc: any) => {
-          const fundSize = Number(vc.fundSize);
-          const avgTicketSize = Number(vc.avgTicketSize);
-          console.log('VC:', vc.name, 'fundSize:', fundSize, 'avgTicketSize:', avgTicketSize);
-          return {
-            ...vc,
-            fundSize,
-            avgTicketSize,
-          };
-        });
-        setVCs(mapped);
-      } else {
-        setError('Failed to load VCs: ' + data.message);
-        setVCs([]);
-      }
-    } catch (error) {
-      console.error('Error loading VCs:', error);
-      setError('Error loading VCs. Please try again later.');
-      setVCs([]);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    // Filter VCs based on search
+    if (!search.trim()) {
+      setFilteredVCs(vcs);
+    } else {
+      const filtered = vcs.filter(vc =>
+        vc.name?.toLowerCase().includes(search.toLowerCase()) ||
+        vc.headOffice?.toLowerCase().includes(search.toLowerCase()) ||
+        vc.sectorFocus?.some(sector => sector.toLowerCase().includes(search.toLowerCase())) ||
+        vc.stageFocus?.some(stage => stage.toLowerCase().includes(search.toLowerCase()))
+      );
+      setFilteredVCs(filtered);
     }
-  };
-
+  }, [search, vcs]);
   const handleVCClick = (vc: VentureCapital) => {
     setSelectedVC(vc);
   };
@@ -110,16 +87,9 @@ const VCFundingPage: React.FC = () => {
       {/* VC Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-2 md:px-6 pb-8">
         {loading ? (
-          Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 animate-pulse">
-              <div className="h-6 bg-gray-200 rounded mb-4"></div>
-              <div className="h-4 bg-gray-200 rounded mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded"></div>
-            </div>
-          ))
+          <LoadingGrid count={6} columns={2} />
         ) : (
-          vcs.map((vc) => (
+          filteredVCs.map((vc) => (
             <div
               key={vc._id}
               onClick={() => handleVCClick(vc)}
@@ -191,14 +161,12 @@ const VCFundingPage: React.FC = () => {
         )}
       </div>
 
-      {vcs.length === 0 && !loading && (
-        <div className="text-center py-12 px-4">
-          {error ? (
-            <p className="text-red-500">{error}</p>
-          ) : (
-            <p className="text-gray-500">No venture capital firms found matching your search criteria.</p>
-          )}
-        </div>
+      {filteredVCs.length === 0 && !loading && (
+        <EmptyState
+          title={search ? "No VCs found" : "No VCs available"}
+          message={search ? "Try adjusting your search criteria" : "Venture capital data will appear here once loaded"}
+          error={error}
+        />
       )}
 
       {/* VC Detail Modal */}

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Building2, MapPin, DollarSign, Calendar, ExternalLink, Mail, Star } from 'lucide-react';
+import { useFunding } from '../../contexts/FundingContext';
+import LoadingGrid from '../../components/ui/LoadingGrid';
+import EmptyState from '../../components/ui/EmptyState';
 
 interface Incubator {
   _id: string;
@@ -16,49 +19,33 @@ interface Incubator {
 }
 
 const IncubatorFundingPage: React.FC = () => {
+  const { getFundingByCategory, loading, error } = useFunding();
   const [incubators, setIncubators] = useState<Incubator[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [filteredIncubators, setFilteredIncubators] = useState<Incubator[]>([]);
   const [search, setSearch] = useState('');
   const [selectedIncubator, setSelectedIncubator] = useState<Incubator | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
   useEffect(() => {
-    loadIncubators();
-  }, [search]);
+    // Get incubators from centralized funding context
+    const incubatorData = getFundingByCategory('incubators') as Incubator[];
+    setIncubators(incubatorData);
+    setFilteredIncubators(incubatorData);
+  }, [getFundingByCategory]);
 
-  const loadIncubators = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      console.log('Loading Incubators with search:', search);
-      
-      const params = new URLSearchParams();
-      if (search) params.append('search', search);
-      
-      const response = await fetch(`${API_URL}/funding/public/incubators?${params.toString()}`, {
-        credentials: 'include'
-      });
-      const data = await response.json();
-      
-      console.log('Incubator data response:', data);
-      
-      if (data.success) {
-        setIncubators(data.data);
-      } else {
-        setError('Failed to load Incubators: ' + data.message);
-        setIncubators([]);
-      }
-    } catch (error) {
-      console.error('Error loading incubators:', error);
-      setError('Error loading incubators. Please try again later.');
-      setIncubators([]);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    // Filter incubators based on search
+    if (!search.trim()) {
+      setFilteredIncubators(incubators);
+    } else {
+      const filtered = incubators.filter(incubator =>
+        incubator.name?.toLowerCase().includes(search.toLowerCase()) ||
+        incubator.location?.toLowerCase().includes(search.toLowerCase()) ||
+        incubator.fundingSupport?.toLowerCase().includes(search.toLowerCase())
+      );
+      setFilteredIncubators(filtered);
     }
-  };
-
+  }, [search, incubators]);
   const handleIncubatorClick = (incubator: Incubator) => {
     setSelectedIncubator(incubator);
   };
@@ -97,16 +84,9 @@ const IncubatorFundingPage: React.FC = () => {
       {/* Incubator Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-2 md:px-6 pb-8">
         {loading ? (
-          Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 animate-pulse">
-              <div className="h-6 bg-gray-200 rounded mb-4"></div>
-              <div className="h-4 bg-gray-200 rounded mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded"></div>
-            </div>
-          ))
+          <LoadingGrid count={6} columns={2} />
         ) : (
-          incubators.map((incubator) => (
+          filteredIncubators.map((incubator) => (
             <div
               key={incubator._id}
               onClick={() => handleIncubatorClick(incubator)}
@@ -159,14 +139,12 @@ const IncubatorFundingPage: React.FC = () => {
         )}
       </div>
 
-      {incubators.length === 0 && !loading && (
-        <div className="text-center py-12 px-4">
-          {error ? (
-            <p className="text-red-500">{error}</p>
-          ) : (
-            <p className="text-gray-500">No incubators found matching your search criteria.</p>
-          )}
-        </div>
+      {filteredIncubators.length === 0 && !loading && (
+        <EmptyState
+          title={search ? "No incubators found" : "No incubators available"}
+          message={search ? "Try adjusting your search criteria" : "Incubator data will appear here once loaded"}
+          error={error}
+        />
       )}
 
       {/* Incubator Detail Modal */}

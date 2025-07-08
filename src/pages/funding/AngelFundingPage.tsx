@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { User, MapPin, DollarSign, Target, ExternalLink, Mail, Linkedin, Star } from 'lucide-react';
+import { useFunding } from '../../contexts/FundingContext';
+import LoadingGrid from '../../components/ui/LoadingGrid';
+import EmptyState from '../../components/ui/EmptyState';
 
 interface AngelInvestor {
   _id: string;
@@ -17,49 +20,34 @@ interface AngelInvestor {
 }
 
 const AngelFundingPage: React.FC = () => {
+  const { getFundingByCategory, loading, error } = useFunding();
   const [angels, setAngels] = useState<AngelInvestor[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [filteredAngels, setFilteredAngels] = useState<AngelInvestor[]>([]);
   const [search, setSearch] = useState('');
   const [selectedAngel, setSelectedAngel] = useState<AngelInvestor | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
   useEffect(() => {
-    loadAngels();
-  }, [search]);
+    // Get angels from centralized funding context
+    const angelData = getFundingByCategory('angel-investors') as AngelInvestor[];
+    setAngels(angelData);
+    setFilteredAngels(angelData);
+  }, [getFundingByCategory]);
 
-  const loadAngels = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      console.log('Loading Angels with search:', search);
-      
-      const params = new URLSearchParams();
-      if (search) params.append('search', search);
-      
-      const response = await fetch(`${API_URL}/funding/public/angel-investors?${params.toString()}`, {
-        credentials: 'include'
-      });
-      const data = await response.json();
-      
-      console.log('Angel data response:', data);
-      
-      if (data.success) {
-        setAngels(data.data);
-      } else {
-        setError('Failed to load Angels: ' + data.message);
-        setAngels([]);
-      }
-    } catch (error) {
-      console.error('Error loading angels:', error);
-      setError('Error loading angel investors. Please try again later.');
-      setAngels([]);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    // Filter angels based on search
+    if (!search.trim()) {
+      setFilteredAngels(angels);
+    } else {
+      const filtered = angels.filter(angel =>
+        angel.name?.toLowerCase().includes(search.toLowerCase()) ||
+        angel.city?.toLowerCase().includes(search.toLowerCase()) ||
+        angel.country?.toLowerCase().includes(search.toLowerCase()) ||
+        angel.investCategory?.some(category => category.toLowerCase().includes(search.toLowerCase()))
+      );
+      setFilteredAngels(filtered);
     }
-  };
-
+  }, [search, angels]);
   const handleAngelClick = (angel: AngelInvestor) => {
     setSelectedAngel(angel);
   };
@@ -98,16 +86,9 @@ const AngelFundingPage: React.FC = () => {
       {/* Angel Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-2 md:px-6 pb-8">
         {loading ? (
-          Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 animate-pulse">
-              <div className="h-6 bg-gray-200 rounded mb-4"></div>
-              <div className="h-4 bg-gray-200 rounded mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded"></div>
-            </div>
-          ))
+          <LoadingGrid count={6} columns={2} />
         ) : (
-          angels.map((angel) => (
+          filteredAngels.map((angel) => (
             <div
               key={angel._id}
               onClick={() => handleAngelClick(angel)}
@@ -180,14 +161,12 @@ const AngelFundingPage: React.FC = () => {
         )}
       </div>
 
-      {angels.length === 0 && !loading && (
-        <div className="text-center py-12 px-4">
-          {error ? (
-            <p className="text-red-500">{error}</p>
-          ) : (
-            <p className="text-gray-500">No angel investors found matching your search criteria.</p>
-          )}
-        </div>
+      {filteredAngels.length === 0 && !loading && (
+        <EmptyState
+          title={search ? "No angels found" : "No angels available"}
+          message={search ? "Try adjusting your search criteria" : "Angel investor data will appear here once loaded"}
+          error={error}
+        />
       )}
 
       {/* Angel Detail Modal */}

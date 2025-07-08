@@ -1,29 +1,49 @@
 import React from 'react';
-import { Star, MapPin } from 'lucide-react';
+import { Star, MapPin, Building2, User, Rocket, Award, DollarSign } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
 interface FundingCardProps {
   id: string;
   name: string;
-  icon: React.ReactNode;
+  category?: string;
   location: string;
-  tags?: string[];
-  details: Array<{
-    icon: React.ReactNode;
-    label: string;
-    value: string | number;
-    color?: string;
-  }>;
+  amount?: string;
+  sector?: string[];
+  stage?: string[];
   onClick: () => void;
 }
 
+const getCategoryIcon = (category?: string) => {
+  switch (category) {
+    case 'angel-investors': return <User className="w-8 h-8 text-pink-600" />;
+    case 'venture-capital': return <Building2 className="w-8 h-8 text-blue-600" />;
+    case 'micro-vcs': return <Building2 className="w-8 h-8 text-green-600" />;
+    case 'incubators': return <Building2 className="w-8 h-8 text-purple-600" />;
+    case 'accelerators': return <Rocket className="w-8 h-8 text-orange-600" />;
+    case 'govt-grants': return <Award className="w-8 h-8 text-green-600" />;
+    default: return <Building2 className="w-8 h-8 text-gray-600" />;
+  }
+};
+
+const getCategoryColor = (category?: string) => {
+  switch (category) {
+    case 'angel-investors': return 'from-pink-100 to-purple-100';
+    case 'venture-capital': return 'from-blue-100 to-indigo-100';
+    case 'micro-vcs': return 'from-green-100 to-blue-100';
+    case 'incubators': return 'from-purple-100 to-blue-100';
+    case 'accelerators': return 'from-orange-100 to-red-100';
+    case 'govt-grants': return 'from-green-100 to-blue-100';
+    default: return 'from-gray-100 to-gray-200';
+  }
+};
 const FundingCard: React.FC<FundingCardProps> = ({
   id,
   name,
-  icon,
+  category,
   location,
-  tags = [],
-  details,
+  amount,
+  sector = [],
+  stage = [],
   onClick
 }) => {
   return (
@@ -43,8 +63,8 @@ const FundingCard: React.FC<FundingCardProps> = ({
       </button>
 
       <div className="flex items-start gap-4">
-        <div className="w-16 h-16 rounded-xl bg-gray-50 flex items-center justify-center">
-          {icon}
+        <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${getCategoryColor(category)} flex items-center justify-center`}>
+          {getCategoryIcon(category)}
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="text-lg font-semibold text-gray-900 truncate group-hover:text-blue-600 transition-colors">
@@ -57,30 +77,35 @@ const FundingCard: React.FC<FundingCardProps> = ({
         </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-4">
-        {details.map((detail, index) => (
-          <div key={index} className="flex items-center gap-2 text-sm">
-            {React.cloneElement(detail.icon as React.ReactElement, { 
-              className: cn("w-4 h-4", detail.color || "text-blue-600")
-            })}
-            <span className="font-medium text-gray-900">{detail.value}</span>
+      <div className="mt-4 space-y-2">
+        {amount && (
+          <div className="flex items-center gap-2 text-sm">
+            <DollarSign className="w-4 h-4 text-green-600" />
+            <span className="font-medium text-gray-900">{amount}</span>
           </div>
-        ))}
+        )}
+        {sector.length > 0 && (
+          <div className="text-sm text-gray-600">
+            <span className="font-medium">Sectors: </span>
+            {sector.slice(0, 2).join(', ')}
+            {sector.length > 2 && ` +${sector.length - 2} more`}
+          </div>
+        )}
       </div>
 
-      {tags && tags.length > 0 && (
+      {stage && stage.length > 0 && (
         <div className="mt-4 flex flex-wrap gap-2">
-          {tags.slice(0, 3).map((tag) => (
+          {stage.slice(0, 3).map((stageItem) => (
             <span
-              key={tag}
+              key={stageItem}
               className="px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 border border-blue-200"
             >
-              {tag}
+              {stageItem}
             </span>
           ))}
-          {tags.length > 3 && (
+          {stage.length > 3 && (
             <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
-              +{tags.length - 3} more
+              +{stage.length - 3} more
             </span>
           )}
         </div>

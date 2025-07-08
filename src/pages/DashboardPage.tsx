@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { User, Briefcase, DollarSign, Building2, Rocket, Award, ArrowRight, FileText, Mail, Lightbulb, TrendingUp, Calendar, Users, MessageCircle, Star, CheckCircle, ChevronRight, ChevronLeft, Slack, Activity, Smile, Sparkles } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
+import { useFunding } from '../contexts/FundingContext';
+import FundingCard from '../components/ui/FundingCard';
 
 const fundingCategories = [
   {
@@ -168,6 +170,55 @@ const AnimatedProgressBar: React.FC = () => {
 };
 
 const DashboardPage: React.FC = () => {
+  const { getRandomFundingItems, loading: fundingLoading } = useFunding();
+  const [randomFundingItems, setRandomFundingItems] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Get random funding items when component mounts or when funding data changes
+    const items = getRandomFundingItems(6);
+    setRandomFundingItems(items);
+  }, [getRandomFundingItems]);
+
+  const formatAmount = (item: any) => {
+    if (item.fundSize) return `₹${(item.fundSize / 10000000).toFixed(1)}Cr Fund`;
+    if (item.ticketSize) return `₹${(item.ticketSize / 100000).toFixed(1)}L Ticket`;
+    if (item.checkSize) return `₹${(item.checkSize / 100000).toFixed(1)}L Check`;
+    if (item.avgTicketSize) return `₹${(item.avgTicketSize / 100000).toFixed(1)}L Avg`;
+    if (item.grantSize) return `₹${(item.grantSize / 100000).toFixed(1)}L Grant`;
+    if (item.fundingOffered) return item.fundingOffered;
+    if (item.fundingSupport) return item.fundingSupport;
+    return 'Contact for details';
+  };
+
+  const getLocation = (item: any) => {
+    return item.location || item.city || item.headOffice || item.hq || 'Location not specified';
+  };
+
+  const getSectors = (item: any) => {
+    return item.sector || item.sectors || item.sectorFocus || item.investCategory || [];
+  };
+
+  const getStages = (item: any) => {
+    return item.stage || item.stageFocus || [];
+  };
+
+  const handleFundingItemClick = (item: any) => {
+    // Navigate to the appropriate funding page based on category
+    const categoryRoutes: Record<string, string> = {
+      'angel-investors': '/funding/angel',
+      'venture-capital': '/funding/vc',
+      'micro-vcs': '/funding/microvc',
+      'incubators': '/funding/incubator',
+      'accelerators': '/funding/accelerator',
+      'govt-grants': '/funding/grants'
+    };
+    
+    const route = categoryRoutes[item.category];
+    if (route) {
+      window.location.href = route;
+    }
+  };
+
   return (
     <>
       <Helmet>
@@ -198,41 +249,69 @@ const DashboardPage: React.FC = () => {
 
         {/* Saved Funding Options */}
         <div data-aos="fade-up" data-aos-delay="300">
-          <h3 className="text-xl font-bold mb-6 text-blue-900">Your Saved Funding Options</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {fundingCategories.map(cat => (
-              <div key={cat.key} className={`group rounded-2xl shadow bg-gradient-to-br ${cat.color} p-6 flex flex-col transition-transform hover:scale-105 hover:shadow-2xl`} data-aos="zoom-in" data-aos-delay="350">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="h-12 w-12 flex items-center justify-center rounded-full bg-white shadow border border-gray-100 transition-transform group-hover:scale-110 group-hover:animate-pulse">{cat.icon}</div>
-                  <span className="text-lg font-bold text-gray-900 transition-transform group-hover:scale-105 group-hover:animate-pulse">{cat.label}</span>
-                </div>
-                <div className="flex-1">
-                  {cat.mock.length > 0 ? (
-                    <div className="space-y-3">
-                      {cat.mock.map((item, idx) => (
-                        <div key={idx} className="bg-white rounded-xl shadow p-4 flex flex-col gap-1 border border-gray-100 transition-transform hover:scale-105 hover:shadow-xl" data-aos="fade-up" data-aos-delay={400+idx*50}>
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="font-semibold text-blue-700 text-base">{item.name}</span>
-                            <span className="text-xs text-gray-500">{item.location}</span>
-                          </div>
-                          <div className="flex flex-wrap gap-2 text-xs text-gray-600">
-                            <span className="bg-blue-50 px-2 py-0.5 rounded">{cat.label.replace('Angel Investors', 'Angel')}</span>
-                            <span className="bg-green-50 px-2 py-0.5 rounded">{item.sector}</span>
-                            <span className="bg-purple-50 px-2 py-0.5 rounded">{item.stage}</span>
-                            <span className="bg-yellow-50 px-2 py-0.5 rounded">{item.check}</span>
-                          </div>
-                        </div>
-                      ))}
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-xl font-bold text-blue-900">Latest Funding Opportunities</h3>
+            <button
+              onClick={() => {
+                const items = getRandomFundingItems(6);
+                setRandomFundingItems(items);
+              }}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors"
+            >
+              <Sparkles className="w-4 h-4" />
+              Refresh
+            </button>
+          </div>
+          
+          {fundingLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 animate-pulse">
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="w-16 h-16 bg-gray-200 rounded-xl"></div>
+                    <div className="flex-1">
+                      <div className="h-6 bg-gray-200 rounded mb-2 w-3/4"></div>
+                      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
                     </div>
-                  ) : (
-                    <div className="text-gray-500 italic mb-2">You haven't saved any {cat.label} yet.</div>
-                  )}
+                  </div>
+                  <div className="space-y-3">
+                    <div className="h-4 bg-gray-200 rounded w-full"></div>
+                    <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                  </div>
                 </div>
-                <a href={`/funding/${cat.key === 'vcs' ? 'vc' : cat.key}`} className="mt-4 inline-flex items-center gap-1 text-blue-700 hover:underline font-medium group">
-                  <span className="transition-transform group-hover:scale-110 group-hover:animate-pulse">View All</span> <ArrowRight size={16} className="transition-transform group-hover:scale-110 group-hover:animate-pulse" />
-                </a>
-              </div>
-            ))}
+              ))}
+            </div>
+          ) : randomFundingItems.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {randomFundingItems.map((item, index) => (
+                <FundingCard
+                  key={`${item._id}-${index}`}
+                  id={item._id}
+                  name={item.name}
+                  category={item.category}
+                  location={getLocation(item)}
+                  amount={formatAmount(item)}
+                  sector={getSectors(item)}
+                  stage={getStages(item)}
+                  onClick={() => handleFundingItemClick(item)}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <div className="text-gray-500 mb-4">No funding opportunities available at the moment.</div>
+              <a href="/funding/vc" className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                Browse All Funding Options
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
+          )}
+          
+          <div className="mt-8 text-center">
+            <a href="/funding/vc" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium">
+              View All Funding Categories
+              <ArrowRight className="w-4 h-4" />
+            </a>
           </div>
         </div>
 

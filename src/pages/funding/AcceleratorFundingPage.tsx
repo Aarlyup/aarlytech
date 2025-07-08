@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Rocket, MapPin, DollarSign, Calendar, Clock, ExternalLink, Mail, Star } from 'lucide-react';
+import { useFunding } from '../../contexts/FundingContext';
+import LoadingGrid from '../../components/ui/LoadingGrid';
+import EmptyState from '../../components/ui/EmptyState';
 
 interface Accelerator {
   _id: string;
@@ -18,49 +21,33 @@ interface Accelerator {
 }
 
 const AcceleratorFundingPage: React.FC = () => {
+  const { getFundingByCategory, loading, error } = useFunding();
   const [accelerators, setAccelerators] = useState<Accelerator[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [filteredAccelerators, setFilteredAccelerators] = useState<Accelerator[]>([]);
   const [search, setSearch] = useState('');
   const [selectedAccelerator, setSelectedAccelerator] = useState<Accelerator | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
   useEffect(() => {
-    loadAccelerators();
-  }, [search]);
+    // Get accelerators from centralized funding context
+    const acceleratorData = getFundingByCategory('accelerators') as Accelerator[];
+    setAccelerators(acceleratorData);
+    setFilteredAccelerators(acceleratorData);
+  }, [getFundingByCategory]);
 
-  const loadAccelerators = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      console.log('Loading Accelerators with search:', search);
-      
-      const params = new URLSearchParams();
-      if (search) params.append('search', search);
-      
-      const response = await fetch(`${API_URL}/funding/public/accelerators?${params.toString()}`, {
-        credentials: 'include'
-      });
-      const data = await response.json();
-      
-      console.log('Accelerator data response:', data);
-      
-      if (data.success) {
-        setAccelerators(data.data);
-      } else {
-        setError('Failed to load Accelerators: ' + data.message);
-        setAccelerators([]);
-      }
-    } catch (error) {
-      console.error('Error loading accelerators:', error);
-      setError('Error loading accelerators. Please try again later.');
-      setAccelerators([]);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    // Filter accelerators based on search
+    if (!search.trim()) {
+      setFilteredAccelerators(accelerators);
+    } else {
+      const filtered = accelerators.filter(accelerator =>
+        accelerator.name?.toLowerCase().includes(search.toLowerCase()) ||
+        accelerator.hq?.toLowerCase().includes(search.toLowerCase()) ||
+        accelerator.sectors?.some(sector => sector.toLowerCase().includes(search.toLowerCase()))
+      );
+      setFilteredAccelerators(filtered);
     }
-  };
-
+  }, [search, accelerators]);
   const handleAcceleratorClick = (accelerator: Accelerator) => {
     setSelectedAccelerator(accelerator);
   };
@@ -99,16 +86,9 @@ const AcceleratorFundingPage: React.FC = () => {
       {/* Accelerator Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-2 md:px-6 pb-8">
         {loading ? (
-          Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 animate-pulse">
-              <div className="h-6 bg-gray-200 rounded mb-4"></div>
-              <div className="h-4 bg-gray-200 rounded mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded"></div>
-            </div>
-          ))
+          <LoadingGrid count={6} columns={2} />
         ) : (
-          accelerators.map((accelerator) => (
+          filteredAccelerators.map((accelerator) => (
             <div
               key={accelerator._id}
               onClick={() => handleAcceleratorClick(accelerator)}
@@ -184,14 +164,12 @@ const AcceleratorFundingPage: React.FC = () => {
         )}
       </div>
 
-      {accelerators.length === 0 && !loading && (
-        <div className="text-center py-12 px-4">
-          {error ? (
-            <p className="text-red-500">{error}</p>
-          ) : (
-            <p className="text-gray-500">No accelerators found matching your search criteria.</p>
-          )}
-        </div>
+      {filteredAccelerators.length === 0 && !loading && (
+        <EmptyState
+          title={search ? "No accelerators found" : "No accelerators available"}
+          message={search ? "Try adjusting your search criteria" : "Accelerator data will appear here once loaded"}
+          error={error}
+        />
       )}
 
       {/* Accelerator Detail Modal */}

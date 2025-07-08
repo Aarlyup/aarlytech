@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Building2, MapPin, DollarSign, Users, ExternalLink, Mail, Linkedin, Star } from 'lucide-react';
+import { useFunding } from '../../contexts/FundingContext';
+import LoadingGrid from '../../components/ui/LoadingGrid';
+import EmptyState from '../../components/ui/EmptyState';
 
 interface MicroVC {
   _id: string;
@@ -16,49 +19,33 @@ interface MicroVC {
 }
 
 const MicroVCFundingPage: React.FC = () => {
+  const { getFundingByCategory, loading, error } = useFunding();
   const [microvcs, setMicroVCs] = useState<MicroVC[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [filteredMicroVCs, setFilteredMicroVCs] = useState<MicroVC[]>([]);
   const [search, setSearch] = useState('');
   const [selectedMicroVC, setSelectedMicroVC] = useState<MicroVC | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
   useEffect(() => {
-    loadMicroVCs();
-  }, [search]);
+    // Get Micro VCs from centralized funding context
+    const microvcData = getFundingByCategory('micro-vcs') as MicroVC[];
+    setMicroVCs(microvcData);
+    setFilteredMicroVCs(microvcData);
+  }, [getFundingByCategory]);
 
-  const loadMicroVCs = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      console.log('Loading Micro VCs with search:', search);
-      
-      const params = new URLSearchParams();
-      if (search) params.append('search', search);
-      
-      const response = await fetch(`${API_URL}/funding/public/micro-vcs?${params.toString()}`, {
-        credentials: 'include'
-      });
-      const data = await response.json();
-      
-      console.log('Micro VC data response:', data);
-      
-      if (data.success) {
-        setMicroVCs(data.data);
-      } else {
-        setError('Failed to load Micro VCs: ' + data.message);
-        setMicroVCs([]);
-      }
-    } catch (error) {
-      console.error('Error loading Micro VCs:', error);
-      setError('Error loading Micro VCs. Please try again later.');
-      setMicroVCs([]);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    // Filter Micro VCs based on search
+    if (!search.trim()) {
+      setFilteredMicroVCs(microvcs);
+    } else {
+      const filtered = microvcs.filter(microvc =>
+        microvc.name?.toLowerCase().includes(search.toLowerCase()) ||
+        microvc.location?.toLowerCase().includes(search.toLowerCase()) ||
+        microvc.sector?.some(sector => sector.toLowerCase().includes(search.toLowerCase()))
+      );
+      setFilteredMicroVCs(filtered);
     }
-  };
-
+  }, [search, microvcs]);
   const handleMicroVCClick = (microvc: MicroVC) => {
     setSelectedMicroVC(microvc);
   };
@@ -97,16 +84,9 @@ const MicroVCFundingPage: React.FC = () => {
       {/* Micro VC Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-2 md:px-6 pb-8">
         {loading ? (
-          Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 animate-pulse">
-              <div className="h-6 bg-gray-200 rounded mb-4"></div>
-              <div className="h-4 bg-gray-200 rounded mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded"></div>
-            </div>
-          ))
+          <LoadingGrid count={6} columns={2} />
         ) : (
-          microvcs.map((microvc) => (
+          filteredMicroVCs.map((microvc) => (
             <div
               key={microvc._id}
               onClick={() => handleMicroVCClick(microvc)}
@@ -177,14 +157,12 @@ const MicroVCFundingPage: React.FC = () => {
         )}
       </div>
 
-      {microvcs.length === 0 && !loading && (
-        <div className="text-center py-12 px-4">
-          {error ? (
-            <p className="text-red-500">{error}</p>
-          ) : (
-            <p className="text-gray-500">No micro VCs found matching your search criteria.</p>
-          )}
-        </div>
+      {filteredMicroVCs.length === 0 && !loading && (
+        <EmptyState
+          title={search ? "No Micro VCs found" : "No Micro VCs available"}
+          message={search ? "Try adjusting your search criteria" : "Micro VC data will appear here once loaded"}
+          error={error}
+        />
       )}
 
       {/* Micro VC Detail Modal */}

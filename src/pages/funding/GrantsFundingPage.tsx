@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Award, Building, DollarSign, Calendar, FileText, ExternalLink, Mail, Star } from 'lucide-react';
+import { useFunding } from '../../contexts/FundingContext';
+import LoadingGrid from '../../components/ui/LoadingGrid';
+import EmptyState from '../../components/ui/EmptyState';
 
 interface GovtGrant {
   _id: string;
@@ -19,49 +22,33 @@ interface GovtGrant {
 }
 
 const GrantsFundingPage: React.FC = () => {
+  const { getFundingByCategory, loading, error } = useFunding();
   const [grants, setGrants] = useState<GovtGrant[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [filteredGrants, setFilteredGrants] = useState<GovtGrant[]>([]);
   const [search, setSearch] = useState('');
   const [selectedGrant, setSelectedGrant] = useState<GovtGrant | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
   useEffect(() => {
-    loadGrants();
-  }, [search]);
+    // Get grants from centralized funding context
+    const grantData = getFundingByCategory('govt-grants') as GovtGrant[];
+    setGrants(grantData);
+    setFilteredGrants(grantData);
+  }, [getFundingByCategory]);
 
-  const loadGrants = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      console.log('Loading Grants with search:', search);
-      
-      const params = new URLSearchParams();
-      if (search) params.append('search', search);
-      
-      const response = await fetch(`${API_URL}/funding/public/govt-grants?${params.toString()}`, {
-        credentials: 'include'
-      });
-      const data = await response.json();
-      
-      console.log('Grants data response:', data);
-      
-      if (data.success) {
-        setGrants(data.data);
-      } else {
-        setError('Failed to load Grants: ' + data.message);
-        setGrants([]);
-      }
-    } catch (error) {
-      console.error('Error loading grants:', error);
-      setError('Error loading government grants. Please try again later.');
-      setGrants([]);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    // Filter grants based on search
+    if (!search.trim()) {
+      setFilteredGrants(grants);
+    } else {
+      const filtered = grants.filter(grant =>
+        grant.name?.toLowerCase().includes(search.toLowerCase()) ||
+        grant.authority?.toLowerCase().includes(search.toLowerCase()) ||
+        grant.sector?.toLowerCase().includes(search.toLowerCase())
+      );
+      setFilteredGrants(filtered);
     }
-  };
-
+  }, [search, grants]);
   const handleGrantClick = (grant: GovtGrant) => {
     setSelectedGrant(grant);
   };
@@ -113,16 +100,9 @@ const GrantsFundingPage: React.FC = () => {
       {/* Grant Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-2 md:px-6 pb-8">
         {loading ? (
-          Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 animate-pulse">
-              <div className="h-6 bg-gray-200 rounded mb-4"></div>
-              <div className="h-4 bg-gray-200 rounded mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded"></div>
-            </div>
-          ))
+          <LoadingGrid count={6} columns={2} />
         ) : (
-          grants.map((grant) => (
+          filteredGrants.map((grant) => (
             <div
               key={grant._id}
               onClick={() => handleGrantClick(grant)}
@@ -196,14 +176,12 @@ const GrantsFundingPage: React.FC = () => {
         )}
       </div>
 
-      {grants.length === 0 && !loading && (
-        <div className="text-center py-12 px-4">
-          {error ? (
-            <p className="text-red-500">{error}</p>
-          ) : (
-            <p className="text-gray-500">No government grants found matching your search criteria.</p>
-          )}
-        </div>
+      {filteredGrants.length === 0 && !loading && (
+        <EmptyState
+          title={search ? "No grants found" : "No grants available"}
+          message={search ? "Try adjusting your search criteria" : "Government grant data will appear here once loaded"}
+          error={error}
+        />
       )}
 
       {/* Grant Detail Modal */}
