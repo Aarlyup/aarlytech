@@ -172,15 +172,41 @@ const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
   const processExcelData = (jsonData: any[]) => {
     const template = categoryTemplates[category];
     const headers = Object.keys(template);
-    
+
+    // Dedicated strict parsing for investor-matches (all fields string, no arrays, enums as single string)
+    if (category === 'investor-matches') {
+      return jsonData.slice(1).map((row: any[]) => {
+        const item: any = {};
+        headers.forEach((header, index) => {
+          let value = row[index];
+          if (value === undefined || value === null) value = '';
+          value = String(value).trim();
+          // For stage and traction, only take the first value if '&' is present
+          if (header === 'stage' || header === 'traction') {
+            value = value.includes('&') ? value.split('&')[0].trim() : value;
+          }
+          // checkSize must be string (even if number in Excel)
+          if (header === 'checkSize') {
+            value = value;
+          }
+          item[header] = value;
+        });
+        // Only include if all required fields are present and non-empty
+        if (
+          item.name && item.stage && item.industry && item.traction && item.description && item.checkSize && item.location
+        ) {
+          return item;
+        }
+        return null;
+      }).filter(Boolean);
+    }
+
+    // All other categories handled by default logic below (completely isolated)
     return jsonData.slice(1).map((row: any[]) => {
       const item: any = {};
-      
       headers.forEach((header, index) => {
         let value = row[index];
-        
         if (value === undefined || value === null || value === '') {
-          // Set default values for required fields
           if (header === 'ticketSize' || header === 'fundSize' || header === 'checkSize' || 
               header === 'avgTicketSize' || header === 'grantSize') {
             value = 0;
@@ -192,7 +218,6 @@ const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
             value = '';
           }
         } else {
-          // Process array fields (those that can contain &)
           if (header.includes('stage') || header.includes('sector') || 
               header.includes('Category') || header.includes('Focus') ||
               header === 'documentsRequired') {
@@ -204,19 +229,15 @@ const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
               value = [];
             }
           }
-          
-          // Process numeric fields
           if (header === 'ticketSize' || header === 'fundSize' || header === 'checkSize' || 
               header === 'avgTicketSize' || header === 'grantSize') {
             value = Number(value) || 0;
           }
         }
-        
         item[header] = value;
       });
-      
       return item;
-    }).filter((item: any) => item.name && item.name.trim() !== ''); // Filter out empty rows
+    }).filter((item: any) => item.name && item.name.trim() !== '');
   };
 
   const handleUpload = async () => {
