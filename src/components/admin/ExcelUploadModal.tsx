@@ -83,6 +83,18 @@ const categoryTemplates: Record<string, any> = {
     contact: 'support@startupindia.gov.in',
     documentsRequired: 'DPIIT Certificate&Business Plan&Financial Projections',
     specialNotes: 'No equity dilution required'
+  },
+  'investor-matches': {
+    name: 'Investor Name', // required
+    stage: 'Seed', // required, enum
+    industry: 'Fintech', // required
+    traction: 'MVP', // required, enum
+    description: 'Short description', // required
+    checkSize: '500000', // required
+    location: 'Mumbai, India', // required
+    website: 'https://investor.com', // optional
+    email: 'investor@example.com', // optional
+    linkedin: 'https://linkedin.com/in/investor' // optional
   }
 };
 
@@ -92,7 +104,8 @@ const categoryLabels: Record<string, string> = {
   'micro-vcs': 'Micro VCs',
   'incubators': 'Incubators',
   'accelerators': 'Accelerators',
-  'govt-grants': 'Government Grants'
+  'govt-grants': 'Government Grants',
+  'investor-matches': 'Investor Matches' // Added missing category
 };
 
 const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
@@ -119,7 +132,7 @@ const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
     const ws = XLSX.utils.json_to_sheet([template]);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Template');
-    XLSX.writeFile(wb, `${categoryLabels[category]}_Template.xlsx`);
+    XLSX.writeFile(wb, `${getCategoryLabel(category)}_Template.xlsx`);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -285,7 +298,7 @@ const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
   };
 
   const handleDeleteAll = async () => {
-    if (!confirm(`Are you sure you want to delete ALL ${categoryLabels[category]} records? This action cannot be undone.`)) {
+    if (!confirm(`Are you sure you want to delete ALL ${getCategoryLabel(category)} records? This action cannot be undone.`)) {
       return;
     }
 
@@ -347,6 +360,9 @@ const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
     }
   };
 
+  // Use a safe label fallback everywhere categoryLabels[category] is used
+  const getCategoryLabel = (cat: string) => categoryLabels[cat] || cat || 'Data';
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
@@ -354,10 +370,10 @@ const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
           <div className="flex justify-between items-start mb-6">
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                Excel Upload - {categoryLabels[category]}
+                Excel Upload - {getCategoryLabel(category)}
               </h2>
               <p className="text-gray-600">
-                Upload Excel file to bulk import {categoryLabels[category].toLowerCase()} data
+                Upload Excel file to bulk import {getCategoryLabel(category).toLowerCase()} data
               </p>
             </div>
             <button
