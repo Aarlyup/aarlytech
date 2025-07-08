@@ -8,7 +8,8 @@ const {
   login,
   logout,
   getMe,
-  googleSuccess
+  googleSuccess,
+  isAdmin
 } = require('../controllers/authController');
 const { protect } = require('../middleware/auth');
 
@@ -48,6 +49,7 @@ router.post('/resend-otp', resendOTP);
 router.post('/login', loginValidation, login);
 router.post('/logout', logout);
 router.get('/me', protect, getMe);
+router.get('/is-admin', protect, isAdmin);
 
 // Google OAuth routes
 router.get('/google',
