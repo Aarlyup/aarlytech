@@ -15,9 +15,9 @@ const categoryTemplates: Record<string, any> = {
     linkedinProfileUrl: 'LinkedIn URL',
     city: 'City',
     country: 'Country',
-    investCategory: 'Fintech&SaaS,AI/ML', // Use & or , as separator
+    investCategory: 'Fintech&SaaS&AI/ML',
     ticketSize: '500000',
-    stage: 'Seed&Series A', // Use & or , as separator
+    stage: 'Idea&MVP&Pre-revenue',
     preferFounderProfile: 'Tech founders with domain expertise',
     portfolioHighlights: 'Invested in 50+ startups',
     contact: 'angel@example.com'
@@ -181,8 +181,8 @@ const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
           let value = row[index];
           if (value === undefined || value === null) value = '';
           if (["investCategory", "stage"].includes(header)) {
-            // Accept both & and , as delimiters, always send as array
-            value = typeof value === 'string' ? value.split(/[&,]/).map(v => v.trim()).filter(Boolean) : [];
+            // Use & as delimiter, always send as array
+            value = typeof value === 'string' ? value.split('&').map(v => v.trim()).filter(Boolean) : [];
           } else if (header === 'ticketSize') {
             value = Number(value) || 0;
           } else {
@@ -190,6 +190,7 @@ const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
           }
           item[header] = value;
         });
+        // Require all backend-required fields
         if (item.name && item.city && item.country && item.ticketSize && item.contact) return item;
         return null;
       }).filter(Boolean);
