@@ -47,3 +47,20 @@
 .group:hover .group-hover\:animate-pulse {
   animation: pulse 1s infinite;
 }
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #a5b4fc #f3f4f6;
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  background: #f3f4f6;
+  border-radius: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #a5b4fc;
+  border-radius: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #6366f1;
+}
