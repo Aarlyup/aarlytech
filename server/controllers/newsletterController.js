@@ -194,7 +194,7 @@ exports.sendNewsletter = async (req, res) => {
                   <p>Best regards,<br>The Aarly Team</p>
                 </div>
                 <div class="footer">
-                  <p>© 2025 Aarly. All rights reserved.</p>
+                  <p>© ${new Date().getFullYear()} Aarly. All rights reserved.</p>
                   <p>
                     <small>
                       If you no longer wish to receive these emails, you can 
