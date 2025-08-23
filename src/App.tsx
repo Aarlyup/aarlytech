@@ -20,7 +20,7 @@ function App() {
       <AuthProvider>
         <FundingProvider>
           <UiProvider>
-            <div className="min-h-screen bg-gray-50">
+            <div className="min-h-screen bg-gray-900">
               <RouterProvider router={router} />
               <ConfirmDialog />
             </div>

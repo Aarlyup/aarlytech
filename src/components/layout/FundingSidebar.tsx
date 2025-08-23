@@ -1,54 +1,91 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Briefcase, DollarSign, Building2, Rocket, User, Award, Menu } from 'lucide-react';
+import { Briefcase, DollarSign, Building2, Rocket, User, Award } from 'lucide-react';
 
 export const fundingNav = [
-  { label: 'VC', path: '/funding/vc' },
-  { label: 'MicroVC', path: '/funding/microvc' },
-  { label: 'Incubator', path: '/funding/incubator' },
-  { label: 'Accelerator', path: '/funding/accelerator' },
-  { label: 'Angel Investor', path: '/funding/angel' },
-  { label: 'Govt', path: '/funding/grants' },
+  { label: 'Venture Capital', path: '/funding/vc', icon: Building2 },
+  { label: 'Micro VCs', path: '/funding/microvc', icon: DollarSign },
+  { label: 'Incubators', path: '/funding/incubator', icon: Briefcase },
+  { label: 'Accelerators', path: '/funding/accelerator', icon: Rocket },
+  { label: 'Angel Investors', path: '/funding/angel', icon: User },
+  { label: 'Government Grants', path: '/funding/grants', icon: Award },
 ];
 
 export const FundingMobileNav: React.FC = () => (
-  <div className="md:hidden w-full flex gap-3 px-2 mt-4 overflow-x-auto pb-2">
-    {fundingNav.map(item => (
-      <NavLink
-        key={item.label}
-        to={item.path}
-        className={({ isActive }) =>
-          `flex flex-col items-center min-w-[80px] px-3 py-2 rounded-xl border border-blue-100 shadow-sm bg-white transition-all duration-150
-          ${isActive ? 'bg-blue-50 border-blue-600 text-blue-700 shadow-md' : 'hover:bg-blue-50 hover:border-blue-300 text-gray-700'}
-          `
-        }
-        style={{ textDecoration: 'none' }}
-      >
-        <span className="text-xs font-medium text-center whitespace-nowrap">{item.label}</span>
-      </NavLink>
-    ))}
+  <div className="md:hidden w-full flex gap-2 px-4 mt-6 overflow-x-auto pb-3">
+    {fundingNav.map(item => {
+      const Icon = item.icon;
+      return (
+        <NavLink
+          key={item.label}
+          to={item.path}
+          className={({ isActive }) =>
+            `flex flex-col items-center min-w-[90px] px-3 py-3 rounded-xl border transition-all duration-200
+            ${isActive 
+              ? 'bg-blue-600/20 border-blue-500/50 text-blue-400 shadow-lg' 
+              : 'bg-gray-800/80 border-gray-600 text-gray-300 hover:bg-gray-700 hover:border-gray-500 hover:text-white'
+            }`
+          }
+          style={{ textDecoration: 'none' }}
+        >
+          <Icon className="w-4 h-4 mb-1" />
+          <span className="text-xs font-medium text-center leading-tight">{item.label.split(' ')[0]}</span>
+        </NavLink>
+      );
+    })}
   </div>
 );
 
 const FundingSidebar: React.FC = () => {
   // Only render on desktop
   return (
-    <aside className="hidden md:block w-full md:fixed md:top-24 md:left-0 md:w-64 md:h-[calc(100vh-6rem)] bg-gradient-to-b from-gray-50 via-white to-gray-100 border-r border-blue-200 shadow-md md:z-30 flex flex-col backdrop-blur-xl bg-white/80 animate-fade-in rounded-2xl md:rounded-none md:shadow-md p-2 md:p-0" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07)'}}>
-      <nav className="flex-1 flex flex-col gap-2 px-2 mt-4">
-        {fundingNav.map(item => (
-          <NavLink
-            key={item.label}
-            to={item.path}
-            className={({ isActive }) =>
-              `group flex items-center gap-4 px-4 py-2 rounded-lg font-medium text-gray-700 transition-all duration-150
-              ${isActive ? 'bg-blue-50 border-l-4 border-blue-600 text-blue-700 shadow-md' : 'border-l-4 border-transparent hover:bg-gray-100 hover:border-blue-200 hover:text-blue-700'}
-              `
-            }
-          >
-            <span className="text-base font-medium tracking-tight">{item.label}</span>
-          </NavLink>
-        ))}
+    <aside className="hidden md:block w-full md:fixed md:top-24 md:left-0 md:w-64 md:h-[calc(100vh-6rem)] bg-gray-900/95 backdrop-blur-sm border-r border-gray-700/50 shadow-xl md:z-30 flex flex-col">
+      <div className="p-6 border-b border-gray-700/50">
+        <h3 className="text-lg font-semibold text-white mb-1">Funding Options</h3>
+        <p className="text-sm text-gray-400">Explore different sources</p>
+      </div>
+      
+      <nav className="flex-1 flex flex-col gap-1 p-4">
+        {fundingNav.map(item => {
+          const Icon = item.icon;
+          return (
+            <NavLink
+              key={item.label}
+              to={item.path}
+              className={({ isActive }) =>
+                `group flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-200 relative
+                ${isActive 
+                  ? 'bg-blue-600/20 text-blue-400 shadow-lg border border-blue-500/30' 
+                  : 'text-gray-300 hover:bg-gray-800 hover:text-white border border-transparent hover:border-gray-600'
+                }`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors
+                    ${isActive ? 'bg-blue-500/20' : 'bg-gray-700 group-hover:bg-gray-600'}
+                  `}>
+                    <Icon className="w-4 h-4" />
+                  </div>
+                  <span className="text-sm font-medium">{item.label}</span>
+                  {isActive && (
+                    <div className="absolute right-3 w-2 h-2 bg-blue-400 rounded-full"></div>
+                  )}
+                </>
+              )}
+            </NavLink>
+          );
+        })}
       </nav>
+      
+      <div className="p-4 border-t border-gray-700/50">
+        <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 rounded-lg p-3">
+          <p className="text-xs text-blue-300 font-medium mb-1">Pro Tip</p>
+          <p className="text-xs text-gray-300 leading-relaxed">
+            Use filters to find investors that match your startup stage and sector.
+          </p>
+        </div>
+      </div>
     </aside>
   );
 };

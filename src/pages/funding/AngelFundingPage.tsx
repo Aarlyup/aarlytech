@@ -65,23 +65,23 @@ const AngelFundingPage: React.FC = () => {
         <meta name="description" content="Connect with angel investors for early-stage startup funding. Find angels that match your industry and stage." />
       </Helmet>
       
-      <FundingMobileNav />
-      <div className="mb-8 px-2 md:px-6 pt-4 md:pt-8">
-        <h1 className="text-2xl font-bold mb-2">Angel Investors</h1>
-        <p className="text-gray-600">
+  <FundingMobileNav />
+  <div className="mb-8 px-2 md:px-6 pt-4 md:pt-8 mt-6 md:mt-10">
+        <h1 className="text-2xl font-bold mb-2 text-white">Angel Investors</h1>
+        <p className="text-gray-400">
           Connect with angel investors who can provide early-stage funding and mentorship.
         </p>
       </div>
 
       {/* Search */}
       <div className="px-2 md:px-6 mb-6">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
+        <div className="bg-gray-800 border border-gray-700 rounded-2xl shadow-sm p-4">
           <input
             type="text"
             placeholder="Search angels by name, location, or category..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 rounded-lg border border-gray-600 bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
       </div>
@@ -95,11 +95,11 @@ const AngelFundingPage: React.FC = () => {
             <div
               key={angel._id}
               onClick={() => handleAngelClick(angel)}
-              className="relative bg-white/80 backdrop-blur-xl rounded-2xl shadow-md border border-blue-100 p-6 hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer group"
+              className="relative bg-gray-800 border border-gray-700 backdrop-blur-xl rounded-2xl shadow-md p-6 hover:shadow-xl hover:border-gray-600 transition-all hover:-translate-y-1 cursor-pointer group"
             >
               {/* Star Icon */}
               <button
-                className="absolute top-4 left-4 bg-white rounded-full p-1 shadow hover:bg-yellow-100 transition-colors"
+                className="absolute top-4 left-4 bg-gray-700 border border-gray-600 rounded-full p-1 shadow hover:bg-yellow-100 transition-colors"
                 onClick={(e) => {
                   e.stopPropagation();
                   // Handle save functionality
@@ -109,14 +109,14 @@ const AngelFundingPage: React.FC = () => {
               </button>
 
               <div className="flex items-start gap-4">
-                <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-pink-100 to-purple-100 flex items-center justify-center">
-                  <User className="w-8 h-8 text-pink-600" />
+                <div className="w-16 h-16 rounded-xl bg-gray-700 border border-gray-600 flex items-center justify-center">
+                  <User className="w-8 h-8 text-pink-400" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-lg font-semibold text-gray-900 truncate group-hover:text-blue-600 transition-colors">
+                  <h3 className="text-lg font-semibold text-white truncate group-hover:text-blue-400 transition-colors">
                     {angel.name}
                   </h3>
-                  <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
+                  <div className="flex items-center gap-2 text-sm text-gray-400 mt-1">
                     <MapPin className="w-4 h-4" />
                     <span>{angel.city}, {angel.country}</span>
                   </div>
@@ -125,12 +125,12 @@ const AngelFundingPage: React.FC = () => {
 
               <div className="mt-4 grid grid-cols-1 gap-2">
                 <div className="flex items-center gap-2 text-sm">
-                  <span className="font-medium text-gray-900">₹{(angel.ticketSize).toFixed(0)} Ticket</span>
+                  <span className="font-medium text-gray-300">₹{(angel.ticketSize).toFixed(0)} Ticket</span>
                 </div>
                 {angel.investCategory && angel.investCategory.length > 0 && (
                   <div className="flex items-center gap-2 text-sm">
-                    <Target className="w-4 h-4 text-blue-600" />
-                    <span className="font-medium text-gray-900">{angel.investCategory.join(', ')}</span>
+                    <Target className="w-4 h-4 text-blue-400" />
+                    <span className="font-medium text-gray-300">{angel.investCategory.join(', ')}</span>
                   </div>
                 )}
               </div>
@@ -140,13 +140,13 @@ const AngelFundingPage: React.FC = () => {
                   {angel.stage.slice(0, 3).map((stage) => (
                     <span
                       key={stage}
-                      className="px-2.5 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-700 border border-purple-200"
+                      className="px-2.5 py-1 rounded-full text-xs font-medium bg-purple-500/20 text-purple-400 border border-purple-500/30"
                     >
                       {stage}
                     </span>
                   ))}
                   {angel.stage.length > 3 && (
-                    <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+                    <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-gray-600 text-gray-300">
                       +{angel.stage.length - 3} more
                     </span>
                   )}
@@ -154,7 +154,7 @@ const AngelFundingPage: React.FC = () => {
               )}
 
               <div className="mt-6 flex items-center justify-end">
-                <span className="text-blue-600 font-medium text-sm group-hover:text-blue-700">
+                <span className="text-blue-400 font-medium text-sm group-hover:text-blue-300">
                   View Profile →
                 </span>
               </div>
@@ -175,27 +175,27 @@ const AngelFundingPage: React.FC = () => {
       {selectedAngel && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-fade-in" onClick={closeModal}>
           <div
-            className="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full animate-slide-up mt-12"
+            className="relative bg-gray-800 border border-gray-700 rounded-2xl shadow-2xl max-w-2xl w-full animate-slide-up mt-12"
             onClick={e => e.stopPropagation()}
             tabIndex={-1}
             ref={modalRef}
           >
             {/* Sticky Header */}
-            <div className="sticky top-0 z-20 bg-white rounded-t-2xl flex items-center justify-between px-4 py-3 border-b border-gray-100 shadow-sm">
+            <div className="sticky top-0 z-20 bg-gray-800 rounded-t-2xl flex items-center justify-between px-4 py-3 border-b border-gray-700 shadow-sm">
               <button
                 onClick={closeModal}
-                className="flex items-center gap-1 text-gray-500 hover:text-blue-600 font-medium text-base px-1 py-1 rounded-lg transition-colors focus:outline-none"
+                className="flex items-center gap-1 text-gray-400 hover:text-blue-400 font-medium text-base px-1 py-1 rounded-lg transition-colors focus:outline-none"
                 aria-label="Back"
               >
                 <span className="text-lg">←</span>
               </button>
               <div className="flex items-center gap-2 mx-auto">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-pink-100 to-purple-100 flex items-center justify-center">
-                  <User className="w-5 h-5 text-pink-600" />
+                <div className="w-9 h-9 rounded-xl bg-gray-700 border border-gray-600 flex items-center justify-center">
+                  <User className="w-5 h-5 text-pink-400" />
                 </div>
                 <div className="text-center">
-                  <h1 className="text-base font-bold text-gray-900 leading-tight">{selectedAngel.name}</h1>
-                  <div className="flex items-center gap-1 text-gray-500 text-xs justify-center">
+                  <h1 className="text-base font-bold text-white leading-tight">{selectedAngel.name}</h1>
+                  <div className="flex items-center gap-1 text-gray-400 text-xs justify-center">
                     <MapPin className="w-3 h-3" />
                     <span>{selectedAngel.city}, {selectedAngel.country}</span>
                   </div>
@@ -203,25 +203,25 @@ const AngelFundingPage: React.FC = () => {
               </div>
               <button
                 onClick={closeModal}
-                className="text-gray-400 hover:text-red-500 text-xl px-1 py-1 rounded-lg transition-colors focus:outline-none"
+                className="text-gray-400 hover:text-red-400 text-xl px-1 py-1 rounded-lg transition-colors focus:outline-none"
                 aria-label="Close"
               >
                 ×
               </button>
             </div>
             <div className="p-4 sm:p-6 space-y-6 overflow-y-auto max-h-[70vh] custom-scrollbar">
-              <div className="bg-green-50 rounded-xl p-4 flex flex-col items-start shadow-sm">
-                <span className="text-xs font-semibold text-green-700 mb-1 uppercase tracking-wide">Ticket Size</span>
-                <span className="text-2xl font-bold text-green-900">₹{Number(selectedAngel.ticketSize).toLocaleString()}</span>
+              <div className="bg-green-500/20 border border-green-500/30 rounded-xl p-4 flex flex-col items-start shadow-sm">
+                <span className="text-xs font-semibold text-green-400 mb-1 uppercase tracking-wide">Ticket Size</span>
+                <span className="text-2xl font-bold text-green-300">₹{Number(selectedAngel.ticketSize).toLocaleString()}</span>
               </div>
               {selectedAngel.investCategory && selectedAngel.investCategory.length > 0 && (
                 <div>
-                  <h3 className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Investment Category</h3>
+                  <h3 className="text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wide">Investment Category</h3>
                   <div className="flex flex-wrap gap-2">
                     {selectedAngel.investCategory.map((cat) => (
                       <span
                         key={cat}
-                        className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 border border-blue-200"
+                        className="px-3 py-1 rounded-full text-xs font-medium bg-blue-500/20 text-blue-400 border border-blue-500/30"
                       >
                         {cat}
                       </span>
@@ -231,12 +231,12 @@ const AngelFundingPage: React.FC = () => {
               )}
               {selectedAngel.stage && selectedAngel.stage.length > 0 && (
                 <div>
-                  <h3 className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Stage Focus</h3>
+                  <h3 className="text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wide">Stage Focus</h3>
                   <div className="flex flex-wrap gap-2">
                     {selectedAngel.stage.map((stage) => (
                       <span
                         key={stage}
-                        className="px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-700 border border-purple-200"
+                        className="px-3 py-1 rounded-full text-xs font-medium bg-purple-500/20 text-purple-400 border border-purple-500/30"
                       >
                         {stage}
                       </span>
@@ -246,8 +246,8 @@ const AngelFundingPage: React.FC = () => {
               )}
               {selectedAngel.portfolioHighlights && (
                 <div>
-                  <h3 className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Portfolio Highlights</h3>
-                  <p className="text-gray-700 leading-relaxed text-sm">{selectedAngel.portfolioHighlights}</p>
+                  <h3 className="text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wide">Portfolio Highlights</h3>
+                  <p className="text-gray-300 leading-relaxed text-sm">{selectedAngel.portfolioHighlights}</p>
                 </div>
               )}
               <div className="flex flex-col sm:flex-row gap-4 pt-2">

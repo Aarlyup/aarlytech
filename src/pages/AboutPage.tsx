@@ -9,19 +9,19 @@ import gsap from 'gsap';
 const AboutPage: React.FC = () => {
   const teamMembers = [
     {
-      name: "Aarav Mehta",
+      name: "Rajyavardhan",
       role: "Lead Designer",
       bio: "Creative visionary with a passion for building beautiful, user-friendly products.",
       image: "/api/placeholder/150/150"
     },
     {
-      name: "Sneha Kapoor",
+      name: "Mohit",
       role: "Growth Strategist",
       bio: "Expert in scaling startups and driving user engagement through data-driven strategies.",
       image: "/api/placeholder/150/150"
     },
     {
-      name: "Rohan Singh",
+      name: "Shaurya",
       role: "Tech Lead",
       bio: "Full-stack developer with a knack for solving complex problems and leading agile teams.",
       image: "/api/placeholder/150/150"
@@ -207,7 +207,7 @@ const AboutPage: React.FC = () => {
         <title>About Us - Aarly</title>
         <meta name="description" content="Learn about Aarly's mission to democratize startup funding and help entrepreneurs find the right investors and grants." />
       </Helmet>
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-16">
+      <div className="min-h-screen bg-gray-900 py-16">
         <div className="container mx-auto px-4 max-w-6xl">
           
           {/* Hero Section */}
@@ -216,39 +216,39 @@ const AboutPage: React.FC = () => {
               ref={logoRef}
               src="/Screenshot 2025-06-29 140116.png"
               alt="Aarly Rocket"
-              className="mx-auto mb-6 sm:mb-8 w-32 h-32 sm:w-40 h-40 object-contain drop-shadow-lg rounded-full border-4 border-blue-100 bg-white"
-              style={{ background: 'linear-gradient(135deg, #e0e7ff 0%, #f0f4ff 100%)' }}
+              className="mx-auto mb-6 sm:mb-8 w-32 h-32 sm:w-40 h-40 object-contain drop-shadow-lg rounded-full border-4 border-gray-700 bg-gray-800"
+              style={{ background: 'linear-gradient(135deg, #374151 0%, #4b5563 100%)' }}
             />
-            <p className="text-base sm:text-lg md:text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed font-medium px-2">We're on a mission to democratize startup funding by making investor connections and funding opportunities accessible to every entrepreneur in India and beyond.</p>
+            <p className="text-base sm:text-lg md:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed font-medium px-2">We're on a mission to democratize startup funding by making investor connections and funding opportunities accessible to every entrepreneur in India and beyond.</p>
           </div>
 
           {/* Mission & Vision */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-10 md:mb-16">
-            <div ref={missionRef} className="backdrop-blur-xl bg-white/80 border border-blue-100 shadow-2xl rounded-3xl p-8 transition-transform duration-200 hover:scale-105 hover:shadow-2xl">
+            <div ref={missionRef} className="bg-gray-800 border border-gray-700 shadow-2xl rounded-3xl p-8 transition-transform duration-200 hover:scale-105 hover:shadow-2xl">
               <div className="flex items-center gap-3 mb-6">
-                <Target className="w-8 h-8 text-blue-600" />
-                <h2 className="text-3xl font-bold text-blue-900">Our Mission</h2>
+                <Target className="w-8 h-8 text-blue-400" />
+                <h2 className="text-3xl font-bold text-white">Our Mission</h2>
               </div>
-              <p className="text-gray-700 text-lg leading-relaxed">
+              <p className="text-gray-300 text-lg leading-relaxed">
                 To bridge the gap between ambitious entrepreneurs and the right funding opportunities by providing a comprehensive, transparent, and accessible platform that empowers startups to find their perfect funding match.
               </p>
             </div>
             
-            <div ref={visionRef} className="backdrop-blur-xl bg-white/80 border border-blue-100 shadow-2xl rounded-3xl p-8 transition-transform duration-200 hover:scale-105 hover:shadow-2xl">
+            <div ref={visionRef} className="bg-gray-800 border border-gray-700 shadow-2xl rounded-3xl p-8 transition-transform duration-200 hover:scale-105 hover:shadow-2xl">
               <div className="flex items-center gap-3 mb-6">
-                <Star className="w-8 h-8 text-purple-600" />
-                <h2 className="text-3xl font-bold text-blue-900">Our Vision</h2>
+                <Star className="w-8 h-8 text-purple-400" />
+                <h2 className="text-3xl font-bold text-white">Our Vision</h2>
               </div>
-              <p className="text-gray-700 text-lg leading-relaxed">
+              <p className="text-gray-300 text-lg leading-relaxed">
                 To become the go-to platform for startup funding in India, where every entrepreneur has equal access to funding opportunities and the tools they need to build successful, impactful businesses.
               </p>
             </div>
           </div>
 
           {/* Our Story */}
-          <div ref={storyRef} className="backdrop-blur-xl bg-white/80 border border-blue-100 shadow-2xl rounded-3xl p-5 sm:p-8 md:p-12 mb-10 md:mb-16">
-            <h2 className="text-3xl font-bold text-blue-900 mb-6 text-center">Our Story</h2>
-            <div className="prose prose-lg max-w-none text-gray-700">
+          <div ref={storyRef} className="bg-gray-800 border border-gray-700 shadow-2xl rounded-3xl p-5 sm:p-8 md:p-12 mb-10 md:mb-16">
+            <h2 className="text-3xl font-bold text-white mb-6 text-center">Our Story</h2>
+            <div className="prose prose-lg max-w-none text-gray-300">
               <p className="text-lg leading-relaxed mb-6">
                 Aarly was born from a simple yet powerful observation: too many brilliant entrepreneurs struggle to find the right funding not because their ideas lack merit, but because they lack access to the right networks and information.
               </p>
@@ -264,8 +264,8 @@ const AboutPage: React.FC = () => {
           {/* Core Values */}
           <div className="mb-10 md:mb-16">
             <div className="text-center mb-8 md:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-blue-900 mb-2 sm:mb-4">Our Core Values</h2>
-              <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">These principles guide everything we do and shape how we serve the startup community.</p>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 sm:mb-4">Our Core Values</h2>
+              <p className="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto">These principles guide everything we do and shape how we serve the startup community.</p>
             </div>
             {/* Carousel for mobile */}
             <div className="block md:hidden">
@@ -278,14 +278,14 @@ const AboutPage: React.FC = () => {
                     style={{ pointerEvents: idx === currentValue ? 'auto' : 'none' }}
                     onClick={() => goToValue(idx)}
                   >
-                    <div className="backdrop-blur-xl bg-white/80 border border-blue-100 shadow-lg rounded-2xl p-8 cursor-pointer">
+                    <div className="bg-gray-800 border border-gray-700 shadow-lg rounded-2xl p-8 cursor-pointer">
                       <div className="flex items-center gap-4 mb-4">
-                        <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center">
+                        <div className="flex-shrink-0 w-16 h-16 bg-gray-700 border border-gray-600 rounded-full flex items-center justify-center">
                           {value.icon}
                         </div>
-                        <h3 className="text-2xl font-bold text-blue-900">{value.title}</h3>
+                        <h3 className="text-2xl font-bold text-white">{value.title}</h3>
                       </div>
-                      <p className="text-gray-700 text-lg leading-relaxed">{value.description}</p>
+                      <p className="text-gray-300 text-lg leading-relaxed">{value.description}</p>
                     </div>
                   </div>
                 ))}
@@ -294,7 +294,7 @@ const AboutPage: React.FC = () => {
                   {values.map((_, idx) => (
                     <button
                       key={idx}
-                      className={`w-2.5 h-2.5 rounded-full ${idx === currentValue ? 'bg-blue-600' : 'bg-gray-300'} transition-all`}
+                      className={`w-2.5 h-2.5 rounded-full ${idx === currentValue ? 'bg-blue-400' : 'bg-gray-600'} transition-all`}
                       onClick={() => goToValue(idx)}
                       aria-label={`Go to value ${idx + 1}`}
                     />
@@ -305,14 +305,14 @@ const AboutPage: React.FC = () => {
             {/* Grid for desktop */}
             <div className="hidden md:grid grid-cols-4 gap-6 md:gap-8">
               {values.map((value, index) => (
-                <div key={index} className="about-value-card backdrop-blur-xl bg-white/80 border border-blue-100 shadow-lg rounded-2xl p-8 transition-transform duration-200 hover:scale-105 hover:rotate-1 hover:shadow-2xl">
+                <div key={index} className="about-value-card bg-gray-800 border border-gray-700 shadow-lg rounded-2xl p-8 transition-transform duration-200 hover:scale-105 hover:rotate-1 hover:shadow-2xl">
                   <div className="flex flex-col items-center gap-4 mb-4">
-                    <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center">
+                    <div className="flex-shrink-0 w-16 h-16 bg-gray-700 border border-gray-600 rounded-full flex items-center justify-center">
                       {value.icon}
                     </div>
-                    <h3 className="text-2xl font-bold text-blue-900 break-words text-center w-full">{value.title}</h3>
+                    <h3 className="text-2xl font-bold text-white break-words text-center w-full">{value.title}</h3>
                   </div>
-                  <p className="text-gray-700 text-lg leading-relaxed text-center">{value.description}</p>
+                  <p className="text-gray-300 text-lg leading-relaxed text-center">{value.description}</p>
                 </div>
               ))}
             </div>
@@ -321,8 +321,8 @@ const AboutPage: React.FC = () => {
           {/* Team Section */}
           <div className="mb-10 md:mb-16">
             <div className="text-center mb-8 md:mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-blue-900 mb-2 sm:mb-4">Meet Our Team</h2>
-              <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">Passionate individuals working together to transform the startup funding landscape.</p>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 sm:mb-4">Meet Our Team</h2>
+              <p className="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto">Passionate individuals working together to transform the startup funding landscape.</p>
             </div>
             {/* Carousel for mobile */}
             <div className="block md:hidden">
@@ -335,13 +335,13 @@ const AboutPage: React.FC = () => {
                     style={{ pointerEvents: idx === currentTeam ? 'auto' : 'none' }}
                     onClick={() => goToTeam(idx)}
                   >
-                    <div className="backdrop-blur-xl bg-white/80 border border-blue-100 shadow-lg rounded-2xl p-6 text-center cursor-pointer">
-                      <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full mx-auto mb-4 flex items-center justify-center">
-                        <Users className="w-12 h-12 text-blue-600" />
+                    <div className="bg-gray-800 border border-gray-700 shadow-lg rounded-2xl p-6 text-center cursor-pointer">
+                      <div className="w-24 h-24 bg-gray-700 border border-gray-600 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <Users className="w-12 h-12 text-blue-400" />
                       </div>
-                      <h3 className="text-xl font-bold text-blue-900 mb-2">{member.name}</h3>
-                      <p className="text-blue-600 font-semibold mb-3">{member.role}</p>
-                      <p className="text-gray-600 text-sm leading-relaxed">{member.bio}</p>
+                      <h3 className="text-xl font-bold text-white mb-2">{member.name}</h3>
+                      <p className="text-blue-400 font-semibold mb-3">{member.role}</p>
+                      <p className="text-gray-300 text-sm leading-relaxed">{member.bio}</p>
                     </div>
                   </div>
                 ))}
@@ -350,7 +350,7 @@ const AboutPage: React.FC = () => {
                   {teamMembers.map((_, idx) => (
                     <button
                       key={idx}
-                      className={`w-2.5 h-2.5 rounded-full ${idx === currentTeam ? 'bg-blue-600' : 'bg-gray-300'} transition-all`}
+                      className={`w-2.5 h-2.5 rounded-full ${idx === currentTeam ? 'bg-blue-400' : 'bg-gray-600'} transition-all`}
                       onClick={() => goToTeam(idx)}
                       aria-label={`Go to team member ${idx + 1}`}
                     />
@@ -361,34 +361,34 @@ const AboutPage: React.FC = () => {
             {/* Grid for desktop */}
             <div className="hidden md:grid grid-cols-3 gap-6 md:gap-8">
               {teamMembers.map((member, index) => (
-                <div key={index} className="about-team-card backdrop-blur-xl bg-white/80 border border-blue-100 shadow-lg rounded-2xl p-6 text-center transition-transform duration-200 hover:scale-105 hover:-rotate-1 hover:shadow-2xl">
-                  <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <Users className="w-12 h-12 text-blue-600" />
+                <div key={index} className="about-team-card bg-gray-800 border border-gray-700 shadow-lg rounded-2xl p-6 text-center transition-transform duration-200 hover:scale-105 hover:-rotate-1 hover:shadow-2xl">
+                  <div className="w-24 h-24 bg-gray-700 border border-gray-600 rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <Users className="w-12 h-12 text-blue-400" />
                   </div>
-                  <h3 className="text-xl font-bold text-blue-900 mb-2">{member.name}</h3>
-                  <p className="text-blue-600 font-semibold mb-3">{member.role}</p>
-                  <p className="text-gray-600 text-sm leading-relaxed">{member.bio}</p>
+                  <h3 className="text-xl font-bold text-white mb-2">{member.name}</h3>
+                  <p className="text-blue-400 font-semibold mb-3">{member.role}</p>
+                  <p className="text-gray-300 text-sm leading-relaxed">{member.bio}</p>
                 </div>
               ))}
             </div>
           </div>
 
           {/* CTA Section */}
-          <div ref={ctaRef} className="relative bg-gradient-to-br from-blue-500 via-indigo-500 to-blue-700 rounded-2xl md:rounded-3xl p-6 sm:p-8 md:p-14 text-center shadow-2xl mt-10 md:mt-20 overflow-hidden flex flex-col items-center justify-center animate-gradient-move">
+          <div ref={ctaRef} className="relative bg-gradient-to-br from-blue-500 via-indigo-500 to-blue-700 rounded-2xl md:rounded-3xl p-4 sm:p-6 md:p-10 text-center shadow-2xl mt-10 md:mt-20 overflow-hidden flex flex-col items-center justify-center animate-gradient-move">
             <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px] rounded-2xl md:rounded-3xl pointer-events-none" />
             <div className="relative z-10 w-full flex flex-col items-center">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-3 sm:mb-4 tracking-tight text-white drop-shadow-lg">Ready to Start Your Funding Journey?</h2>
-              <p className="text-base sm:text-xl md:text-2xl mb-6 sm:mb-10 opacity-95 font-medium text-white drop-shadow-sm">Join thousands of entrepreneurs who have found their perfect funding match through Aarly.</p>
-              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center w-full max-w-xl">
-                <Link to="/auth" className="flex-1 min-w-[180px]">
-                  <Button className="w-full bg-white text-blue-700 hover:bg-blue-50 hover:text-blue-800 font-bold px-6 sm:px-10 py-3 sm:py-4 rounded-xl shadow-lg transition-all duration-200 text-base sm:text-lg border-2 border-white focus:ring-4 focus:ring-blue-200 flex items-center justify-center gap-2">
-                    Get Started Free
-                    <ArrowRight className="w-5 h-5 ml-2" />
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold mb-2 sm:mb-3 tracking-tight text-white drop-shadow-lg">Ready to Start?</h2>
+              <p className="text-sm sm:text-lg md:text-xl mb-4 sm:mb-6 opacity-95 font-medium text-white drop-shadow-sm">Join thousands of entrepreneurs who found their perfect funding match through Aarly.</p>
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center w-full max-w-md">
+                <Link to="/auth" className="flex-1 min-w-[150px]" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                  <Button className="w-full bg-white text-blue-700 hover:bg-blue-50 hover:text-blue-800 font-bold px-4 sm:px-8 py-2 sm:py-3 rounded-lg shadow-lg transition-all duration-200 text-sm sm:text-base border-2 border-white focus:ring-4 focus:ring-blue-200 flex items-center justify-center gap-2">
+                    Get Started
+                    <ArrowRight className="w-4 h-4 ml-1" />
                   </Button>
                 </Link>
-                <Link to="/contact" className="flex-1 min-w-[180px]">
-                  <Button className="w-full bg-white text-blue-700 hover:bg-blue-50 hover:text-blue-800 font-bold px-6 sm:px-10 py-3 sm:py-4 rounded-xl shadow-lg transition-all duration-200 text-base sm:text-lg border-2 border-white focus:ring-4 focus:ring-blue-200 flex items-center justify-center gap-2">
-                    <span>Contact Us</span>
+                <Link to="/contact" className="flex-1 min-w-[150px]" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                  <Button className="w-full bg-white text-blue-700 hover:bg-blue-50 hover:text-blue-800 font-bold px-4 sm:px-8 py-2 sm:py-3 rounded-lg shadow-lg transition-all duration-200 text-sm sm:text-base border-2 border-white focus:ring-4 focus:ring-blue-200 flex items-center justify-center gap-2">
+                    <span>Contact</span>
                   </Button>
                 </Link>
               </div>

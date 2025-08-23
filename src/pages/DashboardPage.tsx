@@ -2,17 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useFunding } from '../contexts/FundingContext';
 import FundingCard from '../components/ui/FundingCard';
-import { ArrowRight, Sparkles, Calendar } from 'lucide-react';
-
-function useIsMd() {
-  const [isMd, setIsMd] = useState(window.innerWidth >= 768);
-  useEffect(() => {
-    const onResize = () => setIsMd(window.innerWidth >= 768);
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
-  return isMd;
-}
+import Button from '../components/ui/Button';
+import { ArrowRight, Sparkles, TrendingUp, Users, Award, DollarSign } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const DashboardPage: React.FC = () => {
   const { getRandomFundingItems, loading: fundingLoading } = useFunding();
@@ -61,95 +53,127 @@ const DashboardPage: React.FC = () => {
     }
   };
 
+  const stats = [
+    { icon: TrendingUp, label: 'Active Opportunities', value: '300+', color: 'text-blue-400' },
+    { icon: Users, label: 'Startups Funded', value: '2,500+', color: 'text-green-400' },
+    { icon: Award, label: 'Success Rate', value: '95%', color: 'text-purple-400' },
+    { icon: DollarSign, label: 'Total Funded', value: '₹120Cr+', color: 'text-orange-400' },
+  ];
+
   return (
     <>
       <Helmet>
         <title>Your Startup Dashboard | Aarly</title>
         <meta name="description" content="Manage your startup journey, track funding, and access personalized resources on your Aarly dashboard." />
-        <link rel="canonical" href="https://aarly.co/dashboard" />
-        <meta property="og:title" content="Your Startup Dashboard | Aarly" />
-        <meta property="og:description" content="Manage your startup journey, track funding, and access personalized resources on your Aarly dashboard." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://aarly.co/dashboard" />
-        <meta property="og:image" content="/Screenshot 2025-06-29 140116.png" />
       </Helmet>
-      <div className="max-w-7xl mx-auto px-4 py-10 space-y-12 animate-fade-in" data-aos="fade-in">
-        {/* Greeting Block */}
-        <div className="relative bg-white/80 border border-blue-100 shadow-2xl rounded-3xl p-4 sm:p-8 md:p-12 mb-8 flex flex-col items-center gap-4 sm:gap-6 overflow-hidden backdrop-blur-xl w-full lg:max-w-none mx-auto" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.10), 0 0 60px 0 #3b82f680'}} data-aos="fade-down" data-aos-delay="200">
-          <div className="absolute inset-0 pointer-events-none" style={{background: 'radial-gradient(circle at 30% 20%, #e0e7ff 0%, #fff0 70%)'}}></div>
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold mb-1 text-blue-900 text-center z-10">
-            <span className="block">Welcome to Aarly — your early-stage startup support system.</span>
-          </h2>
-          <p className="text-gray-700 mb-2 text-sm sm:text-base md:text-lg z-10 text-center max-w-xs sm:max-w-md md:max-w-2xl">Here you can manage your saved investors, explore funding blocks, and access tools to build your startup right.</p>
-          <a href="/funding/vc" className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-3 rounded-xl shadow-lg transition-all text-base sm:text-lg z-10 focus:ring-4 focus:ring-blue-200 group w-full sm:w-auto">
-            <span className="transition-transform group-hover:scale-110 group-hover:animate-pulse">Browse All Funding Options</span> <ArrowRight size={20} className="transition-transform group-hover:scale-110 group-hover:animate-pulse" />
-          </a>
-        </div>
-
-        {/* Latest Funding Opportunities */}
-        <div data-aos="fade-up" data-aos-delay="300">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-xl font-bold text-blue-900">Latest Funding Opportunities</h3>
-            <button
-              onClick={() => {
-                const items = getRandomFundingItems(6);
-                setRandomFundingItems(items);
-              }}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors"
-            >
-              <Sparkles className="w-4 h-4" />
-              Refresh
-            </button>
+      
+      <div className="min-h-screen bg-gray-900">
+        <div className="container mx-auto px-6 py-12 space-y-12">
+          {/* Welcome Section (compact) */}
+          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 md:p-8 text-center">
+            <h1 className="text-2xl md:text-3xl font-bold text-white mb-3">
+              Welcome to Your Funding Journey
+            </h1>
+            <p className="text-base md:text-lg text-blue-100 mb-4 max-w-2xl mx-auto">
+              Discover, connect, and secure funding from the right investors for your startup.
+            </p>
+            <Link to="/funding/vc" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+              <button className="bg-white text-blue-600 hover:bg-gray-100 px-6 py-2 rounded-md font-semibold transition-all flex items-center gap-2 mx-auto text-sm">
+                Explore Funding Options
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </Link>
           </div>
-          {fundingLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 animate-pulse">
-                  <div className="flex items-start gap-4 mb-4">
-                    <div className="w-16 h-16 bg-gray-200 rounded-xl"></div>
-                    <div className="flex-1">
-                      <div className="h-6 bg-gray-200 rounded mb-2 w-3/4"></div>
-                      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+
+          {/* Stats Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {stats.map((stat, index) => {
+              const Icon = stat.icon;
+              return (
+                <div key={index} className="bg-gray-800 border border-gray-700 rounded-xl p-6 text-center hover:border-gray-600 transition-all">
+                  <div className={`w-12 h-12 mx-auto mb-4 bg-gray-700 rounded-lg flex items-center justify-center`}>
+                    <Icon className={`w-6 h-6 ${stat.color}`} />
+                  </div>
+                  <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
+                  <div className="text-sm text-gray-400">{stat.label}</div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Latest Opportunities */}
+          <div>
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="text-2xl font-bold text-white">Latest Funding Opportunities</h2>
+              <button
+                onClick={() => {
+                  const items = getRandomFundingItems(6);
+                  setRandomFundingItems(items);
+                }}
+                className="flex items-center gap-2 px-4 py-2 bg-gray-800 border border-gray-700 text-gray-300 rounded-lg hover:border-gray-600 hover:text-white transition-all"
+              >
+                <Sparkles className="w-4 h-4" />
+                Refresh
+              </button>
+            </div>
+
+            {fundingLoading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="bg-gray-800 border border-gray-700 rounded-xl p-6 animate-pulse">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="w-12 h-12 bg-gray-700 rounded-lg"></div>
+                      <div className="flex-1">
+                        <div className="h-5 bg-gray-700 rounded mb-2 w-3/4"></div>
+                        <div className="h-4 bg-gray-700 rounded w-1/2"></div>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="h-4 bg-gray-700 rounded w-full"></div>
+                      <div className="h-4 bg-gray-700 rounded w-2/3"></div>
                     </div>
                   </div>
-                  <div className="space-y-3">
-                    <div className="h-4 bg-gray-200 rounded w-full"></div>
-                    <div className="h-4 bg-gray-200 rounded w-2/3"></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : randomFundingItems.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {randomFundingItems.map((item, index) => (
-                <FundingCard
-                  key={`${item._id}-${index}`}
-                  id={item._id}
-                  name={item.name}
-                  category={item.category}
-                  location={getLocation(item)}
-                  amount={formatAmount(item)}
-                  sector={getSectors(item)}
-                  stage={getStages(item)}
-                  onClick={() => handleFundingItemClick(item)}
-                  showCategoryLabel={true}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <div className="text-gray-500 mb-4">No funding opportunities available at the moment.</div>
-              <a href="/funding/vc" className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                Browse All Funding Options
+                ))}
+              </div>
+            ) : randomFundingItems.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {randomFundingItems.map((item, index) => (
+                  <FundingCard
+                    key={`${item._id}-${index}`}
+                    id={item._id}
+                    name={item.name}
+                    category={item.category}
+                    location={getLocation(item)}
+                    amount={formatAmount(item)}
+                    sector={getSectors(item)}
+                    stage={getStages(item)}
+                    onClick={() => handleFundingItemClick(item)}
+                    showCategoryLabel={true}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 bg-gray-800 border border-gray-700 rounded-xl">
+                <div className="text-gray-400 mb-4">No funding opportunities available at the moment.</div>
+                <Link to="/funding/vc" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                  <Button className="bg-blue-600 hover:bg-blue-700">
+                    Browse All Funding Options
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
+                </Link>
+              </div>
+            )}
+
+            <div className="mt-8 text-center">
+              <Link 
+                to="/funding/vc" 
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium transition-colors"
+              >
+                View All Funding Categories
                 <ArrowRight className="w-4 h-4" />
-              </a>
+              </Link>
             </div>
-          )}
-          <div className="mt-8 text-center">
-            <a href="/funding/vc" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium">
-              View All Funding Categories
-              <ArrowRight className="w-4 h-4" />
-            </a>
           </div>
         </div>
       </div>

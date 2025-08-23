@@ -39,7 +39,7 @@ const InvestorMatchPage: React.FC = () => {
       if (response.ok) {
         const data = await response.json();
         if (data.success) {
-          const uniqueIndustries = [...new Set(data.data.map((item: InvestorMatch) => item.industry))];
+          const uniqueIndustries = [...new Set(data.data.map((item: InvestorMatch) => item.industry))] as string[];
           setIndustries(uniqueIndustries);
         }
       } else {
@@ -101,79 +101,183 @@ const InvestorMatchPage: React.FC = () => {
         <meta property="og:url" content="https://aarly.co/investor-match" />
         <meta property="og:image" content="/Screenshot 2025-06-29 140116.png" />
       </Helmet>
-      <div className="min-h-[80vh] flex flex-col items-center justify-center bg-gray-50 py-8 px-2 sm:px-4 md:px-8">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-6 sm:mb-8 text-center text-blue-900">Investor Match</h1>
-        <form onSubmit={handleSubmit} className="backdrop-blur-xl bg-white/70 border border-blue-100 shadow-2xl rounded-3xl w-full max-w-lg p-6 sm:p-10 flex flex-col gap-4 sm:gap-6 mb-8 sm:mb-10" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.10)'}}>
-          <div>
-            <label className="block text-blue-900 font-semibold mb-2 text-base sm:text-lg">Stage</label>
-            <select name="stage" value={form.stage} onChange={handleChange} className="block w-full border border-blue-200 rounded-xl p-2 sm:p-3 text-sm sm:text-base focus:ring-2 focus:ring-blue-400 focus:outline-none bg-white/80">
-              <option value="">Select Stage</option>
-              {stages.map(s => <option key={s} value={s}>{s}</option>)}
-            </select>
+      
+      <div className="min-h-screen bg-gray-900">
+        <div className="container mx-auto px-6 py-12">
+          {/* Header Section */}
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              Find Your Perfect Investor Match
+            </h1>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+              Connect with investors who align with your startup's stage, industry, and traction level
+            </p>
           </div>
-          <div>
-            <label className="block text-blue-900 font-semibold mb-2 text-base sm:text-lg">Industry</label>
-            <select name="industry" value={form.industry} onChange={handleChange} className="block w-full border border-blue-200 rounded-xl p-2 sm:p-3 text-sm sm:text-base focus:ring-2 focus:ring-blue-400 focus:outline-none bg-white/80">
-              <option value="">Select Industry</option>
-              {industries.map(i => <option key={i} value={i}>{i}</option>)}
-            </select>
+
+          {/* Search Form */}
+          <div className="max-w-4xl mx-auto mb-12">
+            <div className="bg-gray-800 rounded-2xl border border-gray-700 p-8 shadow-xl">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div>
+                    <label className="block text-white font-semibold mb-3 text-sm uppercase tracking-wide">
+                      Startup Stage
+                    </label>
+                    <select 
+                      name="stage" 
+                      value={form.stage} 
+                      onChange={handleChange} 
+                      className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    >
+                      <option value="">Select Stage</option>
+                      {stages.map(s => <option key={s} value={s}>{s}</option>)}
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-white font-semibold mb-3 text-sm uppercase tracking-wide">
+                      Industry Focus
+                    </label>
+                    <select 
+                      name="industry" 
+                      value={form.industry} 
+                      onChange={handleChange} 
+                      className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    >
+                      <option value="">Select Industry</option>
+                      {industries.map(i => <option key={i} value={i}>{i}</option>)}
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-white font-semibold mb-3 text-sm uppercase tracking-wide">
+                      Traction Level
+                    </label>
+                    <select 
+                      name="traction" 
+                      value={form.traction} 
+                      onChange={handleChange} 
+                      className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    >
+                      <option value="">Select Traction</option>
+                      {tractions.map(t => <option key={t} value={t}>{t}</option>)}
+                    </select>
+                  </div>
+                </div>
+                
+                <div className="text-center">
+                  <Button 
+                    type="submit" 
+                    disabled={loading}
+                    className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all flex items-center gap-2 mx-auto shadow-lg"
+                  >
+                    {loading ? (
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    ) : (
+                      <>
+                        Find Matching Investors
+                        <ArrowRight size={18} />
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </form>
+            </div>
           </div>
-          <div>
-            <label className="block text-blue-900 font-semibold mb-2 text-base sm:text-lg">Traction</label>
-            <select name="traction" value={form.traction} onChange={handleChange} className="block w-full border border-blue-200 rounded-xl p-2 sm:p-3 text-sm sm:text-base focus:ring-2 focus:ring-blue-400 focus:outline-none bg-white/80">
-              <option value="">Select Traction</option>
-              {tractions.map(t => <option key={t} value={t}>{t}</option>)}
-            </select>
-          </div>
-          <Button type="submit" className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-amber-400 to-amber-500 text-white font-semibold text-base sm:text-lg py-2 sm:py-3 rounded-xl shadow-lg hover:from-amber-500 hover:to-amber-600 transition-all">
-            Find Investors <ArrowRight size={18} />
-          </Button>
-        </form>
-        <div className="w-full max-w-lg">
+
+          {/* Results Section */}
           {matches.length > 0 ? (
-            <div>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 text-blue-900 text-center">Matched Investors</h2>
-              <ul className="space-y-4 sm:space-y-5">
+            <div className="max-w-6xl mx-auto">
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-2xl font-bold text-white">
+                  Found {matches.length} Matching Investor{matches.length !== 1 ? 's' : ''}
+                </h2>
+                <div className="text-sm text-gray-400">
+                  Results based on your criteria
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {matches.map(inv => (
-                  <li key={inv.name} className="p-4 sm:p-5 bg-white/80 border border-blue-100 rounded-2xl shadow flex flex-col gap-1">
-                    <div className="flex items-center gap-3 mb-1">
-                      <User size={24} className="text-blue-500" />
-                      <span className="font-bold text-base sm:text-lg text-blue-900">{inv.name}</span>
+                  <div key={inv.name} className="bg-gray-800 border border-gray-700 rounded-xl p-6 hover:border-gray-600 transition-all">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                        <User size={24} className="text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-lg font-semibold text-white mb-2">{inv.name}</h3>
+                        <div className="grid grid-cols-2 gap-4 text-sm">
+                          <div>
+                            <span className="text-gray-400">Stage:</span>
+                            <span className="ml-2 text-blue-400 font-medium">{inv.stage}</span>
+                          </div>
+                          <div>
+                            <span className="text-gray-400">Industry:</span>
+                            <span className="ml-2 text-blue-400 font-medium">{inv.industry}</span>
+                          </div>
+                          <div>
+                            <span className="text-gray-400">Traction:</span>
+                            <span className="ml-2 text-green-400 font-medium">{inv.traction}</span>
+                          </div>
+                          <div>
+                            <span className="text-gray-400">Check Size:</span>
+                            <span className="ml-2 text-green-400 font-medium">{inv.checkSize}</span>
+                          </div>
+                        </div>
+                        <div className="mt-3">
+                          <span className="text-gray-400">Location:</span>
+                          <span className="ml-2 text-purple-400 font-medium">{inv.location}</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="text-xs sm:text-sm text-gray-700 mb-2">
-                      <div>Stage: <span className="font-semibold text-blue-700">{inv.stage}</span></div>
-                      <div>Industry: <span className="font-semibold text-blue-700">{inv.industry}</span></div>
-                      <div>Traction: <span className="font-semibold text-blue-700">{inv.traction}</span></div>
-                      <div>Check Size: <span className="font-semibold text-green-700">{inv.checkSize}</span></div>
-                      <div>Location: <span className="font-semibold text-purple-700">{inv.location}</span></div>
-                    </div>
-                    <div className="text-gray-600 text-xs sm:text-sm mb-3">{inv.description}</div>
+                    
+                    <p className="text-gray-300 text-sm mb-4 leading-relaxed">{inv.description}</p>
+                    
                     {(inv.website || inv.email || inv.linkedin) && (
-                      <div className="flex gap-2 text-xs">
+                      <div className="flex flex-wrap gap-3">
                         {inv.website && (
-                          <a href={inv.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                          <a 
+                            href={inv.website} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded-full transition-colors"
+                          >
                             Website
                           </a>
                         )}
                         {inv.email && (
-                          <a href={`mailto:${inv.email}`} className="text-blue-600 hover:underline">
+                          <a 
+                            href={`mailto:${inv.email}`} 
+                            className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-xs rounded-full transition-colors"
+                          >
                             Email
                           </a>
                         )}
                         {inv.linkedin && (
-                          <a href={inv.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                          <a 
+                            href={inv.linkedin} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white text-xs rounded-full transition-colors"
+                          >
                             LinkedIn
                           </a>
                         )}
                       </div>
                     )}
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
-          ) : (
-            <div className="text-gray-400 text-center text-sm sm:text-base">
-              {loading ? 'Searching for matches...' : 'No matches yet. Fill the form and click Find Investors.'}
+          ) : !loading && (
+            <div className="max-w-2xl mx-auto text-center">
+              <div className="bg-gray-800 border border-gray-700 rounded-xl p-12">
+                <User size={48} className="text-gray-500 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-white mb-2">No matches found yet</h3>
+                <p className="text-gray-400">
+                  Fill out the form above and click "Find Matching Investors" to discover investors that align with your startup profile.
+                </p>
+              </div>
             </div>
           )}
         </div>

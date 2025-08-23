@@ -7,7 +7,7 @@ const FundingLayout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-gray-900 flex flex-col">
       <Header />
       <div className="flex flex-1 w-full">
         {/* Sidebar: hidden on mobile, visible on md+ */}
@@ -16,8 +16,8 @@ const FundingLayout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         </div>
         {/* Mobile sidebar drawer */}
         {mobileMenuOpen && (
-          <div className="fixed inset-0 z-50 bg-black/40 md:hidden" onClick={() => setMobileMenuOpen(false)}>
-            <div className="absolute top-0 left-0 w-64 h-full bg-white shadow-lg">
+          <div className="fixed inset-0 z-50 bg-black/60 md:hidden" onClick={() => setMobileMenuOpen(false)}>
+            <div className="absolute top-0 left-0 w-64 h-full bg-gray-800 border-r border-gray-700 shadow-lg">
               <FundingSidebar />
             </div>
           </div>

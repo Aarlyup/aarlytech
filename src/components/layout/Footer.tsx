@@ -1,26 +1,15 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from 'react';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Link } from 'react-router-dom';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Twitter, Mail, ArrowRight, Linkedin, Instagram, Github, MessageCircle, Slack, Heart, Rocket, Phone, Send } from 'lucide-react';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Twitter, Mail, ArrowRight, Linkedin, Instagram, MessageCircle, Send, Heart } from 'lucide-react';
 import Logo from '../ui/Logo';
 
 const Footer: React.FC = () => {
-  const [newsletterSuccess, setNewsletterSuccess] = React.useState(false);
   const [whatsappForm, setWhatsappForm] = React.useState({ phoneNumber: '' });
   const [whatsappSuccess, setWhatsappSuccess] = React.useState(false);
   const [whatsappLoading, setWhatsappLoading] = React.useState(false);
   const [whatsappError, setWhatsappError] = React.useState('');
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-
-  const handleNewsletter = (e: React.FormEvent) => {
-    e.preventDefault();
-    setNewsletterSuccess(true);
-    setTimeout(() => setNewsletterSuccess(false), 2500);
-  };
 
   const handleWhatsAppSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,82 +42,93 @@ const Footer: React.FC = () => {
       setWhatsappLoading(false);
     }
   };
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   };
 
   return (
-    <footer className="bg-gray-900 text-white pt-10 pb-6 md:pt-20 md:pb-10 lg:pt-6 lg:pb-2 mt-16 border-t border-gray-800 relative overflow-hidden">
-      {/* SVG dot pattern background */}
-      <svg className="absolute left-0 top-0 w-full h-full opacity-10 pointer-events-none" width="100%" height="100%"><defs><pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="2" fill="#fff" /></pattern></defs><rect width="100%" height="100%" fill="url(#dots)" /></svg>
-      {/* Gradient top border */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-400 opacity-70 rounded-t-xl" />
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="flex flex-wrap flex-row gap-y-8 gap-x-4 md:gap-x-16 md:gap-y-12 items-start md:grid md:grid-cols-5 md:gap-x-16 md:gap-y-12">
-          {/* Logo and description */}
-          <div className="flex flex-col items-start justify-center md:justify-start h-full min-w-[120px] space-y-3 mb-6 md:mb-0">
-            <img src="/Aarly_logo.png" alt="Aarly Logo" className="mb-2 h-10 md:h-12 w-auto" />
-            <p className="text-gray-400 text-xs md:text-base max-w-xs mb-2">
-              Find the right investors, grants, and startup support — instantly.
+    <footer className="bg-gray-900 border-t border-gray-800 pt-16 pb-8">
+      <div className="container mx-auto px-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
+          {/* Logo and Description */}
+          <div className="lg:col-span-2">
+            <Logo imgClassName="h-10 w-auto mb-4" />
+            <p className="text-gray-400 mb-6 max-w-sm">
+              Find the right investors, grants, and startup support — instantly. 
+              Connecting ambitious entrepreneurs with funding opportunities.
             </p>
-            <div className="flex flex-row space-x-4 mt-2">
-              <a href="#" onClick={scrollToTop} className="text-gray-400 hover:text-blue-400 transition-transform hover:scale-110 hover:drop-shadow-md" aria-label="Twitter"><Twitter size={20} /></a>
-              <a href="#" onClick={scrollToTop} className="text-gray-400 hover:text-blue-500 transition-transform hover:scale-110 hover:drop-shadow-md" aria-label="Linkedin"><Linkedin size={20} /></a>
-              <a href="#" onClick={scrollToTop} className="text-gray-400 hover:text-pink-400 transition-transform hover:scale-110 hover:drop-shadow-md" aria-label="Instagram"><Instagram size={20} /></a>
+            <div className="flex space-x-4">
+              <a 
+                href="#" 
+                className="p-2 bg-gray-800 border border-gray-700 rounded-lg hover:border-blue-500 hover:bg-blue-500/10 transition-all"
+                aria-label="Twitter"
+              >
+                <Twitter size={20} className="text-gray-400 hover:text-blue-400 transition-colors" />
+              </a>
+              <a 
+                href="#" 
+                className="p-2 bg-gray-800 border border-gray-700 rounded-lg hover:border-blue-500 hover:bg-blue-500/10 transition-all"
+                aria-label="LinkedIn"
+              >
+                <Linkedin size={20} className="text-gray-400 hover:text-blue-400 transition-colors" />
+              </a>
+              <a 
+                href="#" 
+                className="p-2 bg-gray-800 border border-gray-700 rounded-lg hover:border-pink-500 hover:bg-pink-500/10 transition-all"
+                aria-label="Instagram"
+              >
+                <Instagram size={20} className="text-gray-400 hover:text-pink-400 transition-colors" />
+              </a>
             </div>
           </div>
 
           {/* Platform Links */}
-          <div className="mb-8 md:mb-0">
-            <h3 className="text-sm md:text-lg font-semibold mb-3">Platform</h3>
-            <ul className="space-y-2 text-xs md:text-base">
-              <li><Link to="/funding/vc" onClick={scrollToTop} className="text-gray-400 hover:text-white transition-colors">Venture Capital</Link></li>
-              <li><Link to="/funding/microvc" onClick={scrollToTop} className="text-gray-400 hover:text-white transition-colors">Micro VCs</Link></li>
-              <li><Link to="/funding/angel" onClick={scrollToTop} className="text-gray-400 hover:text-white transition-colors">Angel Investors</Link></li>
-              <li><Link to="/funding/accelerator" onClick={scrollToTop} className="text-gray-400 hover:text-white transition-colors">Accelerators</Link></li>
-              <li><Link to="/funding/incubator" onClick={scrollToTop} className="text-gray-400 hover:text-white transition-colors">Incubators</Link></li>
-              <li><Link to="/funding/grants" onClick={scrollToTop} className="text-gray-400 hover:text-white transition-colors">Government Grants</Link></li>
+          <div>
+            <h3 className="text-white font-semibold mb-4">Platform</h3>
+            <ul className="space-y-3">
+              <li><Link to="/funding/vc" className="text-gray-400 hover:text-white transition-colors" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Venture Capital</Link></li>
+              <li><Link to="/funding/microvc" className="text-gray-400 hover:text-white transition-colors" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Micro VCs</Link></li>
+              <li><Link to="/funding/angel" className="text-gray-400 hover:text-white transition-colors" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Angel Investors</Link></li>
+              <li><Link to="/funding/accelerator" className="text-gray-400 hover:text-white transition-colors" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Accelerators</Link></li>
+              <li><Link to="/funding/incubator" className="text-gray-400 hover:text-white transition-colors" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Incubators</Link></li>
+              <li><Link to="/funding/grants" className="text-gray-400 hover:text-white transition-colors" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Government Grants</Link></li>
             </ul>
           </div>
+
           {/* Company Links */}
-          <div className="mb-8 md:mb-0 ml-0 sm:ml-8">
-            <h3 className="text-sm md:text-lg font-semibold mb-3">Company</h3>
-            <ul className="space-y-2 text-xs md:text-base">
-              <li><Link to="/about" onClick={scrollToTop} className="text-gray-400 hover:text-white transition-colors">About Us</Link></li>
-              <li><Link to="/contact" onClick={scrollToTop} className="text-gray-400 hover:text-white transition-colors">Contact</Link></li>
-              <li><a href="#" onClick={scrollToTop} className="text-gray-400 hover:text-white transition-colors">Careers</a></li>
+          <div>
+            <h3 className="text-white font-semibold mb-4">Company</h3>
+            <ul className="space-y-3">
+              <li><Link to="/about" className="text-gray-400 hover:text-white transition-colors" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>About Us</Link></li>
+              <li><Link to="/contact" className="text-gray-400 hover:text-white transition-colors" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Contact</Link></li>
+              <li><Link to="/privacy-policy" className="text-gray-400 hover:text-white transition-colors" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Privacy Policy</Link></li>
+              <li><Link to="/terms-of-service" className="text-gray-400 hover:text-white transition-colors" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Terms of Service</Link></li>
+              <li><Link to="/disclaimer" className="text-gray-400 hover:text-white transition-colors" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Disclaimer</Link></li>
             </ul>
           </div>
-          {/* Legal Links */}
-          <div className="mb-8 md:mb-0">
-            <h3 className="text-sm md:text-lg font-semibold mb-3">Legal</h3>
-            <ul className="space-y-2 text-xs md:text-base">
-              <li><Link to="/privacy-policy" onClick={scrollToTop} className="text-gray-400 hover:text-white transition-colors">Privacy Policy</Link></li>
-              <li><Link to="/terms-of-service" onClick={scrollToTop} className="text-gray-400 hover:text-white transition-colors">Terms of Service</Link></li>
-              <li><Link to="/disclaimer" onClick={scrollToTop} className="text-gray-400 hover:text-white transition-colors">Disclaimer</Link></li>
-            </ul>
-          </div>
+
           {/* WhatsApp Updates */}
-          <div className="mb-8 md:mb-0">
-            <h3 className="text-sm md:text-lg font-semibold mb-3 flex items-center gap-2">
+          <div>
+            <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
               <MessageCircle size={18} className="text-green-400" />
               WhatsApp Updates
             </h3>
-            <p className="text-gray-400 text-xs mb-3">Get funding updates on WhatsApp</p>
-            <form onSubmit={handleWhatsAppSubscribe} className="space-y-2">
+            <p className="text-gray-400 text-sm mb-4">Get funding updates on WhatsApp</p>
+            <form onSubmit={handleWhatsAppSubscribe} className="space-y-3">
               <input
                 type="tel"
                 placeholder="9876543210"
                 value={whatsappForm.phoneNumber}
                 onChange={(e) => setWhatsappForm({ phoneNumber: e.target.value })}
-                className="w-full px-3 py-2 text-sm bg-gray-800 border border-gray-600 rounded focus:outline-none focus:border-green-400 text-white placeholder-gray-400"
+                className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-green-500 text-white placeholder-gray-500"
                 required
                 maxLength={10}
               />
               <button
                 type="submit"
                 disabled={whatsappLoading}
-                className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white text-sm rounded transition-colors"
+                className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white rounded-lg transition-colors"
               >
                 {whatsappLoading ? (
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
@@ -148,8 +148,15 @@ const Footer: React.FC = () => {
             )}
           </div>
         </div>
-        <div className="mt-4 pt-2 border-t border-gray-800 text-center text-gray-500 text-xs md:text-sm flex flex-col md:flex-row items-center justify-between gap-2">
-          <span>&copy; {new Date().getFullYear()} Aarly. All rights reserved. | Made with <Heart size={10} className="inline text-pink-400 animate-pulse" /> by Aarly Team</span>
+
+        {/* Bottom Bar */}
+        <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between gap-4">
+          <span className="text-gray-400 text-sm">
+            &copy; {new Date().getFullYear()} Aarly. All rights reserved.
+          </span>
+          <div className="flex items-center gap-1 text-gray-400 text-sm">
+            Made with <Heart size={12} className="text-red-400 mx-1" /> by Aarly Team
+          </div>
         </div>
       </div>
     </footer>
