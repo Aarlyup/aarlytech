@@ -83,8 +83,8 @@ const Hero: React.FC = () => {
             </button>
           </div>
 
-          {/* Feature Pills */}
-          <div className="flex flex-wrap justify-center gap-4 mt-12">
+          {/* Feature Pills (hidden on mobile) */}
+          <div className="hidden sm:flex flex-wrap justify-center gap-4 mt-12">
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2">
               <TrendingUp className="w-4 h-4 text-green-400" />
               <span className="text-sm text-gray-300">AI-Powered Matching</span>

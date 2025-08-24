@@ -77,15 +77,6 @@ const FundingSidebar: React.FC = () => {
           );
         })}
       </nav>
-      
-      <div className="p-4 border-t border-gray-700/50">
-        <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 rounded-lg p-3">
-          <p className="text-xs text-blue-300 font-medium mb-1">Pro Tip</p>
-          <p className="text-xs text-gray-300 leading-relaxed">
-            Use filters to find investors that match your startup stage and sector.
-          </p>
-        </div>
-      </div>
     </aside>
   );
 };

@@ -59,48 +59,63 @@ const Header: React.FC = () => {
         <nav className="hidden md:flex items-center space-x-8">
           {isHomePage ? (
             <>
-              <button 
-                onClick={() => scrollToSection('how-it-works')} 
-                className="text-gray-300 hover:text-white font-medium transition-colors relative group"
-              >
-                How It Works
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full" />
-              </button>
               {isAuthenticated ? (
-                <Link
-                  to="/dashboard"
-                  className="text-gray-300 hover:text-white font-medium transition-colors relative group"
-                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                >
-                  Dashboard
-                </Link>
+                <>
+                  <Link
+                    to="/funding/vc"
+                    className="text-gray-300 hover:text-white font-medium transition-colors relative group"
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  >
+                    Funding
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full" />
+                  </Link>
+                  <Link
+                    to="/investor-match"
+                    className="text-gray-300 hover:text-white font-medium transition-colors relative group"
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  >
+                    Investor Match
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full" />
+                  </Link>
+                  <Link
+                    to="/content"
+                    className="text-gray-300 hover:text-white font-medium transition-colors relative group"
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  >
+                    Content
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full" />
+                  </Link>
+                  <Link
+                    to="/dashboard"
+                    className="text-gray-300 hover:text-white font-medium transition-colors relative group"
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  >
+                    Dashboard
+                  </Link>
+                </>
               ) : (
-                <button 
-                  onClick={() => scrollToSection('pricing')} 
-                  className="text-gray-300 hover:text-white font-medium transition-colors relative group"
-                >
-                  Pricing
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full" />
-                </button>
+                <>
+                  <button 
+                    onClick={() => scrollToSection('how-it-works')} 
+                    className="text-gray-300 hover:text-white font-medium transition-colors relative group"
+                  >
+                    How It Works
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full" />
+                  </button>
+                  <button 
+                    onClick={() => scrollToSection('pricing')} 
+                    className="text-gray-300 hover:text-white font-medium transition-colors relative group"
+                  >
+                    Pricing
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full" />
+                  </button>
+                </>
               )}
             </>
           ) : (
             <>
               {isAuthenticated && (
                 <>
-                  <Link
-                    to="/dashboard"
-                    className={`font-medium transition-colors relative group ${
-                      location.pathname.startsWith('/dashboard')
-                        ? 'text-blue-400' : 'text-gray-300 hover:text-white'
-                    }`}
-                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                  >
-                    Dashboard
-                    {location.pathname.startsWith('/dashboard') && (
-                      <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400" />
-                    )}
-                  </Link>
                   <Link
                     to="/funding/vc"
                     className={`font-medium transition-colors relative group ${
@@ -137,6 +152,19 @@ const Header: React.FC = () => {
                   >
                     Content
                     {location.pathname.startsWith('/content') && (
+                      <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400" />
+                    )}
+                  </Link>
+                  <Link
+                    to="/dashboard"
+                    className={`font-medium transition-colors relative group ${
+                      location.pathname.startsWith('/dashboard')
+                        ? 'text-blue-400' : 'text-gray-300 hover:text-white'
+                    }`}
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  >
+                    Dashboard
+                    {location.pathname.startsWith('/dashboard') && (
                       <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400" />
                     )}
                   </Link>
@@ -274,12 +302,27 @@ const Header: React.FC = () => {
               <>
                 {isHomePage && (
                   <>
-                    <button
-                      onClick={() => scrollToSection('how-it-works')}
+                    <Link
+                      to="/funding/vc"
                       className="block text-gray-300 hover:text-white font-medium py-2 transition-colors"
+                      onClick={() => { setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                     >
-                      How It Works
-                    </button>
+                      Funding
+                    </Link>
+                    <Link
+                      to="/investor-match"
+                      className="block text-gray-300 hover:text-white font-medium py-2 transition-colors"
+                      onClick={() => { setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                    >
+                      Investor Match
+                    </Link>
+                    <Link
+                      to="/content"
+                      className="block text-gray-300 hover:text-white font-medium py-2 transition-colors"
+                      onClick={() => { setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                    >
+                      Content
+                    </Link>
                     <button
                       onClick={() => scrollToSection('pricing')}
                       className="block text-gray-300 hover:text-white font-medium py-2 transition-colors"
