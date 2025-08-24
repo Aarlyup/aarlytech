@@ -324,3 +324,48 @@ body {
     padding: 3rem 0;
   }
 }
+
+/* Admin page specific styles */
+/* Ensure text is visible in admin forms and inputs */
+[class*="admin"] input,
+[class*="admin"] textarea,
+[class*="admin"] select,
+.admin-dashboard input,
+.admin-dashboard textarea,
+.admin-dashboard select,
+/* Target admin route pages */
+body:has([data-route*="admin"]) input,
+body:has([data-route*="admin"]) textarea,
+body:has([data-route*="admin"]) select,
+/* Target specific admin components */
+div[class*="space-y-6"] input,
+div[class*="space-y-6"] textarea,
+div[class*="space-y-6"] select {
+  color: #111827 !important; /* Force dark text in admin inputs */
+}
+
+/* Admin form labels and text */
+[class*="admin"] label,
+[class*="admin"] .text-gray-700,
+[class*="admin"] .text-gray-900,
+.admin-dashboard label,
+.admin-dashboard .text-gray-700,
+.admin-dashboard .text-gray-900,
+div[class*="space-y-6"] label,
+div[class*="space-y-6"] .text-gray-700,
+div[class*="space-y-6"] .text-gray-900 {
+  color: #374151 !important; /* Force dark text for labels */
+}
+
+/* Admin headings and titles */
+[class*="admin"] h1,
+[class*="admin"] h2,
+[class*="admin"] h3,
+.admin-dashboard h1,
+.admin-dashboard h2,
+.admin-dashboard h3,
+div[class*="space-y-6"] h1,
+div[class*="space-y-6"] h2,
+div[class*="space-y-6"] h3 {
+  color: #111827 !important; /* Force dark text for headings */
+}

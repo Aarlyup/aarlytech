@@ -342,7 +342,7 @@ const WhatsAppManagement: React.FC = () => {
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={toggleSelectAll}
-                className="flex items-center gap-1 px-3 py-1 bg-gray-100 rounded-lg text-sm hover:bg-gray-200"
+                className="flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-700 border border-blue-100 rounded-lg text-sm hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-200"
               >
                 {selectAll ? (
                   <>
