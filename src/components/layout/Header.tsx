@@ -300,53 +300,24 @@ const Header: React.FC = () => {
               </>
             ) : (
               <>
-                {isHomePage && (
-                  <>
-                    <Link
-                      to="/funding/vc"
-                      className="block text-gray-300 hover:text-white font-medium py-2 transition-colors"
-                      onClick={() => { setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                    >
-                      Funding
-                    </Link>
-                    <Link
-                      to="/investor-match"
-                      className="block text-gray-300 hover:text-white font-medium py-2 transition-colors"
-                      onClick={() => { setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                    >
-                      Investor Match
-                    </Link>
-                    <Link
-                      to="/content"
-                      className="block text-gray-300 hover:text-white font-medium py-2 transition-colors"
-                      onClick={() => { setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                    >
-                      Content
-                    </Link>
-                    <button
-                      onClick={() => scrollToSection('pricing')}
-                      className="block text-gray-300 hover:text-white font-medium py-2 transition-colors"
-                    >
-                      Pricing
-                    </button>
-                  </>
-                )}
+                <button
+                  onClick={() => scrollToSection('how-it-works')}
+                  className="block text-gray-300 hover:text-white font-medium py-2 transition-colors text-left"
+                >
+                  How It Works
+                </button>
+                <button
+                  onClick={() => scrollToSection('pricing')}
+                  className="block text-gray-300 hover:text-white font-medium py-2 transition-colors text-left"
+                >
+                  Pricing
+                </button>
                 <Button 
                   onClick={handleAuthClick}
                   className="w-full bg-blue-600 hover:bg-blue-700"
                 >
                   Get Started
                 </Button>
-                {!isHomePage && (
-                  <Link
-                    to="/"
-                    className="flex items-center space-x-2 text-gray-300 hover:text-white font-medium py-2 transition-colors"
-                    onClick={() => { setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  >
-                    <Home size={18} />
-                    <span>Back to Home</span>
-                  </Link>
-                )}
               </>
             )}
           </div>
