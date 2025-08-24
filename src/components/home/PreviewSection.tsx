@@ -1,8 +1,7 @@
 import React from 'react';
-import { Lock, TrendingUp, Users, Award, ArrowRight } from 'lucide-react';
+import { Lock, TrendingUp, Users, Award } from 'lucide-react';
 import Card from '../ui/Card';
 import Button from '../ui/Button';
-import { Link } from 'react-router-dom';
 
 const PreviewCard = ({ title, type, amount, location, sectors, locked = true }: any) => {
   return (
@@ -115,16 +114,6 @@ const PreviewSection: React.FC = () => {
             <div className="text-2xl font-bold text-white mb-1">200+</div>
             <div className="text-sm text-gray-400">Angel Investors</div>
           </div>
-        </div>
-
-        {/* CTA */}
-        <div className="text-center">
-          <Link to="/auth" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-              Unlock Full Access
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </Button>
-          </Link>
         </div>
       </div>
     </section>

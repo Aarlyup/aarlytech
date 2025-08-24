@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Search, Filter, Send, ArrowRight } from 'lucide-react';
 
 const features = [
@@ -61,13 +62,21 @@ const HowItWorks: React.FC = () => {
             Join thousands of entrepreneurs who have successfully raised funding through our platform.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <button className="bg-white text-blue-600 hover:bg-gray-100 px-6 py-2 rounded-md font-semibold transition-all flex items-center justify-center gap-2 text-sm">
+            <Link
+              to="/funding/vc"
+              className="bg-white text-blue-600 hover:bg-gray-100 px-6 py-2 rounded-md font-semibold transition-all flex items-center justify-center gap-2 text-sm"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
               Get Started Free
               <ArrowRight className="w-4 h-4" />
-            </button>
-            <button className="border border-white/30 text-white hover:bg-white/10 px-6 py-2 rounded-md font-semibold transition-all text-sm">
-              View Demo
-            </button>
+            </Link>
+            <Link
+              to="/investor-match"
+              className="border border-white/30 text-white hover:bg-white/10 px-6 py-2 rounded-md font-semibold transition-all text-sm"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
+              Find Investors
+            </Link>
           </div>
         </div>
       </div>

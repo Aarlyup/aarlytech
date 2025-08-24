@@ -66,8 +66,10 @@ const Footer: React.FC = () => {
               >
                 <Twitter size={20} className="text-gray-400 hover:text-blue-400 transition-colors" />
               </a>
-              <a 
-                href="#" 
+              <a
+                href="https://www.linkedin.com/company/aarly"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="p-2 bg-gray-800 border border-gray-700 rounded-lg hover:border-blue-500 hover:bg-blue-500/10 transition-all"
                 aria-label="LinkedIn"
               >
