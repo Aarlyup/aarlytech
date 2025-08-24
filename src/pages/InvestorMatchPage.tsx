@@ -26,7 +26,7 @@ const InvestorMatchPage: React.FC = () => {
   const [industries, setIndustries] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // Load unique industries from backend
   React.useEffect(() => {

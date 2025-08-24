@@ -128,7 +128,7 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [showExcelUpload, setShowExcelUpload] = useState(false);
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     loadItems();

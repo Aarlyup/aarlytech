@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Newspaper, ArrowRight } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 
@@ -17,16 +17,97 @@ interface NewsItem {
   };
 }
 
+// Optimized Image Component with lazy loading and caching
+const OptimizedImage: React.FC<{
+  src: string;
+  alt: string;
+  className?: string;
+  priority?: boolean;
+}> = ({ src, alt, className = '', priority = false }) => {
+  const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState(false);
+
+  const handleLoad = useCallback(() => {
+    setLoaded(true);
+  }, []);
+
+  const handleError = useCallback(() => {
+    setError(true);
+    setLoaded(true);
+  }, []);
+
+  return (
+    <div className={`relative overflow-hidden ${className}`}>
+      {!loaded && !error && (
+        <div className="absolute inset-0 bg-gray-700 animate-pulse" />
+      )}
+      {error ? (
+        <div className="absolute inset-0 bg-gray-700 flex items-center justify-center">
+          <span className="text-gray-400 text-sm">Failed to load</span>
+        </div>
+      ) : (
+        <img
+          src={src}
+          alt={alt}
+          loading={priority ? 'eager' : 'lazy'}
+          decoding="async"
+          className={`w-full h-full object-cover transition-opacity duration-300 ${
+            loaded ? 'opacity-100' : 'opacity-0'
+          }`}
+          onLoad={handleLoad}
+          onError={handleError}
+          style={{ 
+            contentVisibility: 'auto',
+            containIntrinsicSize: '100% 192px'
+          }}
+        />
+      )}
+    </div>
+  );
+};
+
 const FinNewzPage: React.FC = () => {
   const [articles, setArticles] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedArticle, setSelectedArticle] = useState<NewsItem | null>(null);
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  // Cache for news data to avoid refetching
+  const CACHE_KEY = 'aarly_news_cache';
+  const CACHE_DURATION = 60 * 60 * 1000; // 1 hour
+
+  // Preload first few images for faster loading
+  const preloadImages = useCallback((articles: NewsItem[]) => {
+    articles.slice(0, 3).forEach(article => {
+      if (article.image?.url) {
+        const img = new Image();
+        img.src = article.image.url;
+      }
+    });
+  }, []);
 
   useEffect(() => {
     const fetchNews = async () => {
+      // Check cache first
+      const cached = localStorage.getItem(CACHE_KEY);
+      if (cached) {
+        try {
+          const { data, timestamp } = JSON.parse(cached);
+          const isStale = Date.now() - timestamp > CACHE_DURATION;
+          
+          if (!isStale) {
+            setArticles(data);
+            setLoading(false);
+            preloadImages(data);
+            return;
+          }
+        } catch (e) {
+          // Invalid cache, continue to fetch
+        }
+      }
+
       setLoading(true);
       setError(null);
       try {
@@ -39,6 +120,12 @@ const FinNewzPage: React.FC = () => {
           
           if (data.success) {
             setArticles(data.data);
+            // Cache the data
+            localStorage.setItem(CACHE_KEY, JSON.stringify({
+              data: data.data,
+              timestamp: Date.now()
+            }));
+            preloadImages(data.data);
           } else {
             setError('Failed to load news articles');
           }
@@ -52,7 +139,7 @@ const FinNewzPage: React.FC = () => {
       }
     };
     fetchNews();
-  }, []);
+  }, [preloadImages]);
 
   const handleArticleClick = (article: NewsItem) => {
     setSelectedArticle(article);
@@ -106,18 +193,17 @@ const FinNewzPage: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {articles.map((article, i) => (
                 <div
-                  key={i}
+                  key={article._id}
                   onClick={() => handleArticleClick(article)}
                   className="group bg-gray-800 hover:bg-gray-750 rounded-xl p-6 border border-gray-700 hover:border-gray-600 transition-all duration-300 cursor-pointer hover:transform hover:-translate-y-1 hover:shadow-xl"
                 >
                   {article.image?.url && (
-                    <div className="overflow-hidden rounded-lg mb-4 h-48">
-                      <img
-                        src={article.image.url}
-                        alt={article.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    </div>
+                    <OptimizedImage
+                      src={article.image.url}
+                      alt={article.title}
+                      className="rounded-lg mb-4 h-48 group-hover:scale-105 transition-transform duration-500"
+                      priority={i < 3} // Prioritize first 3 images
+                    />
                   )}
                   
                   <div className="flex items-center gap-2 mb-3">
@@ -177,10 +263,11 @@ const FinNewzPage: React.FC = () => {
               </div>
               
               {selectedArticle.image?.url && (
-                <img
+                <OptimizedImage
                   src={selectedArticle.image.url}
                   alt={selectedArticle.title}
-                  className="w-full h-80 object-cover rounded-lg mb-6"
+                  className="w-full h-80 rounded-lg mb-6"
+                  priority={true}
                 />
               )}
               

@@ -11,7 +11,7 @@ const GoogleSignIn: React.FC<GoogleSignInProps> = ({
   onError, 
   text = "Continue with Google" 
 }) => {
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const handleGoogleSignIn = () => {
     // Redirect to backend Google OAuth

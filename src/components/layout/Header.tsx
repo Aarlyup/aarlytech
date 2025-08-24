@@ -39,6 +39,9 @@ const Header: React.FC = () => {
   };
 
   const handleAuthClick = () => {
+    // close mobile menu and scroll to top for a consistent transition
+    try { setMobileMenuOpen(false); } catch (e) { /* ignore */ }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     if (isAuthenticated) {
       navigate('/dashboard');
     } else {

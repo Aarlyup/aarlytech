@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
   const [whatsappLoading, setWhatsappLoading] = React.useState(false);
   const [whatsappError, setWhatsappError] = React.useState('');
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const handleWhatsAppSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
