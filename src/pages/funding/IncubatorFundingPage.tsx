@@ -56,6 +56,15 @@ const IncubatorFundingPage: React.FC = () => {
     setSelectedIncubator(null);
   };
 
+  useEffect(() => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') closeModal();
+    };
+
+    document.addEventListener('keydown', handleEscapeKey);
+    return () => document.removeEventListener('keydown', handleEscapeKey);
+  }, []);
+
   return (
     <>
       <Helmet>
@@ -151,79 +160,113 @@ const IncubatorFundingPage: React.FC = () => {
 
       {/* Incubator Detail Modal */}
       {selectedIncubator && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-fade-in" onClick={closeModal}>
+        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 backdrop-blur-sm animate-fade-in pt-20 px-4 md:pl-72 md:pr-8" onClick={closeModal}>
           <div
-            className="relative bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full animate-slide-up mt-12"
+            className="relative bg-gray-800 border border-gray-700 rounded-2xl shadow-2xl w-full animate-slide-up flex flex-col max-w-full md:max-w-4xl lg:max-w-5xl"
+            style={{ maxHeight: 'calc(100vh - 6rem)' }}
             onClick={e => e.stopPropagation()}
             tabIndex={-1}
             ref={modalRef}
           >
             {/* Sticky Header */}
-            <div className="sticky top-0 z-20 bg-gray-800 rounded-t-2xl flex items-center justify-between px-4 py-3 border-b border-gray-700 shadow-sm">
+            <div className="sticky top-0 z-20 bg-gray-800 rounded-t-2xl flex items-center justify-between px-6 py-4 border-b border-gray-700 shadow-sm">
               <button
                 onClick={closeModal}
-                className="flex items-center gap-1 text-gray-400 hover:text-blue-400 font-medium text-base px-1 py-1 rounded-lg transition-colors focus:outline-none"
+                className="flex items-center gap-2 text-gray-400 hover:text-blue-400 font-medium text-base px-2 py-1 rounded-lg transition-colors focus:outline-none"
                 aria-label="Back"
               >
                 <span className="text-lg">←</span>
+                Back
               </button>
-              <div className="flex items-center gap-2 mx-auto">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center border border-purple-500/30">
-                  <Building2 className="w-5 h-5 text-purple-400" />
+              <div className="flex items-center gap-3 mx-auto">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center border border-purple-500/30">
+                  <Building2 className="w-6 h-6 text-purple-400" />
                 </div>
                 <div className="text-center">
-                  <h1 className="text-base font-bold text-white leading-tight">{selectedIncubator.name}</h1>
-                  <div className="flex items-center gap-1 text-gray-400 text-xs justify-center">
-                    <MapPin className="w-3 h-3" />
+                  <h1 className="text-lg font-bold text-white leading-tight">{selectedIncubator.name}</h1>
+                  <div className="flex items-center gap-2 text-gray-400 text-sm justify-center">
+                    <MapPin className="w-4 h-4" />
                     <span>{selectedIncubator.location}</span>
                   </div>
                 </div>
               </div>
               <button
                 onClick={closeModal}
-                className="text-gray-400 hover:text-red-400 text-xl px-1 py-1 rounded-lg transition-colors focus:outline-none"
+                className="text-gray-400 hover:text-red-400 text-2xl px-2 py-1 rounded-lg transition-colors focus:outline-none"
                 aria-label="Close"
               >
                 ×
               </button>
             </div>
-            <div className="p-4 sm:p-6 space-y-6">
-              <div className="bg-green-500/20 rounded-xl p-4 flex flex-col items-start shadow-sm border border-green-500/30">
-                <span className="text-xs font-semibold text-green-400 mb-1 uppercase tracking-wide">Funding Support</span>
-                <span className="text-lg font-bold text-green-300">{selectedIncubator.fundingSupport}</span>
-              </div>
-              {selectedIncubator.otherBenefits && (
-                <div className="bg-blue-500/20 rounded-xl p-4 flex flex-col items-start shadow-sm border border-blue-500/30">
-                  <span className="text-xs font-semibold text-blue-400 mb-1 uppercase tracking-wide">Other Benefits</span>
-                  <span className="text-sm text-blue-300">{selectedIncubator.otherBenefits}</span>
-                </div>
-              )}
-              <div>
-                <h3 className="text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wide">Eligibility</h3>
-                <p className="text-gray-300 leading-relaxed text-sm">{selectedIncubator.eligibility}</p>
-              </div>
-              <div className="bg-purple-500/20 rounded-xl p-4 flex flex-col items-start shadow-sm border border-purple-500/30">
-                <span className="text-xs font-semibold text-purple-400 mb-1 uppercase tracking-wide">Application Process</span>
-                <span className="text-sm text-purple-300">{selectedIncubator.applicationProcess}</span>
-              </div>
-              {selectedIncubator.alumniStartups && (
-                <div>
-                  <h3 className="text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wide">Alumni Startups</h3>
-                  <p className="text-gray-300 leading-relaxed text-sm">{selectedIncubator.alumniStartups}</p>
-                </div>
-              )}
-              <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                {selectedIncubator.websiteUrl && (
-                  <a
-                    href={selectedIncubator.websiteUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-colors shadow w-full sm:w-auto"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                    Visit Website
-                  </a>
-                )}
+            <div className="overflow-y-auto p-8" style={{ maxHeight: 'calc(100vh - 12rem)' }}>
+              <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Left: metrics & tags */}
+                <aside className="lg:col-span-1 space-y-6">
+                  <div className="rounded-2xl bg-gray-800 border border-gray-700 p-5 border-l-4 border-green-500/80">
+                    <div className="text-sm font-semibold text-gray-300 uppercase">Funding Support</div>
+                    <div className="mt-2 text-2xl font-extrabold text-white">{selectedIncubator.fundingSupport}</div>
+                    <div className="mt-1 text-xs text-gray-400">Monetary & non-monetary support</div>
+                  </div>
+
+                  <div className="rounded-2xl bg-gray-800 border border-gray-700 p-5 border-l-4 border-blue-500/80">
+                    <div className="text-sm font-semibold text-gray-300 uppercase">Application Process</div>
+                    <div className="mt-2 text-2xl font-extrabold text-white">{selectedIncubator.applicationProcess}</div>
+                    <div className="mt-1 text-xs text-gray-400">How to apply and timelines</div>
+                  </div>
+
+                  <div className="rounded-2xl bg-gray-800 border border-gray-700 p-4">
+                    <div className="text-sm font-semibold text-white mb-3">Location</div>
+                    <div className="text-sm text-gray-300">{selectedIncubator.location}</div>
+                  </div>
+
+                  {selectedIncubator.otherBenefits && (
+                    <div className="rounded-2xl bg-gray-800 border border-gray-700 p-4">
+                      <div className="text-sm font-semibold text-white mb-3">Other Benefits</div>
+                      <div className="text-sm text-gray-300">{selectedIncubator.otherBenefits}</div>
+                    </div>
+                  )}
+                </aside>
+
+                {/* Right: long-form content */}
+                <main className="lg:col-span-2 space-y-6">
+                  {selectedIncubator.eligibility && (
+                    <section className="rounded-2xl bg-gray-800 border border-gray-700 p-6">
+                      <h3 className="text-xl font-semibold text-white mb-3">Eligibility</h3>
+                      <p className="text-gray-100 leading-relaxed text-base">{selectedIncubator.eligibility}</p>
+                    </section>
+                  )}
+
+                  {selectedIncubator.applicationProcess && (
+                    <section className="rounded-2xl bg-gray-800 border border-gray-700 p-6">
+                      <h3 className="text-xl font-semibold text-white mb-3">Application Process</h3>
+                      <p className="text-gray-100 leading-relaxed text-base">{selectedIncubator.applicationProcess}</p>
+                    </section>
+                  )}
+
+                  {selectedIncubator.alumniStartups && (
+                    <section className="rounded-2xl bg-gray-800 border border-gray-700 p-6">
+                      <h3 className="text-xl font-semibold text-white mb-3">Alumni Startups</h3>
+                      <p className="text-gray-100 leading-relaxed text-base">{selectedIncubator.alumniStartups}</p>
+                    </section>
+                  )}
+
+                  <div className="flex justify-end">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                      {selectedIncubator.websiteUrl && (
+                        <a href={selectedIncubator.websiteUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full hover:from-blue-700 hover:to-blue-800 inline-flex items-center gap-2">
+                          <ExternalLink className="w-4 h-4" />
+                          <span>Visit Website</span>
+                        </a>
+                      )}
+                      {selectedIncubator.contact && (
+                        <a href={`mailto:${selectedIncubator.contact}`} className="px-4 py-2 bg-gray-800 text-white rounded-full border border-gray-700 hover:bg-gray-800/90 inline-flex items-center gap-2">
+                          <Mail className="w-4 h-4" />
+                          <span>Contact</span>
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </main>
               </div>
             </div>
           </div>

@@ -56,6 +56,15 @@ const MicroVCFundingPage: React.FC = () => {
     setSelectedMicroVC(null);
   };
 
+  useEffect(() => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') closeModal();
+    };
+
+    document.addEventListener('keydown', handleEscapeKey);
+    return () => document.removeEventListener('keydown', handleEscapeKey);
+  }, []);
+
   return (
     <>
       <Helmet>
@@ -169,101 +178,103 @@ const MicroVCFundingPage: React.FC = () => {
 
       {/* Micro VC Detail Modal */}
       {selectedMicroVC && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-fade-in" onClick={closeModal}>
+        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 backdrop-blur-sm animate-fade-in pt-20 px-4 md:pl-72 md:pr-8" onClick={closeModal}>
           <div
-            className="relative bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full animate-slide-up mt-12"
+            className="relative bg-gray-800 border border-gray-700 rounded-2xl shadow-2xl w-full animate-slide-up flex flex-col max-w-full md:max-w-4xl lg:max-w-5xl"
+            style={{ maxHeight: 'calc(100vh - 6rem)' }}
             onClick={e => e.stopPropagation()}
             tabIndex={-1}
             ref={modalRef}
           >
             {/* Sticky Header */}
-            <div className="sticky top-0 z-20 bg-gray-800 rounded-t-2xl flex items-center justify-between px-4 py-3 border-b border-gray-700 shadow-sm">
+            <div className="sticky top-0 z-20 bg-gray-800 rounded-t-2xl flex items-center justify-between px-6 py-4 border-b border-gray-700 shadow-sm">
               <button
                 onClick={closeModal}
-                className="flex items-center gap-1 text-gray-400 hover:text-blue-400 font-medium text-base px-1 py-1 rounded-lg transition-colors focus:outline-none"
+                className="flex items-center gap-2 text-gray-400 hover:text-blue-400 font-medium text-base px-2 py-1 rounded-lg transition-colors focus:outline-none"
                 aria-label="Back"
               >
                 <span className="text-lg">←</span>
+                Back
               </button>
-              <div className="flex items-center gap-2 mx-auto">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500/20 to-blue-500/20 flex items-center justify-center border border-green-500/30">
-                  <Building2 className="w-5 h-5 text-green-400" />
+              <div className="flex items-center gap-3 mx-auto">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500/20 to-blue-500/20 flex items-center justify-center border border-green-500/30">
+                  <Building2 className="w-6 h-6 text-green-400" />
                 </div>
                 <div className="text-center">
-                  <h1 className="text-base font-bold text-white leading-tight">{selectedMicroVC.name}</h1>
-                  <div className="flex items-center gap-1 text-gray-400 text-xs justify-center">
-                    <MapPin className="w-3 h-3" />
+                  <h1 className="text-lg font-bold text-white leading-tight">{selectedMicroVC.name}</h1>
+                  <div className="flex items-center gap-2 text-gray-400 text-sm justify-center">
+                    <MapPin className="w-4 h-4" />
                     <span>{selectedMicroVC.location}</span>
                   </div>
                 </div>
               </div>
               <button
                 onClick={closeModal}
-                className="text-gray-400 hover:text-red-400 text-xl px-1 py-1 rounded-lg transition-colors focus:outline-none"
+                className="text-gray-400 hover:text-red-400 text-2xl px-2 py-1 rounded-lg transition-colors focus:outline-none"
                 aria-label="Close"
               >
                 ×
               </button>
             </div>
-            <div className="p-4 sm:p-6 space-y-6 overflow-y-auto max-h-[70vh] custom-scrollbar">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="bg-green-500/20 rounded-xl p-4 flex flex-col items-start shadow-sm border border-green-500/30">
-                  <span className="text-xs font-semibold text-green-400 mb-1 uppercase tracking-wide">Fund Size</span>
-                  <span className="text-2xl font-bold text-green-300">₹{Number(selectedMicroVC.fundSize).toLocaleString()}</span>
-                </div>
-                <div className="bg-blue-500/20 rounded-xl p-4 flex flex-col items-start shadow-sm border border-blue-500/30">
-                  <span className="text-xs font-semibold text-blue-400 mb-1 uppercase tracking-wide">Check Size</span>
-                  <span className="text-2xl font-bold text-blue-300">₹{Number(selectedMicroVC.checkSize).toLocaleString()}</span>
-                </div>
-              </div>
-              {selectedMicroVC.stage && selectedMicroVC.stage.length > 0 && (
-                <div>
-                  <h3 className="text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wide">Stage Focus</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedMicroVC.stage.map((stage) => (
-                      <span
-                        key={stage}
-                        className="px-3 py-1 rounded-full text-xs font-medium bg-blue-500/20 text-blue-400 border border-blue-500/30"
-                      >
-                        {stage}
-                      </span>
-                    ))}
+            <div className="overflow-y-auto p-8" style={{ maxHeight: 'calc(100vh - 12rem)' }}>
+              <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Left: metrics & tags */}
+                <aside className="lg:col-span-1 space-y-6">
+                  <div className="rounded-2xl bg-gray-800 border border-gray-700 p-5 border-l-4 border-blue-500/80">
+                    <div className="text-sm font-semibold text-gray-300 uppercase">Fund Size</div>
+                    <div className="mt-2 text-2xl font-extrabold text-white">₹{Number(selectedMicroVC.fundSize).toLocaleString()}</div>
+                    <div className="mt-1 text-xs text-gray-400">Total committed fund</div>
                   </div>
-                </div>
-              )}
-              {selectedMicroVC.sector && selectedMicroVC.sector.length > 0 && (
-                <div>
-                  <h3 className="text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wide">Sector Focus</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedMicroVC.sector.map((sector) => (
-                      <span
-                        key={sector}
-                        className="px-3 py-1 rounded-full text-xs font-medium bg-purple-500/20 text-purple-400 border border-purple-500/30"
-                      >
-                        {sector}
-                      </span>
-                    ))}
+
+                  <div className="rounded-2xl bg-gray-800 border border-gray-700 p-5 border-l-4 border-green-500/80">
+                    <div className="text-sm font-semibold text-gray-300 uppercase">Check Size</div>
+                    <div className="mt-2 text-2xl font-extrabold text-white">₹{Number(selectedMicroVC.checkSize).toLocaleString()}</div>
+                    <div className="mt-1 text-xs text-gray-400">Typical investment ticket</div>
                   </div>
-                </div>
-              )}
-              {selectedMicroVC.portfolioHighlights && (
-                <div>
-                  <h3 className="text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wide">Portfolio Highlights</h3>
-                  <p className="text-gray-300 leading-relaxed text-sm">{selectedMicroVC.portfolioHighlights}</p>
-                </div>
-              )}
-              <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                {selectedMicroVC.websiteUrl && (
-                  <a
-                    href={selectedMicroVC.websiteUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-colors shadow w-full sm:w-auto"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                    Visit Website
-                  </a>
-                )}
+
+                  {selectedMicroVC.stage && selectedMicroVC.stage.length > 0 && (
+                    <div className="rounded-2xl bg-gray-800 border border-gray-700 p-4">
+                      <div className="text-sm font-semibold text-white mb-3">Stage Focus</div>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedMicroVC.stage.map(s => (
+                          <span key={s} className="px-3 py-1 rounded-full text-sm bg-blue-600/30 text-blue-100 border border-blue-600/40">{s}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedMicroVC.sector && selectedMicroVC.sector.length > 0 && (
+                    <div className="rounded-2xl bg-gray-800 border border-gray-700 p-4">
+                      <div className="text-sm font-semibold text-white mb-3">Sector Focus</div>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedMicroVC.sector.map(sec => (
+                          <span key={sec} className="px-3 py-1 rounded-full text-sm bg-purple-600/30 text-purple-100 border border-purple-600/40">{sec}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </aside>
+
+                {/* Right: long-form content */}
+                <main className="lg:col-span-2 space-y-6">
+                  {selectedMicroVC.portfolioHighlights && (
+                    <section className="rounded-2xl bg-gray-800 border border-gray-700 p-6">
+                      <h3 className="text-xl font-semibold text-white mb-3">Portfolio Highlights</h3>
+                      <p className="text-gray-100 leading-relaxed text-base">{selectedMicroVC.portfolioHighlights}</p>
+                    </section>
+                  )}
+
+                  <div className="flex justify-end">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                      {selectedMicroVC.websiteUrl && (
+                        <a href={selectedMicroVC.websiteUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full hover:from-blue-700 hover:to-blue-800 inline-flex items-center gap-2">
+                          <ExternalLink className="w-4 h-4" />
+                          <span>Visit Website</span>
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </main>
               </div>
             </div>
           </div>

@@ -59,6 +59,15 @@ const GrantsFundingPage: React.FC = () => {
     setSelectedGrant(null);
   };
 
+  useEffect(() => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') closeModal();
+    };
+
+    document.addEventListener('keydown', handleEscapeKey);
+    return () => document.removeEventListener('keydown', handleEscapeKey);
+  }, []);
+
   const getAuthorityColor = (authority: string) => {
     const colors: Record<string, string> = {
       'DPIIT': 'bg-blue-500/20 text-blue-400 border-blue-500/30',
@@ -185,103 +194,124 @@ const GrantsFundingPage: React.FC = () => {
 
       {/* Grant Detail Modal */}
       {selectedGrant && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-fade-in" onClick={closeModal}>
+        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 backdrop-blur-sm animate-fade-in pt-20 px-4 md:pl-72 md:pr-8" onClick={closeModal}>
           <div
-            className="relative bg-gray-800 rounded-2xl shadow-2xl max-w-3xl w-full animate-slide-up mt-12"
+            className="relative bg-gray-800 border border-gray-700 rounded-2xl shadow-2xl w-full animate-slide-up flex flex-col max-w-full md:max-w-4xl lg:max-w-5xl"
+            style={{ maxHeight: 'calc(100vh - 6rem)' }}
             onClick={e => e.stopPropagation()}
             tabIndex={-1}
             ref={modalRef}
           >
             {/* Sticky Header */}
-            <div className="sticky top-0 z-20 bg-gray-800 rounded-t-2xl flex items-center justify-between px-4 py-3 border-b border-gray-700 shadow-sm">
+            <div className="sticky top-0 z-20 bg-gray-800 rounded-t-2xl flex items-center justify-between px-6 py-4 border-b border-gray-700 shadow-sm">
               <button
                 onClick={closeModal}
-                className="flex items-center gap-1 text-gray-400 hover:text-blue-400 font-medium text-base px-1 py-1 rounded-lg transition-colors focus:outline-none"
+                className="flex items-center gap-2 text-gray-400 hover:text-blue-400 font-medium text-base px-2 py-1 rounded-lg transition-colors focus:outline-none"
                 aria-label="Back"
               >
                 <span className="text-lg">←</span>
+                Back
               </button>
-              <div className="flex items-center gap-2 mx-auto">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500/20 to-blue-500/20 flex items-center justify-center border border-green-500/30">
-                  <Award className="w-5 h-5 text-green-400" />
+              <div className="flex items-center gap-3 mx-auto">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500/20 to-blue-500/20 flex items-center justify-center border border-green-500/30">
+                  <Award className="w-6 h-6 text-green-400" />
                 </div>
                 <div className="text-center">
-                  <h1 className="text-base font-bold text-white leading-tight">{selectedGrant.name}</h1>
-                  <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium border ${getAuthorityColor(selectedGrant.authority)}`}>{selectedGrant.authority}</span>
+                  <h1 className="text-lg font-bold text-white leading-tight">{selectedGrant.name}</h1>
+                  <div className="flex items-center gap-2 text-gray-400 text-sm justify-center">
+                    <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium border ${getAuthorityColor(selectedGrant.authority)}`}>{selectedGrant.authority}</span>
+                  </div>
                 </div>
               </div>
               <button
                 onClick={closeModal}
-                className="text-gray-400 hover:text-red-400 text-xl px-1 py-1 rounded-lg transition-colors focus:outline-none"
+                className="text-gray-400 hover:text-red-400 text-2xl px-2 py-1 rounded-lg transition-colors focus:outline-none"
                 aria-label="Close"
               >
                 ×
               </button>
             </div>
-            <div className="p-4 sm:p-6 space-y-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="bg-green-500/20 rounded-xl p-4 flex flex-col items-start shadow-sm border border-green-500/30">
-                  <span className="text-xs font-semibold text-green-400 mb-1 uppercase tracking-wide">Grant Size</span>
-                  <span className="text-2xl font-bold text-green-300">₹{Number(selectedGrant.grantSize).toLocaleString()}</span>
-                </div>
-                <div className="bg-blue-500/20 rounded-xl p-4 flex flex-col items-start shadow-sm border border-blue-500/30">
-                  <span className="text-xs font-semibold text-blue-400 mb-1 uppercase tracking-wide">Equity Dilution</span>
-                  <span className="text-lg text-blue-300">{selectedGrant.equityDilution}</span>
-                </div>
-              </div>
-              {selectedGrant.stage && selectedGrant.stage.length > 0 && (
-                <div>
-                  <h3 className="text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wide">Stage Focus</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedGrant.stage.map((stage) => (
-                      <span
-                        key={stage}
-                        className="px-3 py-1 rounded-full text-xs font-medium bg-blue-500/20 text-blue-400 border border-blue-500/30"
-                      >
-                        {stage}
-                      </span>
-                    ))}
+            <div className="overflow-y-auto p-8" style={{ maxHeight: 'calc(100vh - 12rem)' }}>
+              <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Left: metrics & tags */}
+                <aside className="lg:col-span-1 space-y-6">
+                  <div className="rounded-2xl bg-gray-800 border border-gray-700 p-5 border-l-4 border-green-500/80">
+                    <div className="text-sm font-semibold text-gray-300 uppercase">Grant Size</div>
+                    <div className="mt-2 text-2xl font-extrabold text-white">₹{Number(selectedGrant.grantSize).toLocaleString()}</div>
+                    <div className="mt-1 text-xs text-gray-400">Total grant amount</div>
                   </div>
-                </div>
-              )}
-              <div>
-                <h3 className="text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wide">Sector</h3>
-                <span className="px-3 py-1 rounded-full text-xs font-medium bg-purple-500/20 text-purple-400 border border-purple-500/30">{selectedGrant.sector}</span>
-              </div>
-              <div>
-                <h3 className="text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wide">Eligibility</h3>
-                <p className="text-gray-300 leading-relaxed text-sm">{selectedGrant.eligibility}</p>
-              </div>
-              <div className="bg-gray-700 rounded-xl p-4 flex flex-col items-start shadow-sm border border-gray-600">
-                <span className="text-xs font-semibold text-gray-400 mb-1 uppercase tracking-wide">How to Apply</span>
-                <span className="text-sm text-gray-300">{selectedGrant.howToApply}</span>
-              </div>
-              {selectedGrant.documentsRequired && selectedGrant.documentsRequired.length > 0 && (
-                <div>
-                  <h3 className="text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wide">Documents Required</h3>
-                  <ul className="list-disc list-inside text-sm text-gray-300">
-                    {selectedGrant.documentsRequired.map((doc, idx) => (
-                      <li key={idx}>{doc}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              {selectedGrant.specialNotes && (
-                <div>
-                  <h3 className="text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wide">Special Notes</h3>
-                  <p className="text-gray-300 leading-relaxed text-sm">{selectedGrant.specialNotes}</p>
-                </div>
-              )}
-              <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                {selectedGrant.contact && (
-                  <a
-                    href={`mailto:${selectedGrant.contact}`}
-                    className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-colors shadow w-full sm:w-auto"
-                  >
-                    <Mail className="w-4 h-4" />
-                    Contact
-                  </a>
-                )}
+
+                  <div className="rounded-2xl bg-gray-800 border border-gray-700 p-5 border-l-4 border-blue-500/80">
+                    <div className="text-sm font-semibold text-gray-300 uppercase">Equity Dilution</div>
+                    <div className="mt-2 text-2xl font-extrabold text-white">{selectedGrant.equityDilution}</div>
+                    <div className="mt-1 text-xs text-gray-400">If applicable</div>
+                  </div>
+
+                  <div className="rounded-2xl bg-gray-800 border border-gray-700 p-4">
+                    <div className="text-sm font-semibold text-white mb-3">Timelines</div>
+                    <div className="text-sm text-gray-300">{selectedGrant.timelines}</div>
+                  </div>
+
+                  {selectedGrant.stage && selectedGrant.stage.length > 0 && (
+                    <div className="rounded-2xl bg-gray-800 border border-gray-700 p-4">
+                      <div className="text-sm font-semibold text-white mb-3">Stage Focus</div>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedGrant.stage.map(s => (
+                          <span key={s} className="px-3 py-1 rounded-full text-sm bg-blue-600/30 text-blue-100 border border-blue-600/40">{s}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </aside>
+
+                {/* Right: long-form content */}
+                <main className="lg:col-span-2 space-y-6">
+                  {selectedGrant.eligibility && (
+                    <section className="rounded-2xl bg-gray-800 border border-gray-700 p-6">
+                      <h3 className="text-xl font-semibold text-white mb-3">Eligibility</h3>
+                      <p className="text-gray-100 leading-relaxed text-base">{selectedGrant.eligibility}</p>
+                    </section>
+                  )}
+
+                  {selectedGrant.howToApply && (
+                    <section className="rounded-2xl bg-gray-800 border border-gray-700 p-6">
+                      <h3 className="text-xl font-semibold text-white mb-3">How to Apply</h3>
+                      <p className="text-gray-100 leading-relaxed text-base">{selectedGrant.howToApply}</p>
+                    </section>
+                  )}
+
+                  {selectedGrant.documentsRequired && selectedGrant.documentsRequired.length > 0 && (
+                    <section className="rounded-2xl bg-gray-800 border border-gray-700 p-6">
+                      <h3 className="text-xl font-semibold text-white mb-3">Documents Required</h3>
+                      <ul className="list-disc list-inside text-sm text-gray-300">
+                        {selectedGrant.documentsRequired.map((doc, idx) => (
+                          <li key={idx}>{doc}</li>
+                        ))}
+                      </ul>
+                    </section>
+                  )}
+
+                  {selectedGrant.specialNotes && (
+                    <section className="rounded-2xl bg-gray-800 border border-gray-700 p-6">
+                      <h3 className="text-xl font-semibold text-white mb-3">Special Notes</h3>
+                      <p className="text-gray-100 leading-relaxed text-base">{selectedGrant.specialNotes}</p>
+                    </section>
+                  )}
+
+                  <div className="flex justify-end">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                      {selectedGrant.contact && (
+                        <a
+                          href={`mailto:${selectedGrant.contact}`}
+                          className="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-500 inline-flex items-center gap-2"
+                        >
+                          <Mail className="w-4 h-4" />
+                          <span>Contact</span>
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </main>
               </div>
             </div>
           </div>
