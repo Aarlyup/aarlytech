@@ -80,14 +80,14 @@ const Header: React.FC = () => {
                     Investor Match
                     <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full" />
                   </Link>
-                  <Link
+                  {/* <Link
                     to="/content"
                     className="text-gray-300 hover:text-white font-medium transition-colors relative group"
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   >
                     Content
                     <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full" />
-                  </Link>
+                  </Link> */}
                   <Link
                     to="/dashboard"
                     className="text-gray-300 hover:text-white font-medium transition-colors relative group"
@@ -145,7 +145,7 @@ const Header: React.FC = () => {
                       <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400" />
                     )}
                   </Link>
-                  <Link
+                  {/* <Link
                     to="/content"
                     className={`font-medium transition-colors relative group ${
                       location.pathname.startsWith('/content')
@@ -157,7 +157,7 @@ const Header: React.FC = () => {
                     {location.pathname.startsWith('/content') && (
                       <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400" />
                     )}
-                  </Link>
+                  </Link> */}
                   <Link
                     to="/dashboard"
                     className={`font-medium transition-colors relative group ${
@@ -286,13 +286,13 @@ const Header: React.FC = () => {
                 >
                   Investor Match
                 </Link>
-                <Link
+                {/* <Link
                   to="/content"
                   className="block text-gray-300 hover:text-white font-medium py-2 transition-colors"
                   onClick={() => { setMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                 >
                   Content
-                </Link>
+                </Link> */}
                 <button
                   onClick={handleLogout}
                   className="flex items-center gap-2 text-red-400 hover:text-red-300 font-medium py-2 transition-colors"

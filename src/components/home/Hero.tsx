@@ -95,7 +95,7 @@ const Hero: React.FC = () => {
             </div>
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2">
               <Award className="w-4 h-4 text-purple-400" />
-              <span className="text-sm text-gray-300">Government Grants</span>
+              <span className="text-sm text-gray-300">Grants & Schemes</span>
             </div>
           </div>
         </div>

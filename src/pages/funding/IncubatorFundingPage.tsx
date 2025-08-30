@@ -208,12 +208,6 @@ const IncubatorFundingPage: React.FC = () => {
                     <div className="mt-1 text-xs text-gray-400">Monetary & non-monetary support</div>
                   </div>
 
-                  <div className="rounded-2xl bg-gray-800 border border-gray-700 p-5 border-l-4 border-blue-500/80">
-                    <div className="text-sm font-semibold text-gray-300 uppercase">Application Process</div>
-                    <div className="mt-2 text-2xl font-extrabold text-white">{selectedIncubator.applicationProcess}</div>
-                    <div className="mt-1 text-xs text-gray-400">How to apply and timelines</div>
-                  </div>
-
                   <div className="rounded-2xl bg-gray-800 border border-gray-700 p-4">
                     <div className="text-sm font-semibold text-white mb-3">Location</div>
                     <div className="text-sm text-gray-300">{selectedIncubator.location}</div>

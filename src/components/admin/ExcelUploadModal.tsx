@@ -15,7 +15,7 @@ const categoryTemplates: Record<string, any> = {
     linkedinProfileUrl: 'LinkedIn URL',
     city: 'City',
     country: 'Country',
-    investCategory: 'Fintech&SaaS&AI/ML',
+    investCategory: 'Fintech&AI / ML',
     ticketSize: '500000',
     stage: 'Idea&MVP&Pre-revenue',
     preferFounderProfile: 'Tech founders with domain expertise',
@@ -28,7 +28,7 @@ const categoryTemplates: Record<string, any> = {
     headOffice: 'Mumbai, India',
     fundSize: '10000000',
     stageFocus: 'Series A&Series B',
-    sectorFocus: 'SaaS&Fintech&AI/ML',
+    sectorFocus: 'Fintech&AI / ML',
     avgTicketSize: '2000000',
     applicationProcess: 'Warm intro',
     contact: 'partners@vcfund.com',
@@ -42,7 +42,7 @@ const categoryTemplates: Record<string, any> = {
     fundSize: '5000000',
     checkSize: '250000',
     stage: 'Pre-seed&Seed',
-    sector: 'Deeptech&B2B SaaS',
+    sector: 'Fintech&AI / ML',
     contact: 'hello@microvc.com',
     portfolioHighlights: 'Early stage specialist'
   },
@@ -104,7 +104,7 @@ const categoryLabels: Record<string, string> = {
   'micro-vcs': 'Micro VCs',
   'incubators': 'Incubators',
   'accelerators': 'Accelerators',
-  'govt-grants': 'Government Grants',
+  'govt-grants': 'Grants',
   'investor-matches': 'Investor Matches' // Added missing category
 };
 
@@ -117,7 +117,6 @@ const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const [preview, setPreview] = useState<any[]>([]);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -158,9 +157,8 @@ const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
         const worksheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
         
-        // Skip first row (headers) and show preview of next 5 rows
-        const previewData = jsonData.slice(1, 6);
-        setPreview(previewData as any[]);
+  // Skip first row (headers); we don't show a preview here
+  const _rows = jsonData.slice(1, 6);
       } catch (err) {
         setError('Error reading Excel file');
         console.error(err);
@@ -474,7 +472,8 @@ const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
             <ul className="text-blue-800 text-sm space-y-1">
               <li>• First row will be ignored (use for column headers)</li>
               <li>• Data will be read from second row onwards</li>
-              <li>• Use comma (,) to separate multiple values (e.g., "Fintech,SaaS,AI/ML")</li>
+              <li>• Use "&" (without spaces) to separate multiple values (e.g., "Fintech&AI / ML").</li>
+              <li>• Ensure values exactly match the form categories (e.g., "Fintech" is valid but "fintech" will throw an error).</li>
               <li>• Empty rows will be skipped automatically</li>
               <li>• Download template below to see the exact format required</li>
             </ul>
@@ -529,28 +528,6 @@ const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
               </p>
             )}
           </div>
-
-          {/* Preview */}
-          {preview.length > 0 && (
-            <div className="mb-6">
-              <h3 className="font-semibold text-gray-900 mb-3">Preview (First 5 rows):</h3>
-              <div className="overflow-x-auto">
-                <table className="min-w-full border border-gray-200 rounded-lg">
-                  <tbody>
-                    {preview.map((row, index) => (
-                      <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                        {row.map((cell: any, cellIndex: number) => (
-                          <td key={cellIndex} className="px-3 py-2 border-r border-gray-200 text-sm">
-                            {cell || '-'}
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
 
           {/* Messages */}
           {error && (

@@ -90,11 +90,11 @@ const Footer: React.FC = () => {
             <h3 className="text-white font-semibold mb-4">Platform</h3>
             <ul className="space-y-3">
               <li><Link to="/funding/vc" className="text-gray-400 hover:text-white transition-colors" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Venture Capital</Link></li>
-              <li><Link to="/funding/microvc" className="text-gray-400 hover:text-white transition-colors" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Micro VCs</Link></li>
+              {/* <li><Link to="/funding/microvc" className="text-gray-400 hover:text-white transition-colors" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Micro VCs</Link></li> */}
               <li><Link to="/funding/angel" className="text-gray-400 hover:text-white transition-colors" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Angel Investors</Link></li>
               <li><Link to="/funding/accelerator" className="text-gray-400 hover:text-white transition-colors" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Accelerators</Link></li>
               <li><Link to="/funding/incubator" className="text-gray-400 hover:text-white transition-colors" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Incubators</Link></li>
-              <li><Link to="/funding/grants" className="text-gray-400 hover:text-white transition-colors" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Government Grants</Link></li>
+              <li><Link to="/funding/grants" className="text-gray-400 hover:text-white transition-colors" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Grants</Link></li>
             </ul>
           </div>
 

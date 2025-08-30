@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Building2, MapPin, Users, ExternalLink, Mail, Star } from 'lucide-react';
 import { useFunding } from '../../contexts/FundingContext';
+import { formatCurrencyShort } from '../../lib/utils';
 import LoadingGrid from '../../components/ui/LoadingGrid';
 import EmptyState from '../../components/ui/EmptyState';
 import { FundingMobileNav } from '../../components/layout/FundingSidebar';
@@ -148,11 +149,11 @@ const VCFundingPage: React.FC = () => {
 
               <div className="mt-4 grid grid-cols-2 gap-4">
                 <div className="flex items-center gap-2 text-sm">
-                  <span className="font-medium text-gray-300">₹{(vc.fundSize).toFixed(0)} Fund</span>
+                  <span className="font-medium text-gray-300">₹{formatCurrencyShort(Number(vc.fundSize))} Fund</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <Users className="w-4 h-4 text-purple-400" />
-                  <span className="font-medium text-gray-300">₹{(vc.avgTicketSize).toFixed(0)} Avg</span>
+                  <span className="font-medium text-gray-300">₹{formatCurrencyShort(Number(vc.avgTicketSize))} Avg</span>
                 </div>
               </div>
 
@@ -239,13 +240,13 @@ const VCFundingPage: React.FC = () => {
                 <aside className="lg:col-span-1 space-y-6">
                   <div className="rounded-2xl bg-gray-800 border border-gray-700 p-5 border-l-4 border-blue-500/80">
                     <div className="text-sm font-semibold text-gray-300 uppercase">Fund Size</div>
-                    <div className="mt-2 text-2xl font-extrabold text-white">₹{Number(selectedVC.fundSize).toLocaleString()}</div>
+                      <div className="mt-2 text-2xl font-extrabold text-white">₹{formatCurrencyShort(Number(selectedVC.fundSize))}</div>
                     <div className="mt-1 text-xs text-gray-400">Total committed fund</div>
                   </div>
 
                   <div className="rounded-2xl bg-gray-800 border border-gray-700 p-5 border-l-4 border-green-500/80">
                     <div className="text-sm font-semibold text-gray-300 uppercase">Avg Ticket</div>
-                    <div className="mt-2 text-2xl font-extrabold text-white">₹{Number(selectedVC.avgTicketSize).toLocaleString()}</div>
+                    <div className="mt-2 text-2xl font-extrabold text-white">₹{formatCurrencyShort(Number(selectedVC.avgTicketSize))}</div>
                     <div className="mt-1 text-xs text-gray-400">Typical check size</div>
                   </div>
 

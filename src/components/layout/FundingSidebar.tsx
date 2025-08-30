@@ -4,11 +4,11 @@ import { Briefcase, DollarSign, Building2, Rocket, User, Award } from 'lucide-re
 
 export const fundingNav = [
   { label: 'Venture Capital', path: '/funding/vc', icon: Building2 },
-  { label: 'Micro VCs', path: '/funding/microvc', icon: DollarSign },
+  // { label: 'Micro VCs', path: '/funding/microvc', icon: DollarSign },
   { label: 'Incubators', path: '/funding/incubator', icon: Briefcase },
   { label: 'Accelerators', path: '/funding/accelerator', icon: Rocket },
   { label: 'Angel Investors', path: '/funding/angel', icon: User },
-  { label: 'Government Grants', path: '/funding/grants', icon: Award },
+  { label: 'Grants', path: '/funding/grants', icon: Award },
 ];
 
 export const FundingMobileNav: React.FC = () => (

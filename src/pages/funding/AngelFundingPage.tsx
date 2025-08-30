@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { User, MapPin, DollarSign, Target, ExternalLink, Mail, Linkedin, Star } from 'lucide-react';
 import { useFunding } from '../../contexts/FundingContext';
+import { formatCurrencyShort } from '../../lib/utils';
 import LoadingGrid from '../../components/ui/LoadingGrid';
 import EmptyState from '../../components/ui/EmptyState';
 import { FundingMobileNav } from '../../components/layout/FundingSidebar';
@@ -136,7 +137,7 @@ const AngelFundingPage: React.FC = () => {
 
               <div className="mt-4 grid grid-cols-1 gap-2">
                 <div className="flex items-center gap-2 text-sm">
-                  <span className="font-medium text-gray-300">₹{(angel.ticketSize).toFixed(0)} Ticket</span>
+                  <span className="font-medium text-gray-300">₹{formatCurrencyShort(Number(angel.ticketSize))} Ticket</span>
                 </div>
                 {angel.investCategory && angel.investCategory.length > 0 && (
                   <div className="flex items-center gap-2 text-sm">
@@ -228,7 +229,7 @@ const AngelFundingPage: React.FC = () => {
                 <aside className="lg:col-span-1 space-y-6">
                   <div className="rounded-2xl bg-gray-800 border border-gray-700 p-5 border-l-4 border-green-500/80">
                     <div className="text-sm font-semibold text-gray-300 uppercase">Ticket Size</div>
-                    <div className="mt-2 text-2xl font-extrabold text-white">₹{Number(selectedAngel.ticketSize).toLocaleString()}</div>
+                      <div className="mt-2 text-2xl font-extrabold text-white">₹{formatCurrencyShort(Number(selectedAngel.ticketSize))}</div>
                     <div className="mt-1 text-xs text-gray-400">Typical check size</div>
                   </div>
 

@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const Pricing: React.FC = () => {
   const features = [
     'Access to 300+ verified investors',
-    'Government grants database',
+    'Grants & Schemes database',
     'AI-powered investor matching',
     'Direct contact information',
     'Advanced filtering options',

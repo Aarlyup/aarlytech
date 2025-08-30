@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Award, Building, Calendar, Mail, Star } from 'lucide-react';
 import { useFunding } from '../../contexts/FundingContext';
+import { formatCurrencyShort } from '../../lib/utils';
 import LoadingGrid from '../../components/ui/LoadingGrid';
 import EmptyState from '../../components/ui/EmptyState';
 import { FundingMobileNav } from '../../components/layout/FundingSidebar';
@@ -84,15 +85,15 @@ const GrantsFundingPage: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Government Grants & Schemes | Aarly</title>
-        <meta name="description" content="Discover government grants and schemes for startups. Find funding opportunities from DPIIT, DST, MSME and other authorities." />
+        <title>Grants | Aarly</title>
+        <meta name="description" content="Discover grants and schemes for startups. Find funding opportunities from DPIIT, DST, MSME and other authorities." />
       </Helmet>
       
   <FundingMobileNav />
   <div className="mb-8 px-2 md:px-6 pt-4 md:pt-8 mt-6 md:mt-10">
-        <h1 className="text-2xl font-bold mb-2 text-white">Government Grants & Schemes</h1>
+        <h1 className="text-2xl font-bold mb-2 text-white">Grants</h1>
         <p className="text-gray-400">
-          Explore government funding opportunities and grants for startups across different stages and sectors.
+          Explore funding opportunities and grants for startups across different stages and sectors.
         </p>
       </div>
 
@@ -187,7 +188,7 @@ const GrantsFundingPage: React.FC = () => {
       {filteredGrants.length === 0 && !loading && (
         <EmptyState
           title={search ? "No grants found" : "No grants available"}
-          message={search ? "Try adjusting your search criteria" : "Government grant data will appear here once loaded"}
+          message={search ? "Try adjusting your search criteria" : "Grant data will appear here once loaded"}
           error={error}
         />
       )}
@@ -237,7 +238,7 @@ const GrantsFundingPage: React.FC = () => {
                 <aside className="lg:col-span-1 space-y-6">
                   <div className="rounded-2xl bg-gray-800 border border-gray-700 p-5 border-l-4 border-green-500/80">
                     <div className="text-sm font-semibold text-gray-300 uppercase">Grant Size</div>
-                    <div className="mt-2 text-2xl font-extrabold text-white">₹{Number(selectedGrant.grantSize).toLocaleString()}</div>
+                    <div className="mt-2 text-2xl font-extrabold text-white">₹{formatCurrencyShort(Number(selectedGrant.grantSize))}</div>
                     <div className="mt-1 text-xs text-gray-400">Total grant amount</div>
                   </div>
 

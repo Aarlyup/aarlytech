@@ -18,7 +18,7 @@ const categoryLabels: Record<string, string> = {
   'micro-vcs': 'Micro VCs',
   'incubators': 'Incubators',
   'accelerators': 'Accelerators',
-  'govt-grants': 'Government Grants'
+  'govt-grants': 'Grants'
 };
 
 const categoryFields: Record<string, { name: string; label: string; type?: string; required?: boolean; options?: string[]; multi?: boolean }[]> = {
@@ -27,7 +27,7 @@ const categoryFields: Record<string, { name: string; label: string; type?: strin
     { name: 'linkedinProfileUrl', label: 'LinkedIn Profile URL' },
     { name: 'city', label: 'City', required: true },
     { name: 'country', label: 'Country', required: true },
-    { name: 'investCategory', label: 'Investment Categories', required: true, options: ['Fintech', 'Consumer', 'SaaS', 'Healthtech', 'Edtech', 'E-commerce', 'AI/ML', 'Deep Tech', 'Clean Tech', 'Other'], multi: true },
+    { name: 'investCategory', label: 'Investment Categories', required: true, options: ['Fintech', 'Consumer & D2C', 'SaaS & Enterprise Tech', 'Healthtech', 'Edtech', 'AI / ML', 'Deeptech', 'Space Tech', 'Cleantech & Climate', 'Foodtech & Agritech', 'Proptech & Infrastructure', 'Mobility & Logistics', 'Media, Gaming & Content'], multi: true },
     { name: 'ticketSize', label: 'Ticket Size (₹)', type: 'number', required: true },
     { name: 'stage', label: 'Stages', required: true, options: ['Idea', 'MVP', 'Pre-revenue', 'Revenue', 'Growth'], multi: true },
     { name: 'preferFounderProfile', label: 'Preferred Founder Profile' },
@@ -40,7 +40,7 @@ const categoryFields: Record<string, { name: string; label: string; type?: strin
     { name: 'headOffice', label: 'Head Office', required: true },
     { name: 'fundSize', label: 'Fund Size (₹)', type: 'number', required: true },
     { name: 'stageFocus', label: 'Stage Focus', required: true, options: ['Pre-seed', 'Seed', 'Series A', 'Series B', 'Series C', 'Growth'], multi: true },
-    { name: 'sectorFocus', label: 'Sector Focus', required: true, options: ['SaaS', 'Fintech', 'D2C', 'Healthtech', 'Edtech', 'E-commerce', 'AI/ML', 'Deep Tech', 'Clean Tech', 'Other'], multi: true },
+    { name: 'sectorFocus', label: 'Sector Focus', required: true, options: ['Fintech', 'Consumer & D2C', 'SaaS & Enterprise Tech', 'Healthtech', 'Edtech', 'AI / ML', 'Deeptech', 'Space Tech', 'Cleantech & Climate', 'Foodtech & Agritech', 'Proptech & Infrastructure', 'Mobility & Logistics', 'Media, Gaming & Content'], multi: true },
     { name: 'avgTicketSize', label: 'Average Ticket Size (₹)', type: 'number', required: true },
     { name: 'applicationProcess', label: 'Application Process', options: ['Warm intro', 'Direct pitch', 'Online application', 'Referral only'] },
     { name: 'contact', label: 'Contact', required: true },
@@ -54,7 +54,7 @@ const categoryFields: Record<string, { name: string; label: string; type?: strin
     { name: 'fundSize', label: 'Fund Size (₹)', type: 'number', required: true },
     { name: 'checkSize', label: 'Check Size (₹)', type: 'number', required: true },
     { name: 'stage', label: 'Stages', required: true, options: ['Pre-seed', 'Seed', 'Series A'], multi: true },
-    { name: 'sector', label: 'Sectors', required: true, options: ['Deeptech', 'B2B SaaS', 'Fintech', 'Healthtech', 'Edtech', 'AI/ML', 'Clean Tech', 'Other'], multi: true },
+    { name: 'sector', label: 'Sectors', required: true, options: ['Fintech', 'Consumer & D2C', 'SaaS & Enterprise Tech', 'Healthtech', 'Edtech', 'AI / ML', 'Deeptech', 'Space Tech', 'Cleantech & Climate', 'Foodtech & Agritech', 'Proptech & Infrastructure', 'Mobility & Logistics', 'Media, Gaming & Content'], multi: true },
     { name: 'contact', label: 'Contact', required: true },
     { name: 'portfolioHighlights', label: 'Portfolio Highlights' }
   ],
@@ -78,7 +78,7 @@ const categoryFields: Record<string, { name: string; label: string; type?: strin
     { name: 'fundingOffered', label: 'Funding Offered', required: true },
     { name: 'programDuration', label: 'Program Duration', required: true },
     { name: 'servicesProvided', label: 'Services Provided' },
-    { name: 'sectors', label: 'Sectors', required: true, options: ['Agnostic', 'Fintech', 'Healthtech', 'Edtech', 'E-commerce', 'SaaS', 'AI/ML', 'Deep Tech', 'Clean Tech', 'Other'], multi: true },
+    { name: 'sectors', label: 'Sectors', required: true, options: ['Fintech', 'Consumer & D2C', 'SaaS & Enterprise Tech', 'Healthtech', 'Edtech', 'AI / ML', 'Deeptech', 'Space Tech', 'Cleantech & Climate', 'Foodtech & Agritech', 'Proptech & Infrastructure', 'Mobility & Logistics', 'Media, Gaming & Content'], multi: true },
     { name: 'applicationLink', label: 'Application Link' },
     { name: 'pastCohorts', label: 'Past Cohorts' }
   ],
@@ -86,7 +86,7 @@ const categoryFields: Record<string, { name: string; label: string; type?: strin
     { name: 'name', label: 'Name', required: true },
     { name: 'authority', label: 'Authority', required: true, options: ['DPIIT', 'DST', 'MSME', 'BIRAC', 'SERB', 'CSIR', 'Other'] },
     { name: 'stage', label: 'Stages', required: true, options: ['Idea', 'MVP', 'Pre-revenue', 'Revenue', 'Growth'], multi: true },
-    { name: 'sector', label: 'Sector', options: ['Open', 'Fintech', 'Healthtech', 'Edtech', 'E-commerce', 'SaaS', 'AI/ML', 'Deep Tech', 'Clean Tech', 'Manufacturing', 'Agriculture', 'Other'] },
+    { name: 'sector', label: 'Sector', options: ['Fintech', 'Consumer & D2C', 'SaaS & Enterprise Tech', 'Healthtech', 'Edtech', 'AI / ML', 'Deeptech', 'Space Tech', 'Cleantech & Climate', 'Foodtech & Agritech', 'Proptech & Infrastructure', 'Mobility & Logistics', 'Media, Gaming & Content'] },
     { name: 'grantSize', label: 'Grant Size (₹)', type: 'number', required: true },
     { name: 'equityDilution', label: 'Equity Dilution' },
     { name: 'eligibility', label: 'Eligibility', required: true },

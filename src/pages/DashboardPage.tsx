@@ -4,6 +4,7 @@ import { useFunding } from '../contexts/FundingContext';
 import FundingCard from '../components/ui/FundingCard';
 import Button from '../components/ui/Button';
 import { ArrowRight, Sparkles, TrendingUp, Users, Award, DollarSign } from 'lucide-react';
+import { formatCurrencyShort } from '../lib/utils';
 import { Link } from 'react-router-dom';
 
 const DashboardPage: React.FC = () => {
@@ -16,11 +17,11 @@ const DashboardPage: React.FC = () => {
   }, [getRandomFundingItems]);
 
   const formatAmount = (item: any) => {
-    if (item.fundSize) return `₹${(item.fundSize).toFixed(0)} Fund`;
-    if (item.ticketSize) return `₹${(item.ticketSize).toFixed(0)} Ticket`;
-    if (item.checkSize) return `₹${(item.checkSize).toFixed(0)} Check`;
-    if (item.avgTicketSize) return `₹${(item.avgTicketSize).toFixed(0)} Avg`;
-    if (item.grantSize) return `₹${(item.grantSize).toFixed(0)} Grant`;
+    if (item.fundSize) return `₹${formatCurrencyShort(item.fundSize)} Fund`;
+    if (item.ticketSize) return `₹${formatCurrencyShort(item.ticketSize)} Ticket`;
+    if (item.checkSize) return `₹${formatCurrencyShort(item.checkSize)} Check`;
+    if (item.avgTicketSize) return `₹${formatCurrencyShort(item.avgTicketSize)} Avg`;
+    if (item.grantSize) return `₹${formatCurrencyShort(item.grantSize)} Grant`;
     if (item.fundingOffered) return item.fundingOffered;
     if (item.fundingSupport) return item.fundingSupport;
     return 'Contact for details';

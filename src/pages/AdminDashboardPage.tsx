@@ -12,10 +12,10 @@ type TabType = 'investor-match' | 'news' | 'contacts' | 'funding' | 'newsletter'
 const fundingCategories = [
   { value: 'angel-investors', label: 'Angel Investors' },
   { value: 'venture-capital', label: 'Venture Capital' },
-  { value: 'micro-vcs', label: 'Micro VCs' },
+  // { value: 'micro-vcs', label: 'Micro VCs' },
   { value: 'incubators', label: 'Incubators' },
   { value: 'accelerators', label: 'Accelerators' },
-  { value: 'govt-grants', label: 'Government Grants' }
+  { value: 'govt-grants', label: 'Grants' }
 ];
 
 const AdminDashboardPage: React.FC = () => {

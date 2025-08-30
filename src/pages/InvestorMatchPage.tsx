@@ -45,12 +45,12 @@ const InvestorMatchPage: React.FC = () => {
       } else {
         console.error('Error loading industries:', response.statusText);
         // Fallback industries
-        setIndustries(['Fintech', 'Healthtech', 'Edtech', 'E-commerce', 'SaaS', 'AI/ML']);
+        setIndustries(['Fintech', 'Consumer & D2C', 'SaaS & Enterprise Tech', 'Healthtech', 'Edtech', 'AI / ML', 'Deeptech', 'Space Tech', 'Cleantech & Climate', 'Foodtech & Agritech', 'Proptech & Infrastructure', 'Mobility & Logistics', 'Media, Gaming & Content']);
       }
     } catch (error) {
       console.error('Error loading industries:', error);
       // Fallback industries
-      setIndustries(['Fintech', 'Healthtech', 'Edtech', 'E-commerce', 'SaaS', 'AI/ML']);
+      setIndustries(['Fintech', 'Consumer & D2C', 'SaaS & Enterprise Tech', 'Healthtech', 'Edtech', 'AI / ML', 'Deeptech', 'Space Tech', 'Cleantech & Climate', 'Foodtech & Agritech', 'Proptech & Infrastructure', 'Mobility & Logistics', 'Media, Gaming & Content']);
     }
   };
 
