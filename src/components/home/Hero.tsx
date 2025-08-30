@@ -34,21 +34,20 @@ const Hero: React.FC = () => {
         }} />
       </div>
 
-      <div className="relative z-30 container mx-auto px-6 pt-10 pb-20">
+      <div className="relative z-30 container mx-auto px-6 pt-6 pb-20">
         <div className="max-w-4xl mx-auto text-center">
           {/* Main Heading */}
           <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight">
-            <span className="text-white">Find the Right</span>
+            <span className="text-white inline-block transform -translate-y-1 md:-translate-y-2 whitespace-nowrap">Seize the Right Opportunity</span>
             <br />
             <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
-              Funding Partner
+              at the Right Moment
             </span>
           </h1>
 
           {/* Subheading */}
           <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Connect with 300+ verified investors, VCs, and funding sources. 
-            From pre-seed to Series C, find your perfect match.
+            For first-time founders, timing is everything — Aarly is your unfair advantage to seize funding, mentors, grants, and discover events & competitions right on time.
           </p>
 
           {/* Stats */}
@@ -81,22 +80,6 @@ const Hero: React.FC = () => {
             >
               Learn More
             </button>
-          </div>
-
-          {/* Feature Pills (hidden on mobile) */}
-          <div className="hidden sm:flex flex-wrap justify-center gap-4 mt-12">
-            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2">
-              <TrendingUp className="w-4 h-4 text-green-400" />
-              <span className="text-sm text-gray-300">AI-Powered Matching</span>
-            </div>
-            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2">
-              <Users className="w-4 h-4 text-blue-400" />
-              <span className="text-sm text-gray-300">Verified Investors</span>
-            </div>
-            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2">
-              <Award className="w-4 h-4 text-purple-400" />
-              <span className="text-sm text-gray-300">Grants & Schemes</span>
-            </div>
           </div>
         </div>
       </div>

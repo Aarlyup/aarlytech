@@ -1,22 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Filter, Send, ArrowRight } from 'lucide-react';
+import { Compass, Filter, Link as LinkIcon, ArrowRight } from 'lucide-react';
 
 const features = [
   {
-    icon: <Search size={24} className="text-blue-400" />,
+    icon: <Compass size={24} className="text-blue-400" />,
     title: 'Discover Opportunities',
-    description: 'Search through our curated database of 300+ investors, VCs, and funding sources tailored to your startup stage and sector.',
+    description: 'Explore a curated hub of funding, grants, accelerators, mentors, events, and competitions tailored to your startup stage and sector.',
   },
   {
     icon: <Filter size={24} className="text-purple-400" />,
     title: 'Smart Filtering',
-    description: 'Filter by investment size, stage, geography, and sector focus to find the most relevant funding opportunities.',
+  description: 'Get opportunities filtered by stage, geography, sector, and relevance — ensuring you see what truly matters, when it matters.',
   },
   {
-    icon: <Send size={24} className="text-green-400" />,
+    icon: <LinkIcon size={24} className="text-green-400" />,
     title: 'Direct Connect',
-    description: 'Get verified contact information and application links to reach out directly to investors and funding sources.',
+    description: 'Access verified contacts, applications, and entry points to investors, programs, and events — no gatekeepers, no wasted time.',
   },
 ];
 

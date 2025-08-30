@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Award, Building, Calendar, Mail, Star } from 'lucide-react';
+import { Award, Building, Calendar, Mail, ExternalLink, Star } from 'lucide-react';
 import { useFunding } from '../../contexts/FundingContext';
 import { formatCurrencyShort } from '../../lib/utils';
 import LoadingGrid from '../../components/ui/LoadingGrid';
@@ -306,8 +306,8 @@ const GrantsFundingPage: React.FC = () => {
                           href={`mailto:${selectedGrant.contact}`}
                           className="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-500 inline-flex items-center gap-2"
                         >
-                          <Mail className="w-4 h-4" />
-                          <span>Contact</span>
+                          <ExternalLink className="w-4 h-4" />
+                          <span>Apply Now</span>
                         </a>
                       )}
                     </div>
