@@ -58,7 +58,7 @@ const sendVerificationEmail = async (email, otp, name) => {
           <p>Enter this code on the verification page to activate your account and gain access to:</p>
           <ul>
             <li>300+ Investors and VCs database</li>
-            <li>Government grants and schemes</li>
+            <li>Grants and schemes</li>
             <li>Accelerators and incubators</li>
             <li>Investor matching tools</li>
             <li>Funding resources and templates</li>
@@ -111,7 +111,7 @@ const sendWelcomeEmail = async (email, name) => {
           
           <div class="feature-box">
             <h4>🔍 Discover Funding Opportunities</h4>
-            <p>Browse 300+ investors, VCs, accelerators, and government grants tailored for your startup stage and sector.</p>
+            <p>Browse 300+ investors, VCs, accelerators, and grants tailored for your startup stage and sector.</p>
           </div>
           
           <div class="feature-box">

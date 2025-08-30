@@ -22,7 +22,21 @@ const angelInvestorSchema = new mongoose.Schema({
   },
   investCategory: [{
     type: String,
-    enum: ['Fintech', 'Consumer', 'SaaS', 'Healthtech', 'Edtech', 'E-commerce', 'AI/ML', 'Deep Tech', 'Clean Tech', 'Other']
+    enum: [
+      'Fintech',
+      'Consumer & D2C',
+      'SaaS & Enterprise Tech',
+      'Healthtech',
+      'Edtech',
+      'AI / ML',
+      'Deeptech',
+      'Space Tech',
+      'Cleantech & Climate',
+      'Foodtech & Agritech',
+      'Proptech & Infrastructure',
+      'Mobility & Logistics',
+      'Media, Gaming & Content'
+    ]
   }],
   ticketSize: {
     type: Number,

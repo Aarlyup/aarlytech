@@ -29,7 +29,21 @@ const microVCSchema = new mongoose.Schema({
   }],
   sector: [{
     type: String,
-    enum: ['Deeptech', 'B2B SaaS', 'Fintech', 'Healthtech', 'Edtech', 'E-commerce', 'AI/ML', 'Clean Tech', 'Other']
+    enum: [
+      'Fintech',
+      'Consumer & D2C',
+      'SaaS & Enterprise Tech',
+      'Healthtech',
+      'Edtech',
+      'AI / ML',
+      'Deeptech',
+      'Space Tech',
+      'Cleantech & Climate',
+      'Foodtech & Agritech',
+      'Proptech & Infrastructure',
+      'Mobility & Logistics',
+      'Media, Gaming & Content'
+    ]
   }],
   contact: {
     type: String,
