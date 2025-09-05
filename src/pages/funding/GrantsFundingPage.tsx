@@ -195,124 +195,189 @@ const GrantsFundingPage: React.FC = () => {
 
       {/* Grant Detail Modal */}
       {selectedGrant && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 backdrop-blur-sm animate-fade-in pt-20 px-4 md:pl-72 md:pr-8" onClick={closeModal}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in p-4 pt-20 md:pl-72" onClick={closeModal}>
           <div
-            className="relative bg-gray-800 border border-gray-700 rounded-2xl shadow-2xl w-full animate-slide-up flex flex-col max-w-full md:max-w-4xl lg:max-w-5xl"
-            style={{ maxHeight: 'calc(100vh - 6rem)' }}
+            className="relative bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl w-full max-w-3xl max-h-[85vh] overflow-hidden animate-slide-up mx-auto"
             onClick={e => e.stopPropagation()}
             tabIndex={-1}
             ref={modalRef}
           >
-            {/* Sticky Header */}
-            <div className="sticky top-0 z-20 bg-gray-800 rounded-t-2xl flex items-center justify-between px-6 py-4 border-b border-gray-700 shadow-sm">
-              <button
-                onClick={closeModal}
-                className="flex items-center gap-2 text-gray-400 hover:text-blue-400 font-medium text-base px-2 py-1 rounded-lg transition-colors focus:outline-none"
-                aria-label="Back"
-              >
-                <span className="text-lg">←</span>
-                Back
-              </button>
-              <div className="flex items-center gap-3 mx-auto">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500/20 to-blue-500/20 flex items-center justify-center border border-green-500/30">
+            {/* Header */}
+            <div className="sticky top-0 z-20 bg-gray-900 border-b border-gray-700 flex items-center justify-between px-6 py-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 flex items-center justify-center">
                   <Award className="w-6 h-6 text-green-400" />
                 </div>
-                <div className="text-center">
-                  <h1 className="text-lg font-bold text-white leading-tight">{selectedGrant.name}</h1>
-                  <div className="flex items-center gap-2 text-gray-400 text-sm justify-center">
+                <div>
+                  <h1 className="text-xl font-bold text-white">{selectedGrant.name}</h1>
+                  <div className="flex items-center gap-2 text-sm mt-1">
                     <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium border ${getAuthorityColor(selectedGrant.authority)}`}>{selectedGrant.authority}</span>
                   </div>
                 </div>
               </div>
               <button
                 onClick={closeModal}
-                className="text-gray-400 hover:text-red-400 text-2xl px-2 py-1 rounded-lg transition-colors focus:outline-none"
+                className="p-2 rounded-xl hover:bg-gray-800 transition-all duration-200 group"
                 aria-label="Close"
               >
-                ×
+                <span className="text-2xl text-gray-400 group-hover:text-white">×</span>
               </button>
             </div>
-            <div className="overflow-y-auto p-8" style={{ maxHeight: 'calc(100vh - 12rem)' }}>
-              <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Left: metrics & tags */}
-                <aside className="lg:col-span-1 space-y-6">
-                  <div className="rounded-2xl bg-gray-800 border border-gray-700 p-5 border-l-4 border-green-500/80">
-                    <div className="text-sm font-semibold text-gray-300 uppercase">Grant Size</div>
-                    <div className="mt-2 text-2xl font-extrabold text-white">₹{formatCurrencyShort(Number(selectedGrant.grantSize))}</div>
-                    <div className="mt-1 text-xs text-gray-400">Total grant amount</div>
-                  </div>
 
-                  <div className="rounded-2xl bg-gray-800 border border-gray-700 p-5 border-l-4 border-blue-500/80">
-                    <div className="text-sm font-semibold text-gray-300 uppercase">Equity Dilution</div>
-                    <div className="mt-2 text-2xl font-extrabold text-white">{selectedGrant.equityDilution}</div>
-                    <div className="mt-1 text-xs text-gray-400">If applicable</div>
+            {/* Content */}
+            <div className="overflow-y-auto p-6 max-h-[calc(85vh-120px)]">
+              <div className="space-y-6">
+                {/* Grant Size Card */}
+                <div className="bg-gradient-to-br from-emerald-600/40 to-green-600/40 border border-emerald-400/60 rounded-xl p-6">
+                  <div className="text-center">
+                    <div className="text-sm font-semibold text-emerald-200 uppercase tracking-wide mb-2">Grant Size</div>
+                    <div className="text-3xl font-bold text-emerald-50">₹{formatCurrencyShort(Number(selectedGrant.grantSize))}</div>
+                    <div className="text-sm text-emerald-300 mt-1">Total grant amount</div>
                   </div>
+                </div>
 
-                  <div className="rounded-2xl bg-gray-800 border border-gray-700 p-4">
+                {/* Equity Dilution Card */}
+                <div className="bg-gradient-to-br from-sky-600/40 to-blue-600/40 border border-sky-400/60 rounded-xl p-6">
+                  <div className="text-center">
+                    <div className="text-sm font-semibold text-sky-200 uppercase tracking-wide mb-2">Equity Dilution</div>
+                    <div className="text-3xl font-bold text-sky-50">{selectedGrant.equityDilution}</div>
+                    <div className="text-sm text-sky-300 mt-1">If applicable</div>
+                  </div>
+                </div>
+
+                {/* Additional Info Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-gray-800 border border-gray-700 rounded-xl p-4">
                     <div className="text-sm font-semibold text-white mb-3">Timelines</div>
-                    <div className="text-sm text-gray-300">{selectedGrant.timelines}</div>
+                    <div className="text-gray-300">{selectedGrant.timelines}</div>
                   </div>
 
                   {selectedGrant.stage && selectedGrant.stage.length > 0 && (
-                    <div className="rounded-2xl bg-gray-800 border border-gray-700 p-4">
+                    <div className="bg-gray-800 border border-gray-700 rounded-xl p-4">
                       <div className="text-sm font-semibold text-white mb-3">Stage Focus</div>
                       <div className="flex flex-wrap gap-2">
                         {selectedGrant.stage.map(s => (
-                          <span key={s} className="px-3 py-1 rounded-full text-sm bg-blue-600/30 text-blue-100 border border-blue-600/40">{s}</span>
+                          <span key={s} className="px-3 py-1 rounded-full text-sm bg-blue-600/30 text-blue-300 border border-blue-500/40">{s}</span>
                         ))}
                       </div>
                     </div>
                   )}
-                </aside>
+                </div>
 
-                {/* Right: long-form content */}
-                <main className="lg:col-span-2 space-y-6">
-                  {selectedGrant.eligibility && (
-                    <section className="rounded-2xl bg-gray-800 border border-gray-700 p-6">
-                      <h3 className="text-xl font-semibold text-white mb-3">Eligibility</h3>
-                      <p className="text-gray-100 leading-relaxed text-base">{selectedGrant.eligibility}</p>
-                    </section>
-                  )}
-
-                  {selectedGrant.howToApply && (
-                    <section className="rounded-2xl bg-gray-800 border border-gray-700 p-6">
-                      <h3 className="text-xl font-semibold text-white mb-3">How to Apply</h3>
-                      <p className="text-gray-100 leading-relaxed text-base">{selectedGrant.howToApply}</p>
-                    </section>
-                  )}
-
-                  {selectedGrant.documentsRequired && selectedGrant.documentsRequired.length > 0 && (
-                    <section className="rounded-2xl bg-gray-800 border border-gray-700 p-6">
-                      <h3 className="text-xl font-semibold text-white mb-3">Documents Required</h3>
-                      <ul className="list-disc list-inside text-sm text-gray-300">
-                        {selectedGrant.documentsRequired.map((doc, idx) => (
-                          <li key={idx}>{doc}</li>
-                        ))}
-                      </ul>
-                    </section>
-                  )}
-
-                  {selectedGrant.specialNotes && (
-                    <section className="rounded-2xl bg-gray-800 border border-gray-700 p-6">
-                      <h3 className="text-xl font-semibold text-white mb-3">Special Notes</h3>
-                      <p className="text-gray-100 leading-relaxed text-base">{selectedGrant.specialNotes}</p>
-                    </section>
-                  )}
-
-                  <div className="flex justify-end">
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                      {selectedGrant.contact && (
-                        <a
-                          href={`mailto:${selectedGrant.contact}`}
-                          className="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-500 inline-flex items-center gap-2"
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                          <span>Apply Now</span>
-                        </a>
-                      )}
-                    </div>
+                {/* Eligibility */}
+                {selectedGrant.eligibility && (
+                  <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
+                    <h3 
+                      className="text-lg font-semibold mb-3 text-white"
+                      style={{ 
+                        color: '#ffffff',
+                        WebkitTextFillColor: '#ffffff',
+                        textShadow: '0 0 1px rgba(255,255,255,0.5)'
+                      }}
+                    >
+                      Eligibility
+                    </h3>
+                    <p 
+                      className="leading-relaxed text-gray-300"
+                      style={{ 
+                        color: '#d1d5db',
+                        WebkitTextFillColor: '#d1d5db'
+                      }}
+                    >
+                      {selectedGrant.eligibility}
+                    </p>
                   </div>
-                </main>
+                )}
+
+                {/* How to Apply */}
+                {selectedGrant.howToApply && (
+                  <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
+                    <h3 
+                      className="text-lg font-semibold mb-3 text-white"
+                      style={{ 
+                        color: '#ffffff',
+                        WebkitTextFillColor: '#ffffff',
+                        textShadow: '0 0 1px rgba(255,255,255,0.5)'
+                      }}
+                    >
+                      How to Apply
+                    </h3>
+                    <p 
+                      className="leading-relaxed text-gray-300"
+                      style={{ 
+                        color: '#d1d5db',
+                        WebkitTextFillColor: '#d1d5db'
+                      }}
+                    >
+                      {selectedGrant.howToApply}
+                    </p>
+                  </div>
+                )}
+
+                {/* Documents Required */}
+                {selectedGrant.documentsRequired && selectedGrant.documentsRequired.length > 0 && (
+                  <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
+                    <h3 
+                      className="text-lg font-semibold mb-3 text-white"
+                      style={{ 
+                        color: '#ffffff',
+                        WebkitTextFillColor: '#ffffff',
+                        textShadow: '0 0 1px rgba(255,255,255,0.5)'
+                      }}
+                    >
+                      Documents Required
+                    </h3>
+                    <ul 
+                      className="list-disc list-inside text-sm space-y-1 text-gray-300"
+                      style={{ 
+                        color: '#d1d5db',
+                        WebkitTextFillColor: '#d1d5db'
+                      }}
+                    >
+                      {selectedGrant.documentsRequired.map((doc, idx) => (
+                        <li key={idx}>{doc}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Special Notes */}
+                {selectedGrant.specialNotes && (
+                  <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
+                    <h3 
+                      className="text-lg font-semibold mb-3 text-white"
+                      style={{ 
+                        color: '#ffffff',
+                        WebkitTextFillColor: '#ffffff',
+                        textShadow: '0 0 1px rgba(255,255,255,0.5)'
+                      }}
+                    >
+                      Special Notes
+                    </h3>
+                    <p 
+                      className="leading-relaxed text-gray-300"
+                      style={{ 
+                        color: '#d1d5db',
+                        WebkitTextFillColor: '#d1d5db'
+                      }}
+                    >
+                      {selectedGrant.specialNotes}
+                    </p>
+                  </div>
+                )}
+
+                {/* Contact Actions */}
+                <div className="flex flex-col sm:flex-row gap-3">
+                  {selectedGrant.contact && (
+                    <a 
+                      href={`mailto:${selectedGrant.contact}`} 
+                      className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all duration-200 font-medium"
+                    >
+                      <ExternalLink className="w-5 h-5" />
+                      <span>Apply Now</span>
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           </div>

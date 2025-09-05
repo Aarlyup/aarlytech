@@ -160,31 +160,22 @@ const IncubatorFundingPage: React.FC = () => {
 
       {/* Incubator Detail Modal */}
       {selectedIncubator && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 backdrop-blur-sm animate-fade-in pt-20 px-4 md:pl-72 md:pr-8" onClick={closeModal}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in p-4 pt-20 md:pl-72" onClick={closeModal}>
           <div
-            className="relative bg-gray-800 border border-gray-700 rounded-2xl shadow-2xl w-full animate-slide-up flex flex-col max-w-full md:max-w-4xl lg:max-w-5xl"
-            style={{ maxHeight: 'calc(100vh - 6rem)' }}
+            className="relative bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl w-full max-w-3xl max-h-[85vh] overflow-hidden animate-slide-up mx-auto"
             onClick={e => e.stopPropagation()}
             tabIndex={-1}
             ref={modalRef}
           >
-            {/* Sticky Header */}
-            <div className="sticky top-0 z-20 bg-gray-800 rounded-t-2xl flex items-center justify-between px-6 py-4 border-b border-gray-700 shadow-sm">
-              <button
-                onClick={closeModal}
-                className="flex items-center gap-2 text-gray-400 hover:text-blue-400 font-medium text-base px-2 py-1 rounded-lg transition-colors focus:outline-none"
-                aria-label="Back"
-              >
-                <span className="text-lg">←</span>
-                Back
-              </button>
-              <div className="flex items-center gap-3 mx-auto">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center border border-purple-500/30">
+            {/* Header */}
+            <div className="sticky top-0 z-20 bg-gray-900 border-b border-gray-700 flex items-center justify-between px-6 py-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-indigo-500/20 border border-purple-500/30 flex items-center justify-center">
                   <Building2 className="w-6 h-6 text-purple-400" />
                 </div>
-                <div className="text-center">
-                  <h1 className="text-lg font-bold text-white leading-tight">{selectedIncubator.name}</h1>
-                  <div className="flex items-center gap-2 text-gray-400 text-sm justify-center">
+                <div>
+                  <h1 className="text-xl font-bold text-white">{selectedIncubator.name}</h1>
+                  <div className="flex items-center gap-2 text-gray-400 text-sm">
                     <MapPin className="w-4 h-4" />
                     <span>{selectedIncubator.location}</span>
                   </div>
@@ -192,75 +183,143 @@ const IncubatorFundingPage: React.FC = () => {
               </div>
               <button
                 onClick={closeModal}
-                className="text-gray-400 hover:text-red-400 text-2xl px-2 py-1 rounded-lg transition-colors focus:outline-none"
+                className="p-2 rounded-xl hover:bg-gray-800 transition-all duration-200 group"
                 aria-label="Close"
               >
-                ×
+                <span className="text-2xl text-gray-400 group-hover:text-white">×</span>
               </button>
             </div>
-            <div className="overflow-y-auto p-8" style={{ maxHeight: 'calc(100vh - 12rem)' }}>
-              <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Left: metrics & tags */}
-                <aside className="lg:col-span-1 space-y-6">
-                  <div className="rounded-2xl bg-gray-800 border border-gray-700 p-5 border-l-4 border-green-500/80">
-                    <div className="text-sm font-semibold text-gray-300 uppercase">Funding Support</div>
-                    <div className="mt-2 text-2xl font-extrabold text-white">{selectedIncubator.fundingSupport}</div>
-                    <div className="mt-1 text-xs text-gray-400">Monetary & non-monetary support</div>
+
+            {/* Content */}
+            <div className="overflow-y-auto p-6 max-h-[calc(85vh-120px)]">
+              <div className="space-y-6">
+                {/* Funding Support Card */}
+                <div className="bg-gradient-to-br from-emerald-600/40 to-green-600/40 border border-emerald-400/60 rounded-xl p-6">
+                  <div className="text-center">
+                    <div className="text-sm font-semibold text-emerald-200 uppercase tracking-wide mb-2">Funding Support</div>
+                    <div className="text-3xl font-bold text-emerald-50">{selectedIncubator.fundingSupport}</div>
+                    <div className="text-sm text-emerald-300 mt-1">Monetary & non-monetary support</div>
                   </div>
+                </div>
 
-                  <div className="rounded-2xl bg-gray-800 border border-gray-700 p-4">
-                    <div className="text-sm font-semibold text-white mb-3">Location</div>
-                    <div className="text-sm text-gray-300">{selectedIncubator.location}</div>
-                  </div>
-
-                  {selectedIncubator.otherBenefits && (
-                    <div className="rounded-2xl bg-gray-800 border border-gray-700 p-4">
-                      <div className="text-sm font-semibold text-white mb-3">Other Benefits</div>
-                      <div className="text-sm text-gray-300">{selectedIncubator.otherBenefits}</div>
-                    </div>
-                  )}
-                </aside>
-
-                {/* Right: long-form content */}
-                <main className="lg:col-span-2 space-y-6">
-                  {selectedIncubator.eligibility && (
-                    <section className="rounded-2xl bg-gray-800 border border-gray-700 p-6">
-                      <h3 className="text-xl font-semibold text-white mb-3">Eligibility</h3>
-                      <p className="text-gray-100 leading-relaxed text-base">{selectedIncubator.eligibility}</p>
-                    </section>
-                  )}
-
-                  {selectedIncubator.applicationProcess && (
-                    <section className="rounded-2xl bg-gray-800 border border-gray-700 p-6">
-                      <h3 className="text-xl font-semibold text-white mb-3">Application Process</h3>
-                      <p className="text-gray-100 leading-relaxed text-base">{selectedIncubator.applicationProcess}</p>
-                    </section>
-                  )}
-
-                  {selectedIncubator.alumniStartups && (
-                    <section className="rounded-2xl bg-gray-800 border border-gray-700 p-6">
-                      <h3 className="text-xl font-semibold text-white mb-3">Alumni Startups</h3>
-                      <p className="text-gray-100 leading-relaxed text-base">{selectedIncubator.alumniStartups}</p>
-                    </section>
-                  )}
-
-                  <div className="flex justify-end">
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                      {selectedIncubator.websiteUrl && (
-                        <a href={selectedIncubator.websiteUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full hover:from-blue-700 hover:to-blue-800 inline-flex items-center gap-2">
-                          <ExternalLink className="w-4 h-4" />
-                          <span>Visit Website</span>
-                        </a>
-                      )}
-                      {selectedIncubator.contact && (
-                        <a href={`mailto:${selectedIncubator.contact}`} className="px-4 py-2 bg-gray-800 text-white rounded-full border border-gray-700 hover:bg-gray-800/90 inline-flex items-center gap-2">
-                          <Mail className="w-4 h-4" />
-                          <span>Contact</span>
-                        </a>
-                      )}
+                {/* Other Benefits Card */}
+                {selectedIncubator.otherBenefits && (
+                  <div className="bg-gradient-to-br from-purple-600/40 to-indigo-600/40 border border-purple-400/60 rounded-xl p-6">
+                    <div className="text-center">
+                      <div className="text-sm font-semibold text-purple-200 uppercase tracking-wide mb-2">Other Benefits</div>
+                      <div className="text-lg font-semibold text-purple-50">{selectedIncubator.otherBenefits}</div>
+                      <div className="text-sm text-purple-300 mt-1">Additional support provided</div>
                     </div>
                   </div>
-                </main>
+                )}
+
+                {/* Location */}
+                <div className="bg-gray-800 border border-gray-700 rounded-xl p-4">
+                  <div className="text-sm font-semibold text-white mb-3">Location</div>
+                  <div className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-blue-400" />
+                    <span className="text-gray-300">{selectedIncubator.location}</span>
+                  </div>
+                </div>
+
+                {/* Eligibility */}
+                {selectedIncubator.eligibility && (
+                  <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
+                    <h3 
+                      className="text-lg font-semibold mb-3 text-white"
+                      style={{ 
+                        color: '#ffffff',
+                        WebkitTextFillColor: '#ffffff',
+                        textShadow: '0 0 1px rgba(255,255,255,0.5)'
+                      }}
+                    >
+                      Eligibility
+                    </h3>
+                    <p 
+                      className="leading-relaxed text-gray-300"
+                      style={{ 
+                        color: '#d1d5db',
+                        WebkitTextFillColor: '#d1d5db'
+                      }}
+                    >
+                      {selectedIncubator.eligibility}
+                    </p>
+                  </div>
+                )}
+
+                {/* Application Process */}
+                {selectedIncubator.applicationProcess && (
+                  <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
+                    <h3 
+                      className="text-lg font-semibold mb-3 text-white"
+                      style={{ 
+                        color: '#ffffff',
+                        WebkitTextFillColor: '#ffffff',
+                        textShadow: '0 0 1px rgba(255,255,255,0.5)'
+                      }}
+                    >
+                      Application Process
+                    </h3>
+                    <p 
+                      className="leading-relaxed text-gray-300"
+                      style={{ 
+                        color: '#d1d5db',
+                        WebkitTextFillColor: '#d1d5db'
+                      }}
+                    >
+                      {selectedIncubator.applicationProcess}
+                    </p>
+                  </div>
+                )}
+
+                {/* Alumni Startups */}
+                {selectedIncubator.alumniStartups && (
+                  <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
+                    <h3 
+                      className="text-lg font-semibold mb-3 text-white"
+                      style={{ 
+                        color: '#ffffff',
+                        WebkitTextFillColor: '#ffffff',
+                        textShadow: '0 0 1px rgba(255,255,255,0.5)'
+                      }}
+                    >
+                      Alumni Startups
+                    </h3>
+                    <p 
+                      className="leading-relaxed text-gray-300"
+                      style={{ 
+                        color: '#d1d5db',
+                        WebkitTextFillColor: '#d1d5db'
+                      }}
+                    >
+                      {selectedIncubator.alumniStartups}
+                    </p>
+                  </div>
+                )}
+
+                {/* Contact Actions */}
+                <div className="flex flex-col sm:flex-row gap-3">
+                  {selectedIncubator.contact && (
+                    <a 
+                      href={`mailto:${selectedIncubator.contact}`} 
+                      className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all duration-200 font-medium"
+                    >
+                      <Mail className="w-5 h-5" />
+                      <span>Send Email</span>
+                    </a>
+                  )}
+                  {selectedIncubator.websiteUrl && (
+                    <a 
+                      href={selectedIncubator.websiteUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium"
+                    >
+                      <ExternalLink className="w-5 h-5" />
+                      <span>Visit Website</span>
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           </div>

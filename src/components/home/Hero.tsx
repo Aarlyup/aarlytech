@@ -1,7 +1,6 @@
 import React from 'react';
 import { ArrowRight, TrendingUp, Users, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import Button from '../ui/Button';
 
 const Hero: React.FC = () => {
   return (
@@ -34,58 +33,73 @@ const Hero: React.FC = () => {
         }} />
       </div>
 
-      <div className="relative z-30 container mx-auto px-6 pt-6 pb-20">
-        <div className="max-w-4xl mx-auto text-center">
-          {/* Main Heading */}
-          <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight">
-            <span className="text-white inline-block transform -translate-y-1 md:-translate-y-2 whitespace-nowrap">Seize the Right Opportunity</span>
-            <br />
-            <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
-              at the Right Moment
-            </span>
-          </h1>
-
-          {/* Subheading */}
-          <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
-            For first-time founders, timing is everything — Aarly is your unfair advantage to seize funding, mentors, grants, and discover events & competitions right on time.
-          </p>
-
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-8 mb-12 max-w-2xl mx-auto">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-2">300+</div>
-              <div className="text-sm text-gray-400">Investors</div>
+      <div className="relative z-30 container mx-auto px-4 sm:px-6 pt-4 sm:pt-6 pb-16 sm:pb-20">
+        <div className="max-w-5xl mx-auto">
+          {/* Main Content */}
+          <div className="text-center space-y-8 sm:space-y-12">
+            {/* Main Heading */}
+            <div className="space-y-2 sm:space-y-4">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight">
+                <div className="text-white mb-2 sm:mb-3">
+                  Seize the Right Opportunity
+                </div>
+                <div className="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent pb-2">
+                  at the Right Moment
+                </div>
+              </h1>
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-2">₹120Cr+</div>
-              <div className="text-sm text-gray-400">Funded</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-2">95%</div>
-              <div className="text-sm text-gray-400">Success Rate</div>
-            </div>
-          </div>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link to="/auth" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold">
+            {/* Subheading */}
+            <p className="text-lg sm:text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed px-4 sm:px-0">
+              For first-time founders, timing is everything — Aarly is your unfair advantage to seize funding, mentors, grants, and discover events & competitions right on time.
+            </p>
+
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-4xl mx-auto">
+              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-white/10">
+                <div className="text-center">
+                  <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">300+</div>
+                  <div className="text-xs sm:text-sm lg:text-base text-gray-400 font-medium">Investors</div>
+                </div>
+              </div>
+              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-white/10">
+                <div className="text-center">
+                  <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">₹120Cr+</div>
+                  <div className="text-xs sm:text-sm lg:text-base text-gray-400 font-medium">Funded</div>
+                </div>
+              </div>
+              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-white/10">
+                <div className="text-center">
+                  <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">95%</div>
+                  <div className="text-xs sm:text-sm lg:text-base text-gray-400 font-medium">Success Rate</div>
+                </div>
+              </div>
+            </div>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link 
+                to="/auth" 
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                className="block bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 min-w-[200px] w-full sm:w-auto cursor-pointer text-center no-underline"
+              >
                 Start Your Journey
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-            </Link>
-            <button 
-              onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
-              className="px-8 py-4 text-lg font-semibold text-white border border-white/20 rounded-lg hover:bg-white/10 transition-all"
-            >
-              Learn More
-            </button>
+                <ArrowRight className="ml-2 w-5 h-5 inline" />
+              </Link>
+              <button 
+                type="button"
+                onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
+                className="block px-8 py-4 text-lg font-semibold text-white border-2 border-white/20 rounded-xl hover:bg-white/10 hover:border-white/30 transition-all duration-300 backdrop-blur-sm min-w-[200px] w-full sm:w-auto cursor-pointer text-center"
+              >
+                Learn More
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom Gradient */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-900 to-transparent z-30" />
+      {/* Bottom Gradient - moved to lower z-index */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-900 to-transparent z-10" />
     </section>
   );
 };
