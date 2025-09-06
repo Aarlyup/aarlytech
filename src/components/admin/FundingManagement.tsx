@@ -43,7 +43,8 @@ const categoryFields: Record<string, { name: string; label: string; type?: strin
     { name: 'fundSizeCurrency', label: 'Fund Size Currency', options: ['INR', 'USD'], required: true },
     { name: 'stageFocus', label: 'Stage Focus', required: true, options: ['Pre-seed', 'Seed', 'Series A', 'Series B', 'Series C', 'Growth'], multi: true },
     { name: 'sectorFocus', label: 'Sector Focus', required: true, options: ['Fintech', 'Consumer & D2C', 'SaaS & Enterprise Tech', 'Healthtech', 'Edtech', 'AI / ML', 'Deeptech', 'Space Tech', 'Cleantech & Climate', 'Foodtech & Agritech', 'Proptech & Infrastructure', 'Mobility & Logistics', 'Media, Gaming & Content'], multi: true },
-    { name: 'avgTicketSize', label: 'Average Ticket Size', type: 'number', required: true },
+    { name: 'avgTicketSizeMin', label: 'Average Ticket Size (Min)', type: 'number', required: true },
+    { name: 'avgTicketSizeMax', label: 'Average Ticket Size (Max)', type: 'number', required: true },
     { name: 'avgTicketSizeCurrency', label: 'Avg Ticket Size Currency', options: ['INR', 'USD'], required: true },
     { name: 'applicationProcess', label: 'Application Process', options: ['Warm intro', 'Direct pitch', 'Online application', 'Referral only'] },
     { name: 'contact', label: 'Contact', required: true },
@@ -308,6 +309,14 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
         }
       }
     });
+    
+    // Special handling for venture capital avgTicketSize range
+    if (category === 'venture-capital' && item.avgTicketSize && typeof item.avgTicketSize === 'object') {
+      formattedData.avgTicketSizeMin = item.avgTicketSize.min || 0;
+      formattedData.avgTicketSizeMax = item.avgTicketSize.max || 0;
+      delete formattedData.avgTicketSize; // Remove the original object
+    }
+    
     setFormData({ ...formattedData });
     setShowForm(true);
   };
