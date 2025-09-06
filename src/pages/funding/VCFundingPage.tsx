@@ -14,6 +14,7 @@ interface VentureCapital {
   headOffice: string;
   fundSize: number;
   fundSizeCurrency: string;
+  fundSizeDescription: string;
   stageFocus: string[];
   sectorFocus: string[];
   avgTicketSize: {
@@ -240,6 +241,11 @@ const VCFundingPage: React.FC = () => {
                     <div className="text-sm font-semibold text-emerald-200 uppercase tracking-wide mb-2">Fund Size</div>
                     <div className="text-3xl font-bold text-emerald-50">{formatCurrencyWithSymbol(Number(selectedVC.fundSize), selectedVC.fundSizeCurrency || 'INR')}</div>
                     <div className="text-sm text-emerald-300 mt-1">Total committed fund</div>
+                    {selectedVC.fundSizeDescription && (
+                      <div className="text-sm text-emerald-200 mt-3 px-4">
+                        {selectedVC.fundSizeDescription}
+                      </div>
+                    )}
                   </div>
                 </div>
 
