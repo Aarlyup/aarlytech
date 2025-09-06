@@ -17,6 +17,7 @@ const angelInvestorValidation = [
   body('city').trim().notEmpty().withMessage('City is required'),
   body('country').trim().notEmpty().withMessage('Country is required'),
   body('ticketSize').isNumeric().withMessage('Ticket size must be a number'),
+  body('currency').isIn(['INR', 'USD']).withMessage('Currency must be INR or USD'),
   body('contact').trim().notEmpty().withMessage('Contact is required')
 ];
 
@@ -24,7 +25,9 @@ const ventureCapitalValidation = [
   body('name').trim().notEmpty().withMessage('Name is required'),
   body('headOffice').trim().notEmpty().withMessage('Head office is required'),
   body('fundSize').isNumeric().withMessage('Fund size must be a number'),
+  body('fundSizeCurrency').isIn(['INR', 'USD']).withMessage('Fund size currency must be INR or USD'),
   body('avgTicketSize').isNumeric().withMessage('Average ticket size must be a number'),
+  body('avgTicketSizeCurrency').isIn(['INR', 'USD']).withMessage('Average ticket size currency must be INR or USD'),
   body('contact').trim().notEmpty().withMessage('Contact is required')
 ];
 
@@ -32,7 +35,9 @@ const microVCValidation = [
   body('name').trim().notEmpty().withMessage('Name is required'),
   body('location').trim().notEmpty().withMessage('Location is required'),
   body('fundSize').isNumeric().withMessage('Fund size must be a number'),
+  body('fundSizeCurrency').isIn(['INR', 'USD']).withMessage('Fund size currency must be INR or USD'),
   body('checkSize').isNumeric().withMessage('Check size must be a number'),
+  body('checkSizeCurrency').isIn(['INR', 'USD']).withMessage('Check size currency must be INR or USD'),
   body('contact').trim().notEmpty().withMessage('Contact is required')
 ];
 
@@ -56,6 +61,7 @@ const govtGrantValidation = [
   body('name').trim().notEmpty().withMessage('Name is required'),
   body('authority').trim().notEmpty().withMessage('Authority is required'),
   body('grantSize').isNumeric().withMessage('Grant size must be a number'),
+  body('currency').isIn(['INR', 'USD']).withMessage('Currency must be INR or USD'),
   body('eligibility').trim().notEmpty().withMessage('Eligibility is required'),
   body('howToApply').trim().notEmpty().withMessage('How to apply is required'),
   body('timelines').trim().notEmpty().withMessage('Timelines is required'),
