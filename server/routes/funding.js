@@ -26,7 +26,8 @@ const ventureCapitalValidation = [
   body('headOffice').trim().notEmpty().withMessage('Head office is required'),
   body('fundSize').isNumeric().withMessage('Fund size must be a number'),
   body('fundSizeCurrency').isIn(['INR', 'USD']).withMessage('Fund size currency must be INR or USD'),
-  body('avgTicketSize').isNumeric().withMessage('Average ticket size must be a number'),
+  body('avgTicketSizeMin').isNumeric().withMessage('Average ticket size minimum must be a number'),
+  body('avgTicketSizeMax').isNumeric().withMessage('Average ticket size maximum must be a number'),
   body('avgTicketSizeCurrency').isIn(['INR', 'USD']).withMessage('Average ticket size currency must be INR or USD'),
   body('contact').trim().notEmpty().withMessage('Contact is required')
 ];
