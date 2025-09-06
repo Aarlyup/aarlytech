@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { User, MapPin, DollarSign, Target, ExternalLink, Mail, Linkedin, Star } from 'lucide-react';
 import { useFunding } from '../../contexts/FundingContext';
-import { formatCurrencyShort } from '../../lib/utils';
+import { formatCurrencyWithSymbol } from '../../lib/utils';
 import LoadingGrid from '../../components/ui/LoadingGrid';
 import EmptyState from '../../components/ui/EmptyState';
 import { FundingMobileNav } from '../../components/layout/FundingSidebar';
@@ -15,6 +15,7 @@ interface AngelInvestor {
   country: string;
   investCategory: string[];
   ticketSize: number;
+  currency: string;
   stage: string[];
   preferFounderProfile: string;
   portfolioHighlights: string;
@@ -137,7 +138,7 @@ const AngelFundingPage: React.FC = () => {
 
               <div className="mt-4 grid grid-cols-1 gap-2">
                 <div className="flex items-center gap-2 text-sm">
-                  <span className="font-medium text-gray-300">₹{formatCurrencyShort(Number(angel.ticketSize))} Ticket</span>
+                  <span className="font-medium text-gray-300">{formatCurrencyWithSymbol(Number(angel.ticketSize), angel.currency || 'INR')} Ticket</span>
                 </div>
                 {angel.investCategory && angel.investCategory.length > 0 && (
                   <div className="flex items-center gap-2 text-sm">
@@ -222,7 +223,7 @@ const AngelFundingPage: React.FC = () => {
                 <div className="bg-gradient-to-br from-emerald-600/40 to-green-600/40 border border-emerald-400/60 rounded-xl p-6">
                   <div className="text-center">
                     <div className="text-sm font-semibold text-emerald-200 uppercase tracking-wide mb-2">Ticket Size</div>
-                    <div className="text-3xl font-bold text-emerald-50">₹{formatCurrencyShort(Number(selectedAngel.ticketSize))}</div>
+                    <div className="text-3xl font-bold text-emerald-50">{formatCurrencyWithSymbol(Number(selectedAngel.ticketSize), selectedAngel.currency || 'INR')}</div>
                     <div className="text-sm text-emerald-300 mt-1">Typical investment amount</div>
                   </div>
                 </div>

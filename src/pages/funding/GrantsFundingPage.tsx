@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Award, Building, Calendar, Mail, ExternalLink, Star } from 'lucide-react';
 import { useFunding } from '../../contexts/FundingContext';
-import { formatCurrencyShort } from '../../lib/utils';
+import { formatCurrencyWithSymbol } from '../../lib/utils';
 import LoadingGrid from '../../components/ui/LoadingGrid';
 import EmptyState from '../../components/ui/EmptyState';
 import { FundingMobileNav } from '../../components/layout/FundingSidebar';
@@ -14,6 +14,7 @@ interface GovtGrant {
   stage: string[];
   sector: string;
   grantSize: number;
+  currency: string;
   equityDilution: string;
   eligibility: string;
   howToApply: string;
@@ -231,7 +232,7 @@ const GrantsFundingPage: React.FC = () => {
                 <div className="bg-gradient-to-br from-emerald-600/40 to-green-600/40 border border-emerald-400/60 rounded-xl p-6">
                   <div className="text-center">
                     <div className="text-sm font-semibold text-emerald-200 uppercase tracking-wide mb-2">Grant Size</div>
-                    <div className="text-3xl font-bold text-emerald-50">₹{formatCurrencyShort(Number(selectedGrant.grantSize))}</div>
+                    <div className="text-3xl font-bold text-emerald-50">{formatCurrencyWithSymbol(Number(selectedGrant.grantSize), selectedGrant.currency || 'INR')}</div>
                     <div className="text-sm text-emerald-300 mt-1">Total grant amount</div>
                   </div>
                 </div>

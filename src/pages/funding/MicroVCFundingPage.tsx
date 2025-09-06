@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Building2, MapPin, DollarSign, Users, ExternalLink, Mail, Linkedin, Star } from 'lucide-react';
 import { useFunding } from '../../contexts/FundingContext';
+import { formatCurrencyWithSymbol } from '../../lib/utils';
 import LoadingGrid from '../../components/ui/LoadingGrid';
 import EmptyState from '../../components/ui/EmptyState';
 import { FundingMobileNav } from '../../components/layout/FundingSidebar';
@@ -12,7 +13,9 @@ interface MicroVC {
   websiteUrl: string;
   location: string;
   fundSize: number;
+  fundSizeCurrency: string;
   checkSize: number;
+  checkSizeCurrency: string;
   stage: string[];
   sector: string[];
   contact: string;
@@ -132,11 +135,11 @@ const MicroVCFundingPage: React.FC = () => {
 
               <div className="mt-4 grid grid-cols-2 gap-4">
                 <div className="flex items-center gap-2 text-sm">
-                  <span className="font-medium text-gray-300">₹{(microvc.fundSize).toFixed(0)} Fund</span>
+                  <span className="font-medium text-gray-300">{formatCurrencyWithSymbol(microvc.fundSize, microvc.fundSizeCurrency || 'INR')} Fund</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <Users className="w-4 h-4 text-purple-400" />
-                  <span className="font-medium text-gray-300">₹{(microvc.checkSize).toFixed(0)} Check</span>
+                  <span className="font-medium text-gray-300">{formatCurrencyWithSymbol(microvc.checkSize, microvc.checkSizeCurrency || 'INR')} Check</span>
                 </div>
               </div>
 
@@ -222,13 +225,13 @@ const MicroVCFundingPage: React.FC = () => {
                 <aside className="lg:col-span-1 space-y-6">
                   <div className="rounded-2xl bg-gray-800 border border-gray-700 p-5 border-l-4 border-blue-500/80">
                     <div className="text-sm font-semibold text-gray-300 uppercase">Fund Size</div>
-                    <div className="mt-2 text-2xl font-extrabold text-white">₹{Number(selectedMicroVC.fundSize).toLocaleString()}</div>
+                    <div className="mt-2 text-2xl font-extrabold text-white">{formatCurrencyWithSymbol(Number(selectedMicroVC.fundSize), selectedMicroVC.fundSizeCurrency || 'INR')}</div>
                     <div className="mt-1 text-xs text-gray-400">Total committed fund</div>
                   </div>
 
                   <div className="rounded-2xl bg-gray-800 border border-gray-700 p-5 border-l-4 border-green-500/80">
                     <div className="text-sm font-semibold text-gray-300 uppercase">Check Size</div>
-                    <div className="mt-2 text-2xl font-extrabold text-white">₹{Number(selectedMicroVC.checkSize).toLocaleString()}</div>
+                    <div className="mt-2 text-2xl font-extrabold text-white">{formatCurrencyWithSymbol(Number(selectedMicroVC.checkSize), selectedMicroVC.checkSizeCurrency || 'INR')}</div>
                     <div className="mt-1 text-xs text-gray-400">Typical investment ticket</div>
                   </div>
 

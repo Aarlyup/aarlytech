@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Building2, MapPin, Users, ExternalLink, Mail, Star } from 'lucide-react';
 import { useFunding } from '../../contexts/FundingContext';
-import { formatCurrencyShort } from '../../lib/utils';
+import { formatCurrencyWithSymbol } from '../../lib/utils';
 import LoadingGrid from '../../components/ui/LoadingGrid';
 import EmptyState from '../../components/ui/EmptyState';
 import { FundingMobileNav } from '../../components/layout/FundingSidebar';
@@ -13,9 +13,11 @@ interface VentureCapital {
   websiteUrl: string;
   headOffice: string;
   fundSize: number;
+  fundSizeCurrency: string;
   stageFocus: string[];
   sectorFocus: string[];
   avgTicketSize: number;
+  avgTicketSizeCurrency: string;
   applicationProcess: string;
   contact: string;
   portfolioHighlights: string;
@@ -149,11 +151,11 @@ const VCFundingPage: React.FC = () => {
 
               <div className="mt-4 grid grid-cols-2 gap-4">
                 <div className="flex items-center gap-2 text-sm">
-                  <span className="font-medium text-gray-300">₹{formatCurrencyShort(Number(vc.fundSize))} Fund</span>
+                  <span className="font-medium text-gray-300">{formatCurrencyWithSymbol(Number(vc.fundSize), vc.fundSizeCurrency || 'INR')} Fund</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <Users className="w-4 h-4 text-purple-400" />
-                  <span className="font-medium text-gray-300">₹{formatCurrencyShort(Number(vc.avgTicketSize))} Avg</span>
+                  <span className="font-medium text-gray-300">{formatCurrencyWithSymbol(Number(vc.avgTicketSize), vc.avgTicketSizeCurrency || 'INR')} Avg</span>
                 </div>
               </div>
 
@@ -233,7 +235,7 @@ const VCFundingPage: React.FC = () => {
                 <div className="bg-gradient-to-br from-emerald-600/40 to-green-600/40 border border-emerald-400/60 rounded-xl p-6">
                   <div className="text-center">
                     <div className="text-sm font-semibold text-emerald-200 uppercase tracking-wide mb-2">Fund Size</div>
-                    <div className="text-3xl font-bold text-emerald-50">₹{formatCurrencyShort(Number(selectedVC.fundSize))}</div>
+                    <div className="text-3xl font-bold text-emerald-50">{formatCurrencyWithSymbol(Number(selectedVC.fundSize), selectedVC.fundSizeCurrency || 'INR')}</div>
                     <div className="text-sm text-emerald-300 mt-1">Total committed fund</div>
                   </div>
                 </div>
@@ -242,7 +244,7 @@ const VCFundingPage: React.FC = () => {
                 <div className="bg-gradient-to-br from-sky-600/40 to-blue-600/40 border border-sky-400/60 rounded-xl p-6">
                   <div className="text-center">
                     <div className="text-sm font-semibold text-sky-200 uppercase tracking-wide mb-2">Average Ticket</div>
-                    <div className="text-3xl font-bold text-sky-50">₹{formatCurrencyShort(Number(selectedVC.avgTicketSize))}</div>
+                    <div className="text-3xl font-bold text-sky-50">{formatCurrencyWithSymbol(Number(selectedVC.avgTicketSize), selectedVC.avgTicketSizeCurrency || 'INR')}</div>
                     <div className="text-sm text-sky-300 mt-1">Typical check size</div>
                   </div>
                 </div>

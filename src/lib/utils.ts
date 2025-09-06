@@ -38,3 +38,13 @@ export function formatCurrencyShort(value: number | string | undefined): string 
   }
   return `${sign}${trim(abs)}`;
 }
+
+export function formatCurrencyWithSymbol(value: number | string | undefined, currency: string = 'INR'): string {
+  const symbol = getCurrencySymbol(currency);
+  const formattedValue = formatCurrencyShort(value);
+  return `${symbol}${formattedValue}`;
+}
+
+export function getCurrencySymbol(currency: string = 'INR'): string {
+  return currency === 'USD' ? '$' : '₹';
+}
