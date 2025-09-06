@@ -45,13 +45,16 @@ export function formatCurrencyWithSymbol(value: number | string | undefined, cur
   return `${symbol}${formattedValue}`;
 }
 
-export function getCurrencySymbol(currency: string = 'INR'): string {
-  return currency === 'USD' ? '$' : '₹';
-}
-
-export function formatCurrencyRange(range: {min: number; max: number}, currency: string = 'INR'): string {
+export function formatCurrencyRange(range: { min: number; max: number } | any, currency: string = 'INR'): string {
+  if (!range || typeof range !== 'object' || !range.min || !range.max) {
+    return 'N/A';
+  }
   const symbol = getCurrencySymbol(currency);
   const minFormatted = formatCurrencyShort(range.min);
   const maxFormatted = formatCurrencyShort(range.max);
   return `${symbol}${minFormatted} - ${symbol}${maxFormatted}`;
+}
+
+export function getCurrencySymbol(currency: string = 'INR'): string {
+  return currency === 'USD' ? '$' : '₹';
 }
