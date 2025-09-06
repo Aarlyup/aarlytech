@@ -37,6 +37,11 @@ const govtGrantSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  currency: {
+    type: String,
+    enum: ['INR', 'USD'],
+    default: 'INR'
+  },
   equityDilution: {
     type: String,
     default: 'None'

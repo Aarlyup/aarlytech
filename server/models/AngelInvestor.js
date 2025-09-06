@@ -42,6 +42,11 @@ const angelInvestorSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  currency: {
+    type: String,
+    enum: ['INR', 'USD'],
+    default: 'INR'
+  },
   stage: [{
     type: String,
     enum: ['Idea', 'MVP', 'Pre-revenue', 'Revenue', 'Growth']

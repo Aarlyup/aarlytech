@@ -19,6 +19,11 @@ const ventureCapitalSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  fundSizeCurrency: {
+    type: String,
+    enum: ['INR', 'USD'],
+    default: 'INR'
+  },
   stageFocus: [{
     type: String,
     enum: ['Pre-seed', 'Seed', 'Series A', 'Series B', 'Series C', 'Growth']
@@ -44,6 +49,11 @@ const ventureCapitalSchema = new mongoose.Schema({
   avgTicketSize: {
     type: Number,
     required: true
+  },
+  avgTicketSizeCurrency: {
+    type: String,
+    enum: ['INR', 'USD'],
+    default: 'INR'
   },
   applicationProcess: {
     type: String,

@@ -19,9 +19,19 @@ const microVCSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  fundSizeCurrency: {
+    type: String,
+    enum: ['INR', 'USD'],
+    default: 'INR'
+  },
   checkSize: {
     type: Number,
     required: true
+  },
+  checkSizeCurrency: {
+    type: String,
+    enum: ['INR', 'USD'],
+    default: 'INR'
   },
   stage: [{
     type: String,
