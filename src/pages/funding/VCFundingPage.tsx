@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Building2, MapPin, Users, ExternalLink, Mail, Star } from 'lucide-react';
 import { useFunding } from '../../contexts/FundingContext';
-import { formatCurrencyWithSymbol } from '../../lib/utils';
+import { formatCurrencyWithSymbol, formatCurrencyRange } from '../../lib/utils';
 import LoadingGrid from '../../components/ui/LoadingGrid';
 import EmptyState from '../../components/ui/EmptyState';
 import { FundingMobileNav } from '../../components/layout/FundingSidebar';
@@ -16,7 +16,10 @@ interface VentureCapital {
   fundSizeCurrency: string;
   stageFocus: string[];
   sectorFocus: string[];
-  avgTicketSize: number;
+  avgTicketSize: {
+    min: number;
+    max: number;
+  };
   avgTicketSizeCurrency: string;
   applicationProcess: string;
   contact: string;
@@ -155,7 +158,7 @@ const VCFundingPage: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <Users className="w-4 h-4 text-purple-400" />
-                  <span className="font-medium text-gray-300">{formatCurrencyWithSymbol(Number(vc.avgTicketSize), vc.avgTicketSizeCurrency || 'INR')} Avg</span>
+                  <span className="font-medium text-gray-300">{formatCurrencyRange(vc.avgTicketSize, vc.avgTicketSizeCurrency || 'INR')} Avg</span>
                 </div>
               </div>
 
@@ -244,7 +247,7 @@ const VCFundingPage: React.FC = () => {
                 <div className="bg-gradient-to-br from-sky-600/40 to-blue-600/40 border border-sky-400/60 rounded-xl p-6">
                   <div className="text-center">
                     <div className="text-sm font-semibold text-sky-200 uppercase tracking-wide mb-2">Average Ticket</div>
-                    <div className="text-3xl font-bold text-sky-50">{formatCurrencyWithSymbol(Number(selectedVC.avgTicketSize), selectedVC.avgTicketSizeCurrency || 'INR')}</div>
+                    <div className="text-3xl font-bold text-sky-50">{formatCurrencyRange(selectedVC.avgTicketSize, selectedVC.avgTicketSizeCurrency || 'INR')}</div>
                     <div className="text-sm text-sky-300 mt-1">Typical check size</div>
                   </div>
                 </div>
