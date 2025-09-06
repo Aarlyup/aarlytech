@@ -4,7 +4,7 @@ import { useFunding } from '../contexts/FundingContext';
 import FundingCard from '../components/ui/FundingCard';
 import Button from '../components/ui/Button';
 import { ArrowRight, Sparkles, TrendingUp, Users, Award, DollarSign } from 'lucide-react';
-import { formatCurrencyShort } from '../lib/utils';
+import { formatCurrencyWithSymbol, formatCurrencyRange } from '../lib/utils';
 import { Link } from 'react-router-dom';
 
 const DashboardPage: React.FC = () => {
@@ -17,13 +17,45 @@ const DashboardPage: React.FC = () => {
   }, [getRandomFundingItems]);
 
   const formatAmount = (item: any) => {
-    if (item.fundSize) return `₹${formatCurrencyShort(item.fundSize)} Fund`;
-    if (item.ticketSize) return `₹${formatCurrencyShort(item.ticketSize)} Ticket`;
-    if (item.checkSize) return `₹${formatCurrencyShort(item.checkSize)} Check`;
-    if (item.avgTicketSize) return `₹${formatCurrencyShort(item.avgTicketSize)} Avg`;
-    if (item.grantSize) return `₹${formatCurrencyShort(item.grantSize)} Grant`;
+    // Handle fund size with currency
+    if (item.fundSize) {
+      const currency = item.fundSizeCurrency || 'INR';
+      return `${formatCurrencyWithSymbol(item.fundSize, currency)} Fund`;
+    }
+    
+    // Handle ticket size with currency (angel investors)
+    if (item.ticketSize) {
+      const currency = item.currency || 'INR';
+      return `${formatCurrencyWithSymbol(item.ticketSize, currency)} Ticket`;
+    }
+    
+    // Handle check size with currency (micro VCs)
+    if (item.checkSize) {
+      const currency = item.checkSizeCurrency || 'INR';
+      return `${formatCurrencyWithSymbol(item.checkSize, currency)} Check`;
+    }
+    
+    // Handle avgTicketSize range (venture capital)
+    if (item.avgTicketSize && typeof item.avgTicketSize === 'object' && item.avgTicketSize.min && item.avgTicketSize.max) {
+      const currency = item.avgTicketSizeCurrency || 'INR';
+      return `${formatCurrencyRange(item.avgTicketSize, currency)} Avg`;
+    }
+    // Fallback for old avgTicketSize format
+    if (item.avgTicketSize && typeof item.avgTicketSize === 'number') {
+      const currency = item.avgTicketSizeCurrency || 'INR';
+      return `${formatCurrencyWithSymbol(item.avgTicketSize, currency)} Avg`;
+    }
+    
+    // Handle grant size with currency
+    if (item.grantSize) {
+      const currency = item.currency || 'INR';
+      return `${formatCurrencyWithSymbol(item.grantSize, currency)} Grant`;
+    }
+    
+    // Handle text-based funding amounts
     if (item.fundingOffered) return item.fundingOffered;
     if (item.fundingSupport) return item.fundingSupport;
+    
     return 'Contact for details';
   };
 
