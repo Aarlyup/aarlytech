@@ -48,3 +48,10 @@ export function formatCurrencyWithSymbol(value: number | string | undefined, cur
 export function getCurrencySymbol(currency: string = 'INR'): string {
   return currency === 'USD' ? '$' : '₹';
 }
+
+export function formatCurrencyRange(range: {min: number; max: number}, currency: string = 'INR'): string {
+  const symbol = getCurrencySymbol(currency);
+  const minFormatted = formatCurrencyShort(range.min);
+  const maxFormatted = formatCurrencyShort(range.max);
+  return `${symbol}${minFormatted} - ${symbol}${maxFormatted}`;
+}
