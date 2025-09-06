@@ -17,6 +17,7 @@ const categoryTemplates: Record<string, any> = {
     country: 'Country',
     investCategory: 'Fintech&AI / ML',
     ticketSize: '500000',
+    currency: 'INR',
     stage: 'Idea&MVP&Pre-revenue',
     preferFounderProfile: 'Tech founders with domain expertise',
     portfolioHighlights: 'Invested in 50+ startups',
@@ -27,9 +28,13 @@ const categoryTemplates: Record<string, any> = {
     websiteUrl: 'https://vcfund.com',
     headOffice: 'Mumbai, India',
     fundSize: '10000000',
+    fundSizeCurrency: 'INR',
+    fundSizeDescription: 'Across multiple funds with 5-year deployment',
     stageFocus: 'Series A&Series B',
     sectorFocus: 'Fintech&AI / ML',
-    avgTicketSize: '2000000',
+    avgTicketSizeMin: '1500000',
+    avgTicketSizeMax: '2500000',
+    avgTicketSizeCurrency: 'INR',
     applicationProcess: 'Warm intro',
     contact: 'partners@vcfund.com',
     portfolioHighlights: 'Portfolio of 100+ companies',
@@ -40,7 +45,9 @@ const categoryTemplates: Record<string, any> = {
     websiteUrl: 'https://microvc.com',
     location: 'Bangalore, India',
     fundSize: '5000000',
+    fundSizeCurrency: 'INR',
     checkSize: '250000',
+    checkSizeCurrency: 'INR',
     stage: 'Pre-seed&Seed',
     sector: 'Fintech&AI / ML',
     contact: 'hello@microvc.com',
@@ -76,6 +83,7 @@ const categoryTemplates: Record<string, any> = {
     stage: 'Idea&MVP&Pre-revenue',
     sector: 'Open',
     grantSize: '1000000',
+    currency: 'INR',
     equityDilution: 'None',
     eligibility: 'DPIIT recognized startups',
     howToApply: 'Apply through startup.india.gov.in',
@@ -188,8 +196,8 @@ const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
           }
           item[header] = value;
         });
-        // Require all backend-required fields
-        if (item.name && item.city && item.country && item.ticketSize && item.contact) return item;
+        // Require all backend-required fields including currency
+        if (item.name && item.city && item.country && item.ticketSize && item.currency && item.contact) return item;
         return null;
       }).filter(Boolean);
     }
@@ -201,14 +209,14 @@ const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
           if (value === undefined || value === null) value = '';
           if (["stageFocus", "sectorFocus"].includes(header)) {
             value = typeof value === 'string' ? value.split('&').map(v => v.trim()).filter(Boolean) : [];
-          } else if (["fundSize", "avgTicketSize"].includes(header)) {
+          } else if (["fundSize", "avgTicketSizeMin", "avgTicketSizeMax"].includes(header)) {
             value = Number(value) || 0;
           } else {
             value = String(value).trim();
           }
           item[header] = value;
         });
-        if (item.name && item.headOffice && item.fundSize && item.avgTicketSize && item.contact) return item;
+        if (item.name && item.headOffice && item.fundSize && item.avgTicketSizeMin && item.avgTicketSizeMax && item.contact) return item;
         return null;
       }).filter(Boolean);
     }
@@ -227,7 +235,7 @@ const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
           }
           item[header] = value;
         });
-        if (item.name && item.location && item.fundSize && item.checkSize && item.contact) return item;
+        if (item.name && item.location && item.fundSize && item.fundSizeCurrency && item.checkSize && item.checkSizeCurrency && item.contact) return item;
         return null;
       }).filter(Boolean);
     }
@@ -276,7 +284,7 @@ const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
           }
           item[header] = value;
         });
-        if (item.name && item.authority && item.grantSize && item.eligibility && item.howToApply && item.timelines && item.contact) return item;
+        if (item.name && item.authority && item.grantSize && item.currency && item.eligibility && item.howToApply && item.timelines && item.contact) return item;
         return null;
       }).filter(Boolean);
     }
