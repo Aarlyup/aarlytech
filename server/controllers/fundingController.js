@@ -156,7 +156,7 @@ exports.createFundingItem = async (req, res) => {
     // Convert numeric fields
     const numericFields = {
       'angel-investors': ['ticketSize'],
-      'venture-capital': ['fundSize', 'avgTicketSize'], 
+      'venture-capital': ['fundSize'], // avgTicketSize handled separately as range
       'micro-vcs': ['fundSize', 'checkSize'], 
       'incubators': [],
       'accelerators': [],
@@ -172,6 +172,19 @@ exports.createFundingItem = async (req, res) => {
           processedData[field] = 0; // Default to 0 if not provided
         }
       });
+    }
+
+    // Special processing for venture capital avgTicketSize range
+    if (category === 'venture-capital') {
+      if (processedData.avgTicketSizeMin !== undefined && processedData.avgTicketSizeMax !== undefined) {
+        processedData.avgTicketSize = {
+          min: Number(processedData.avgTicketSizeMin),
+          max: Number(processedData.avgTicketSizeMax)
+        };
+        // Remove the temporary fields
+        delete processedData.avgTicketSizeMin;
+        delete processedData.avgTicketSizeMax;
+      }
     }
 
     console.log('Final processed data (after processing):', JSON.stringify(processedData));
@@ -245,7 +258,7 @@ exports.updateFundingItem = async (req, res) => {
 
     const numericFields = { 
       'angel-investors': ['ticketSize'],
-      'venture-capital': ['fundSize', 'avgTicketSize'],
+      'venture-capital': ['fundSize'], // avgTicketSize handled separately as range
       'micro-vcs': ['fundSize', 'checkSize'],
       'incubators': [],
       'accelerators': [],
@@ -260,6 +273,19 @@ exports.updateFundingItem = async (req, res) => {
           processedData[field] = 0; // Default to 0 if not provided
         }
       });
+    }
+
+    // Special processing for venture capital avgTicketSize range
+    if (category === 'venture-capital') {
+      if (processedData.avgTicketSizeMin !== undefined && processedData.avgTicketSizeMax !== undefined) {
+        processedData.avgTicketSize = {
+          min: Number(processedData.avgTicketSizeMin),
+          max: Number(processedData.avgTicketSizeMax)
+        };
+        // Remove the temporary fields
+        delete processedData.avgTicketSizeMin;
+        delete processedData.avgTicketSizeMax;
+      }
     }
 
     console.log('Final processed data for update:', JSON.stringify(processedData));
