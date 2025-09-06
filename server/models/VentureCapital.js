@@ -24,6 +24,10 @@ const ventureCapitalSchema = new mongoose.Schema({
     enum: ['INR', 'USD'],
     default: 'INR'
   },
+  fundSizeDescription: {
+    type: String,
+    default: ''
+  },
   stageFocus: [{
     type: String,
     enum: ['Pre-seed', 'Seed', 'Series A', 'Series B', 'Series C', 'Growth']
