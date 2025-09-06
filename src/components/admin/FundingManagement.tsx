@@ -41,6 +41,7 @@ const categoryFields: Record<string, { name: string; label: string; type?: strin
     { name: 'headOffice', label: 'Head Office', required: true },
     { name: 'fundSize', label: 'Fund Size', type: 'number', required: true },
     { name: 'fundSizeCurrency', label: 'Fund Size Currency', options: ['INR', 'USD'], required: true },
+    { name: 'fundSizeDescription', label: 'Fund Size Description' },
     { name: 'stageFocus', label: 'Stage Focus', required: true, options: ['Pre-seed', 'Seed', 'Series A', 'Series B', 'Series C', 'Growth'], multi: true },
     { name: 'sectorFocus', label: 'Sector Focus', required: true, options: ['Fintech', 'Consumer & D2C', 'SaaS & Enterprise Tech', 'Healthtech', 'Edtech', 'AI / ML', 'Deeptech', 'Space Tech', 'Cleantech & Climate', 'Foodtech & Agritech', 'Proptech & Infrastructure', 'Mobility & Logistics', 'Media, Gaming & Content'], multi: true },
     { name: 'avgTicketSizeMin', label: 'Average Ticket Size (Min)', type: 'number', required: true },
