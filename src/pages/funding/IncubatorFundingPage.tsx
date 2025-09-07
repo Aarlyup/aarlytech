@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Building2, MapPin, DollarSign, Calendar, ExternalLink, Mail, Star } from 'lucide-react';
+import { Building2, MapPin, DollarSign, Calendar, ExternalLink, Mail } from 'lucide-react';
 import { useFunding } from '../../contexts/FundingContext';
 import LoadingGrid from '../../components/ui/LoadingGrid';
 import EmptyState from '../../components/ui/EmptyState';
@@ -104,17 +104,6 @@ const IncubatorFundingPage: React.FC = () => {
               onClick={() => handleIncubatorClick(incubator)}
               className="relative bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-md border border-gray-700 p-6 hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer group"
             >
-              {/* Star Icon */}
-              <button
-                className="absolute top-4 left-4 bg-gray-700 rounded-full p-1 shadow hover:bg-yellow-500/20 transition-colors border border-gray-600"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // Handle save functionality
-                }}
-              >
-                <Star className="w-5 h-5 text-yellow-400" fill="none" />
-              </button>
-
               <div className="flex items-start gap-4">
                 <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center border border-purple-500/30">
                   <Building2 className="w-8 h-8 text-purple-400" />

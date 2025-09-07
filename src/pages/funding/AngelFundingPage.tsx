@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { User, MapPin, DollarSign, Target, ExternalLink, Mail, Linkedin, Star } from 'lucide-react';
+import { User, MapPin, DollarSign, Target, ExternalLink, Mail, Linkedin } from 'lucide-react';
 import { useFunding } from '../../contexts/FundingContext';
 import { formatCurrencyWithSymbol } from '../../lib/utils';
 import LoadingGrid from '../../components/ui/LoadingGrid';
@@ -110,17 +110,6 @@ const AngelFundingPage: React.FC = () => {
               onClick={() => handleAngelClick(angel)}
               className="relative bg-gray-800 border border-gray-700 backdrop-blur-xl rounded-2xl shadow-md p-6 hover:shadow-xl hover:border-gray-600 transition-all hover:-translate-y-1 cursor-pointer group"
             >
-              {/* Star Icon */}
-              <button
-                className="absolute top-4 left-4 bg-gray-700 border border-gray-600 rounded-full p-1 shadow hover:bg-yellow-100 transition-colors"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // Handle save functionality
-                }}
-              >
-                <Star className="w-5 h-5 text-yellow-400" fill="none" />
-              </button>
-
               <div className="flex items-start gap-4">
                 <div className="w-16 h-16 rounded-xl bg-gray-700 border border-gray-600 flex items-center justify-center">
                   <User className="w-8 h-8 text-pink-400" />

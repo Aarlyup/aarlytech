@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, MapPin, Building2, User, Rocket, Award, ExternalLink } from 'lucide-react';
+import { MapPin, Building2, User, Rocket, Award, ExternalLink } from 'lucide-react';
 
 interface FundingCardProps {
   id: string;
@@ -53,17 +53,6 @@ const FundingCard: React.FC<FundingCardProps> = ({
       onClick={onClick}
       className="group relative bg-gray-800 border border-gray-700 rounded-xl p-6 hover:border-gray-600 hover:shadow-xl hover:shadow-black/20 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
     >
-      {/* Save Button */}
-      <button
-        className="absolute top-4 right-4 p-2 rounded-full bg-gray-700 hover:bg-yellow-500/20 border border-gray-600 hover:border-yellow-500/50 transition-all"
-        onClick={(e) => {
-          e.stopPropagation();
-          // Handle save functionality
-        }}
-      >
-        <Star className="w-4 h-4 text-gray-400 hover:text-yellow-400 transition-colors" />
-      </button>
-
       {/* Header */}
       <div className="flex items-start gap-4 mb-4">
         <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${getCategoryGradient(category)} flex items-center justify-center border border-white/10`}>
