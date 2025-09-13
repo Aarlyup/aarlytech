@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Twitter, Mail, ArrowRight, Linkedin, Instagram, MessageCircle, Send, Heart } from 'lucide-react';
+import { FaWhatsapp, FaReddit } from 'react-icons/fa';
 import Logo from '../ui/Logo';
 
 const Footer: React.FC = () => {
@@ -60,7 +61,7 @@ const Footer: React.FC = () => {
             </p>
             <div className="flex space-x-4">
               <a 
-                href="#" 
+                href="https://twitter.com" 
                 className="p-2 bg-gray-800 border border-gray-700 rounded-lg hover:border-blue-500 hover:bg-blue-500/10 transition-all"
                 aria-label="Twitter"
               >
@@ -76,11 +77,31 @@ const Footer: React.FC = () => {
                 <Linkedin size={20} className="text-gray-400 hover:text-blue-400 transition-colors" />
               </a>
               <a 
-                href="#" 
+                href="https://www.instagram.com/aarly.in/" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="p-2 bg-gray-800 border border-gray-700 rounded-lg hover:border-pink-500 hover:bg-pink-500/10 transition-all"
                 aria-label="Instagram"
               >
                 <Instagram size={20} className="text-gray-400 hover:text-pink-400 transition-colors" />
+              </a>
+              <a
+                href="https://whatsapp.com/channel/0029Vb7HJcKCsU9GvTgzG01u"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 bg-gray-800 border border-gray-700 rounded-lg hover:border-green-500 hover:bg-green-500/10 transition-all"
+                aria-label="WhatsApp"
+              >
+                <FaWhatsapp className="w-5 h-5 text-gray-400 hover:text-green-500 transition-colors" />
+              </a>
+              <a
+                href="https://www.reddit.com/r/startupOpportunities/s/FiC5h8zotj"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 bg-gray-800 border border-gray-700 rounded-lg hover:border-orange-500 hover:bg-orange-500/10 transition-all"
+                aria-label="Reddit"
+              >
+                <FaReddit className="w-5 h-5 text-gray-400 hover:text-orange-500 transition-colors" />
               </a>
             </div>
           </div>
