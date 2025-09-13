@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Linkedin, Instagram, Twitter, CheckCircle } from 'lucide-react';
+import { FaWhatsapp, FaReddit } from 'react-icons/fa';
 
 const ContactPage: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
@@ -109,9 +110,21 @@ const ContactPage: React.FC = () => {
         <div className="mt-8 sm:mt-10 text-center">
           <p className="text-gray-400 mb-2 sm:mb-3 text-sm sm:text-base">Or connect with us:</p>
           <div className="flex justify-center space-x-6 sm:space-x-8 mb-2 sm:mb-3">
-            <a href="https://www.linkedin.com/company/aarly" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-transform hover:scale-110"><Linkedin size={28} className="sm:w-8 sm:h-8" /></a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-pink-400 hover:text-pink-300 transition-transform hover:scale-110"><Instagram size={28} className="sm:w-8 sm:h-8" /></a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-transform hover:scale-110"><Twitter size={28} className="sm:w-8 sm:h-8" /></a>
+            <a href="https://www.linkedin.com/company/aarly" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-transform hover:scale-110">
+              <Linkedin size={28} className="sm:w-8 sm:h-8" />
+            </a>
+            <a href="https://www.instagram.com/aarly.in/" target="_blank" rel="noopener noreferrer" className="text-pink-400 hover:text-pink-300 transition-transform hover:scale-110">
+              <Instagram size={28} className="sm:w-8 sm:h-8" />
+            </a>
+            <a href="https://whatsapp.com/channel/0029Vb7HJcKCsU9GvTgzG01u" target="_blank" rel="noopener noreferrer" className="text-green-400 hover:text-green-300 transition-transform hover:scale-110">
+              <FaWhatsapp className="w-7 h-7 sm:w-8 sm:h-8" />
+            </a>
+            <a href="https://www.reddit.com/r/startupOpportunities/s/FiC5h8zotj" target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:text-orange-300 transition-transform hover:scale-110">
+              <FaReddit className="w-7 h-7 sm:w-8 sm:h-8" />
+            </a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-transform hover:scale-110">
+              <Twitter size={28} className="sm:w-8 sm:h-8" />
+            </a>
           </div>
           <div className="text-gray-400 text-xs sm:text-base break-words">
             <div>Email: <a href="mailto:teamaarly@gmail.com" className="underline hover:text-blue-400">teamaarly@gmail.com</a></div>
