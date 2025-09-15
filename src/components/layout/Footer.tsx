@@ -61,7 +61,9 @@ const Footer: React.FC = () => {
             </p>
             <div className="flex space-x-4">
               <a 
-                href="https://x.com/Aarly_in?t=Tkckn_Uy7ZlW9iVM2mSELA&s=08" 
+                href="https://x.com/Aarly_in?t=Tkckn_Uy7ZlW9iVM2mSELA&s=08"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="p-2 bg-gray-800 border border-gray-700 rounded-lg hover:border-blue-500 hover:bg-blue-500/10 transition-all"
                 aria-label="Twitter"
               >
