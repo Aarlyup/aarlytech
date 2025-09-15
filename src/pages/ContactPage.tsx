@@ -122,7 +122,7 @@ const ContactPage: React.FC = () => {
             <a href="https://www.reddit.com/r/startupOpportunities/s/FiC5h8zotj" target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:text-orange-300 transition-transform hover:scale-110">
               <FaReddit className="w-7 h-7 sm:w-8 sm:h-8" />
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-transform hover:scale-110">
+            <a href="https://x.com/Aarly_in?t=Tkckn_Uy7ZlW9iVM2mSELA&s=08" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-transform hover:scale-110">
               <Twitter size={28} className="sm:w-8 sm:h-8" />
             </a>
           </div>
