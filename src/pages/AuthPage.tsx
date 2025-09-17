@@ -53,11 +53,54 @@ const AuthPage: React.FC = () => {
   }, [otpTimer]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+    
+    // Special handling for OTP input
+    if (name === 'otp') {
+      // Only allow numbers and limit to 6 digits
+      const numericValue = value.replace(/\D/g, '').slice(0, 6);
+      setFormData({
+        ...formData,
+        [name]: numericValue
+      });
+      
+      // Auto-submit when 6 digits are entered
+      if (numericValue.length === 6) {
+        setTimeout(() => {
+          handleOtpSubmit(numericValue);
+        }, 200); // Delay to ensure state is updated
+      }
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+    }
     setError('');
+  };
+
+  const handleOtpSubmit = async (otpValue: string) => {
+    if (otpValue.length !== 6) {
+      setError('Please enter a valid 6-digit verification code');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+    setSuccess('');
+
+    try {
+      await verifyEmail(formData.email, otpValue);
+      setSuccess('Email verified successfully! Redirecting...');
+      setTimeout(() => {
+        const from = location.state?.from?.pathname || '/dashboard';
+        navigate(from, { replace: true });
+      }, 1000);
+    } catch (err: any) {
+      setError(err.message || 'Verification failed');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const validateForm = () => {
@@ -83,8 +126,8 @@ const AuthPage: React.FC = () => {
       setError('Password is required');
       return false;
     }
-    if (mode === 'verify' && !formData.otp.trim()) {
-      setError('OTP is required');
+    if (mode === 'verify' && (!formData.otp.trim() || formData.otp.trim().length !== 6)) {
+      setError('Please enter a valid 6-digit verification code');
       return false;
     }
     return true;
@@ -100,7 +143,7 @@ const AuthPage: React.FC = () => {
 
     try {
       if (mode === 'signup') {
-        const result = await register(formData.name, formData.email, formData.password);
+        await register(formData.name, formData.email, formData.password);
         setSuccess('Registration successful! Please check your email for verification code.');
         setMode('verify');
         setOtpTimer(900); // 15 minutes
@@ -117,7 +160,7 @@ const AuthPage: React.FC = () => {
           }, 1000);
         }
       } else if (mode === 'verify') {
-        const result = await verifyEmail(formData.email, formData.otp);
+        await verifyEmail(formData.email, formData.otp);
         setSuccess('Email verified successfully! Redirecting...');
         setTimeout(() => {
           const from = location.state?.from?.pathname || '/dashboard';
@@ -353,10 +396,12 @@ const AuthPage: React.FC = () => {
                   id="otp"
                   required
                   maxLength={6}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-center text-lg font-mono tracking-wider"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-center text-lg font-mono tracking-wider text-black bg-white"
                   value={formData.otp}
                   onChange={handleChange}
                   placeholder="000000"
+                  autoComplete="one-time-code"
+                  inputMode="numeric"
                 />
                 <div className="mt-2 flex items-center justify-between text-xs text-gray-500">
                   <span>
