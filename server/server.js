@@ -140,8 +140,8 @@ app.use('*', (req, res) => {
 // Error handling
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, () => {
+const PORT = process.env.PORT || 6000;
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV}`);
   console.log(`🌐 Allowed Frontend URLs: ${process.env.FRONTEND_URLS}`);
