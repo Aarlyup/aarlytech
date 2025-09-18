@@ -9,6 +9,10 @@ interface FundingCardProps {
   amount?: string;
   sector?: string[];
   stage?: string[];
+  icon?: {
+    url: string;
+    publicId: string;
+  };
   onClick: () => void;
   showCategoryLabel?: boolean;
 }
@@ -45,6 +49,7 @@ const FundingCard: React.FC<FundingCardProps> = ({
   amount,
   sector = [],
   stage = [],
+  icon,
   onClick,
   showCategoryLabel = false
 }) => {
@@ -55,8 +60,16 @@ const FundingCard: React.FC<FundingCardProps> = ({
     >
       {/* Header */}
       <div className="flex items-start gap-4 mb-4">
-        <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${getCategoryGradient(category)} flex items-center justify-center border border-white/10`}>
-          {getCategoryIcon(category)}
+        <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${getCategoryGradient(category)} flex items-center justify-center border border-white/10 overflow-hidden`}>
+          {icon?.url ? (
+            <img 
+              src={icon.url} 
+              alt={`${name} icon`}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            getCategoryIcon(category)
+          )}
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="text-lg font-semibold text-white truncate group-hover:text-blue-400 transition-colors">
