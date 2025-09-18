@@ -19,6 +19,10 @@ interface Accelerator {
   sectors: string[];
   applicationLink: string;
   pastCohorts: string;
+  icon?: {
+    url: string;
+    publicId: string;
+  };
 }
 
 const AcceleratorFundingPage: React.FC = () => {
@@ -109,8 +113,16 @@ const AcceleratorFundingPage: React.FC = () => {
               className="relative bg-gray-800 border border-gray-700 backdrop-blur-xl rounded-2xl shadow-md p-6 hover:shadow-xl hover:border-gray-600 transition-all hover:-translate-y-1 cursor-pointer group"
             >
               <div className="flex items-start gap-4">
-                <div className="w-16 h-16 rounded-xl bg-gray-700 border border-gray-600 flex items-center justify-center">
-                  <Rocket className="w-8 h-8 text-orange-400" />
+                <div className="w-16 h-16 rounded-xl bg-gray-700 border border-gray-600 flex items-center justify-center overflow-hidden">
+                  {accelerator.icon?.url ? (
+                    <img 
+                      src={accelerator.icon.url} 
+                      alt={`${accelerator.name} icon`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <Rocket className="w-8 h-8 text-orange-400" />
+                  )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <h3 className="text-lg font-semibold text-white truncate group-hover:text-blue-400 transition-colors">
@@ -180,8 +192,16 @@ const AcceleratorFundingPage: React.FC = () => {
             {/* Header */}
             <div className="sticky top-0 z-20 bg-gray-900 border-b border-gray-700 flex items-center justify-between px-6 py-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500/20 to-red-500/20 border border-orange-500/30 flex items-center justify-center">
-                  <Rocket className="w-6 h-6 text-orange-400" />
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500/20 to-red-500/20 border border-orange-500/30 flex items-center justify-center overflow-hidden">
+                  {selectedAccelerator.icon?.url ? (
+                    <img 
+                      src={selectedAccelerator.icon.url} 
+                      alt={`${selectedAccelerator.name} icon`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <Rocket className="w-6 h-6 text-orange-400" />
+                  )}
                 </div>
                 <div>
                   <h1 className="text-xl font-bold text-white">{selectedAccelerator.name}</h1>

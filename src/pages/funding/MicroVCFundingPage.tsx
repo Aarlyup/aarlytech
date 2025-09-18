@@ -20,6 +20,10 @@ interface MicroVC {
   sector: string[];
   contact: string;
   portfolioHighlights: string;
+  icon?: {
+    url: string;
+    publicId: string;
+  };
 }
 
 const MicroVCFundingPage: React.FC = () => {
@@ -108,8 +112,16 @@ const MicroVCFundingPage: React.FC = () => {
               className="relative bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-md border border-gray-700 p-6 hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer group"
             >
               <div className="flex items-start gap-4">
-                <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-green-500/20 to-blue-500/20 flex items-center justify-center border border-green-500/30">
-                  <Building2 className="w-8 h-8 text-green-400" />
+                <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-green-500/20 to-blue-500/20 flex items-center justify-center border border-green-500/30 overflow-hidden">
+                  {microvc.icon?.url ? (
+                    <img 
+                      src={microvc.icon.url} 
+                      alt={`${microvc.name} icon`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <Building2 className="w-8 h-8 text-green-400" />
+                  )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <h3 className="text-lg font-semibold text-white truncate group-hover:text-blue-400 transition-colors">
@@ -189,8 +201,16 @@ const MicroVCFundingPage: React.FC = () => {
                 Back
               </button>
               <div className="flex items-center gap-3 mx-auto">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500/20 to-blue-500/20 flex items-center justify-center border border-green-500/30">
-                  <Building2 className="w-6 h-6 text-green-400" />
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500/20 to-blue-500/20 flex items-center justify-center border border-green-500/30 overflow-hidden">
+                  {selectedMicroVC.icon?.url ? (
+                    <img 
+                      src={selectedMicroVC.icon.url} 
+                      alt={`${selectedMicroVC.name} icon`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <Building2 className="w-6 h-6 text-green-400" />
+                  )}
                 </div>
                 <div className="text-center">
                   <h1 className="text-lg font-bold text-white leading-tight">{selectedMicroVC.name}</h1>

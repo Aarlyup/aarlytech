@@ -20,6 +20,10 @@ interface AngelInvestor {
   preferFounderProfile: string;
   portfolioHighlights: string;
   contact: string;
+  icon?: {
+    url: string;
+    publicId: string;
+  };
 }
 
 const AngelFundingPage: React.FC = () => {
@@ -111,8 +115,16 @@ const AngelFundingPage: React.FC = () => {
               className="relative bg-gray-800 border border-gray-700 backdrop-blur-xl rounded-2xl shadow-md p-6 hover:shadow-xl hover:border-gray-600 transition-all hover:-translate-y-1 cursor-pointer group"
             >
               <div className="flex items-start gap-4">
-                <div className="w-16 h-16 rounded-xl bg-gray-700 border border-gray-600 flex items-center justify-center">
-                  <User className="w-8 h-8 text-pink-400" />
+                <div className="w-16 h-16 rounded-xl bg-gray-700 border border-gray-600 flex items-center justify-center overflow-hidden">
+                  {angel.icon?.url ? (
+                    <img 
+                      src={angel.icon.url} 
+                      alt={`${angel.name} icon`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <User className="w-8 h-8 text-pink-400" />
+                  )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <h3 className="text-lg font-semibold text-white truncate group-hover:text-blue-400 transition-colors">
@@ -185,8 +197,16 @@ const AngelFundingPage: React.FC = () => {
             {/* Header */}
             <div className="sticky top-0 z-20 bg-gray-900 border-b border-gray-700 flex items-center justify-between px-6 py-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 border border-pink-500/30 flex items-center justify-center">
-                  <User className="w-6 h-6 text-pink-400" />
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 border border-pink-500/30 flex items-center justify-center overflow-hidden">
+                  {selectedAngel.icon?.url ? (
+                    <img 
+                      src={selectedAngel.icon.url} 
+                      alt={`${selectedAngel.name} icon`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <User className="w-6 h-6 text-pink-400" />
+                  )}
                 </div>
                 <div>
                   <h1 className="text-xl font-bold text-white">{selectedAngel.name}</h1>

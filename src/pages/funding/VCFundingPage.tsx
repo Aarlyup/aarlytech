@@ -26,6 +26,10 @@ interface VentureCapital {
   contact: string;
   portfolioHighlights: string;
   investmentThesis: string;
+  icon?: {
+    url: string;
+    publicId: string;
+  };
 }
 
 const VCFundingPage: React.FC = () => {
@@ -128,8 +132,16 @@ const VCFundingPage: React.FC = () => {
               className="relative bg-gray-800 border border-gray-700 backdrop-blur-xl rounded-2xl shadow-md p-6 hover:shadow-xl hover:border-gray-600 transition-all hover:-translate-y-1 cursor-pointer group"
             >
               <div className="flex items-start gap-4">
-                <div className="w-16 h-16 rounded-xl bg-gray-700 border border-gray-600 flex items-center justify-center">
-                  <Building2 className="w-8 h-8 text-blue-400" />
+                <div className="w-16 h-16 rounded-xl bg-gray-700 border border-gray-600 flex items-center justify-center overflow-hidden">
+                  {vc.icon?.url ? (
+                    <img 
+                      src={vc.icon.url} 
+                      alt={`${vc.name} icon`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <Building2 className="w-8 h-8 text-blue-400" />
+                  )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <h3 className="text-lg font-semibold text-white truncate group-hover:text-blue-400 transition-colors">
@@ -201,8 +213,16 @@ const VCFundingPage: React.FC = () => {
             {/* Header */}
             <div className="sticky top-0 z-20 bg-gray-900 border-b border-gray-700 flex items-center justify-between px-6 py-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center">
-                  <Building2 className="w-6 h-6 text-blue-400" />
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center overflow-hidden">
+                  {selectedVC.icon?.url ? (
+                    <img 
+                      src={selectedVC.icon.url} 
+                      alt={`${selectedVC.name} icon`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <Building2 className="w-6 h-6 text-blue-400" />
+                  )}
                 </div>
                 <div>
                   <h1 className="text-xl font-bold text-white">{selectedVC.name}</h1>
