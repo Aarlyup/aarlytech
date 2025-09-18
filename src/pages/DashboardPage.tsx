@@ -193,6 +193,7 @@ const DashboardPage: React.FC = () => {
                     amount={formatAmount(item)}
                     sector={getSectors(item)}
                     stage={getStages(item)}
+                    icon={item.icon}
                     onClick={() => handleFundingItemClick(item)}
                     showCategoryLabel={true}
                   />
