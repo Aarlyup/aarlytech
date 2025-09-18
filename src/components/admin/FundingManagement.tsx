@@ -135,6 +135,8 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
   const [success, setSuccess] = useState('');
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [showExcelUpload, setShowExcelUpload] = useState(false);
+  const [selectedIcon, setSelectedIcon] = useState<File | null>(null);
+  const [iconPreview, setIconPreview] = useState<string | null>(null);
 
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -255,14 +257,30 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
       const method = editingItem ? 'PUT' : 'POST';
       
       console.log('Final data being sent to API:', JSON.stringify(processedData));
+      
+      // Create FormData for file upload
+      const formDataToSend = new FormData();
+      
+      // Add all form fields
+      Object.keys(processedData).forEach(key => {
+        const value = processedData[key];
+        if (Array.isArray(value)) {
+          formDataToSend.append(key, value.join(','));
+        } else {
+          formDataToSend.append(key, value.toString());
+        }
+      });
+      
+      // Add icon file if selected
+      if (selectedIcon) {
+        formDataToSend.append('icon', selectedIcon);
+      }
+      
       try {
         const response = await fetch(url, {
           method,
-          headers: {
-            'Content-Type': 'application/json'
-          },
           credentials: 'include',
-          body: JSON.stringify(processedData)
+          body: formDataToSend // Remove Content-Type header to let browser set it with boundary
         });
         
         const data = await response.json();
@@ -274,6 +292,8 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
           setShowForm(false);
           setEditingItem(null);
           setFormData({});
+          setSelectedIcon(null);
+          setIconPreview(null);
           setTimeout(() => setSuccess(''), 3000);
         } else {
           setError(data.message || 'Error saving item');
@@ -365,6 +385,18 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
     }
   };
 
+  const handleIconChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedIcon(file);
+      const reader = new FileReader();
+      reader.onload = () => {
+        setIconPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const filteredItems = items.filter(item =>
     item.name?.toLowerCase().includes(search.toLowerCase())
   );
@@ -389,6 +421,8 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
             onClick={() => {
               setEditingItem(null);
               setFormData({});
+              setSelectedIcon(null);
+              setIconPreview(null);
               setShowForm(true);
               setError('');
               setSuccess('');
@@ -478,6 +512,35 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
               </h3>
               
               <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Icon Upload Field */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Icon (optional)
+                  </label>
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleIconChange}
+                      className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                    />
+                    {iconPreview && (
+                      <img 
+                        src={iconPreview} 
+                        alt="Icon preview" 
+                        className="w-16 h-16 object-cover rounded border"
+                      />
+                    )}
+                    {editingItem?.icon?.url && !iconPreview && (
+                      <img 
+                        src={editingItem.icon.url} 
+                        alt="Current icon" 
+                        className="w-16 h-16 object-cover rounded border"
+                      />
+                    )}
+                  </div>
+                </div>
+                
                 {fields.map((field) => (
                   <div key={field.name}>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
