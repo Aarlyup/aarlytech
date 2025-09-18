@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { body } = require('express-validator');
+const multer = require('multer');
 const adminAuth = require('../middleware/adminAuth');
 const {
   getFundingItems,
@@ -10,6 +11,21 @@ const {
   deleteFundingItem,
   getPublicFundingItems
 } = require('../controllers/fundingController');
+
+// Configure multer for file uploads
+const upload = multer({
+  dest: 'uploads/',
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed'), false);
+    }
+  }
+});
 
 // Validation rules for different categories
 const angelInvestorValidation = [
@@ -85,12 +101,12 @@ const getValidation = (category) => {
 // Admin routes (protected)
 router.get('/admin/:category', adminAuth, getFundingItems);
 router.get('/admin/:category/:id', adminAuth, getFundingItem);
-router.post('/admin/:category', adminAuth, (req, res, next) => {
+router.post('/admin/:category', adminAuth, upload.single('icon'), (req, res, next) => {
   const validation = getValidation(req.params.category);
   validation.forEach(rule => rule(req, res, () => {}));
   next();
 }, createFundingItem);
-router.put('/admin/:category/:id', adminAuth, updateFundingItem);
+router.put('/admin/:category/:id', adminAuth, upload.single('icon'), updateFundingItem);
 router.delete('/admin/:category/:id', adminAuth, deleteFundingItem);
 router.delete('/admin/:category/bulk/all', adminAuth, require('../controllers/fundingController').bulkDeleteFundingItems);
 
