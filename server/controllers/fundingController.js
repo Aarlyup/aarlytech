@@ -5,6 +5,7 @@ const IncubatorNew = require('../models/IncubatorNew');
 const AcceleratorNew = require('../models/AcceleratorNew');
 const GovtGrant = require('../models/GovtGrant');
 const { validationResult } = require('express-validator');
+const cloudinary = require('../config/cloudinary');
 
 // Model mapping
 const models = {
@@ -189,6 +190,29 @@ exports.createFundingItem = async (req, res) => {
 
     console.log('Final processed data (after processing):', JSON.stringify(processedData));
 
+    // Handle icon upload if file is provided
+    if (req.file) {
+      try {
+        const result = await cloudinary.uploader.upload(req.file.path, {
+          folder: `funding-icons/${category}`,
+          public_id: `${category}_${Date.now()}`,
+          resource_type: 'image',
+          transformation: [
+            { width: 128, height: 128, crop: 'fill' },
+            { quality: 'auto' }
+          ]
+        });
+        
+        processedData.icon = {
+          url: result.secure_url,
+          publicId: result.public_id
+        };
+      } catch (uploadError) {
+        console.error('Icon upload error:', uploadError);
+        // Continue without icon if upload fails
+      }
+    }
+
     const item = new Model(processedData);
     await item.save();
 
@@ -289,6 +313,35 @@ exports.updateFundingItem = async (req, res) => {
     }
 
     console.log('Final processed data for update:', JSON.stringify(processedData));
+
+    // Handle icon upload if file is provided
+    if (req.file) {
+      try {
+        // First get the existing item to delete old icon if exists
+        const existingItem = await Model.findById(id);
+        if (existingItem && existingItem.icon && existingItem.icon.publicId) {
+          await cloudinary.uploader.destroy(existingItem.icon.publicId);
+        }
+
+        const result = await cloudinary.uploader.upload(req.file.path, {
+          folder: `funding-icons/${category}`,
+          public_id: `${category}_${Date.now()}`,
+          resource_type: 'image',
+          transformation: [
+            { width: 128, height: 128, crop: 'fill' },
+            { quality: 'auto' }
+          ]
+        });
+        
+        processedData.icon = {
+          url: result.secure_url,
+          publicId: result.public_id
+        };
+      } catch (uploadError) {
+        console.error('Icon upload error:', uploadError);
+        // Continue without icon update if upload fails
+      }
+    }
 
     const item = await Model.findByIdAndUpdate(
       id,
