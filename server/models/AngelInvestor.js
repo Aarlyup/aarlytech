@@ -6,6 +6,10 @@ const angelInvestorSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  icon: {
+    url: String,
+    publicId: String
+  },
   linkedinProfileUrl: {
     type: String,
     default: ''

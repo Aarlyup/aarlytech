@@ -6,6 +6,10 @@ const incubatorSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  icon: {
+    url: String,
+    publicId: String
+  },
   websiteUrl: {
     type: String,
     default: ''

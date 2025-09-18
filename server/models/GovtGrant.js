@@ -6,6 +6,10 @@ const govtGrantSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  icon: {
+    url: String,
+    publicId: String
+  },
   authority: {
     type: String,
     required: true,
