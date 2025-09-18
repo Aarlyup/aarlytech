@@ -1,6 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const { body } = require('express-validator');
+const { authLimiter } = require('../middleware/rateLimiters');
 const {
   register,
   verifyEmail,
@@ -43,10 +44,10 @@ const loginValidation = [
 ];
 
 // Auth routes
-router.post('/register', registerValidation, register);
+router.post('/register', authLimiter, registerValidation, register);
 router.post('/verify-email', verifyEmail);
-router.post('/resend-otp', resendOTP);
-router.post('/login', loginValidation, login);
+router.post('/resend-otp', authLimiter, resendOTP);
+router.post('/login', authLimiter, loginValidation, login);
 router.post('/logout', logout);
 router.get('/me', protect, getMe);
 router.get('/is-admin', protect, isAdmin);
