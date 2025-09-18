@@ -4,7 +4,6 @@ const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
 const morgan = require('morgan');
-const rateLimit = require('express-rate-limit');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
@@ -12,6 +11,7 @@ const passport = require('./config/passport');
 
 const connectDB = require('./config/database');
 const errorHandler = require('./middleware/errorHandler');
+const { generalLimiter } = require('./middleware/rateLimiters');
 
 // Route imports
 const authRoutes = require('./routes/auth');
@@ -50,12 +50,7 @@ app.use(helmet({
 }));
 
 // Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100,
-  message: 'Too many requests from this IP, please try again later.'
-});
-app.use('/api/', limiter);
+app.use('/api/', generalLimiter);
 
 // CORS
 const allowedOrigins = (process.env.FRONTEND_URLS || '')
@@ -84,6 +79,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Cookie parser
 app.use(cookieParser());
 
+
 // Session middleware
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-session-secret',
@@ -110,6 +106,10 @@ app.use(compression());
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
+app.get('/', (req, res) => {
+  res.send('Welcome to Aarly API');
+});
 
 // Health check
 app.get('/api/health', (req, res) => {
