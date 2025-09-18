@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { body } = require('express-validator');
 const adminAuth = require('../middleware/adminAuth');
+const { contactLimiter } = require('../middleware/rateLimiters');
 const { upload } = require('../controllers/uploadController');
 const {
   // Investor Match
@@ -67,8 +68,8 @@ router.post('/contacts/reply/:id', adminAuth, replyToContact);
 router.put('/contacts/:id', adminAuth, updateContactStatus);
 router.delete('/contacts/:id', adminAuth, deleteContact);
 
-// Public contact endpoint (no auth required)
-router.post('/contacts', contactValidation, createContact);
+// Public contact endpoint (no auth required but rate limited)
+router.post('/contacts', contactLimiter, contactValidation, createContact);
 
 // Test endpoint to check admin access
 router.get('/test', adminAuth, (req, res) => {
