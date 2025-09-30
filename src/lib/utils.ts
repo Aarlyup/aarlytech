@@ -13,7 +13,7 @@ export function cn(...inputs: ClassValue[]) {
  *  21590 -> "21.59K"
  *  1250000 -> "1.25M"
  */
-export function formatCurrencyShort(value: number | string | undefined): string {
+export function formatCurrencyShort(value: number | string | undefined, currency: string = 'INR'): string {
   if (value === undefined || value === null || value === '') return '';
   const num = typeof value === 'string' ? Number(value) : value;
   if (!isFinite(num)) return String(value);
@@ -27,6 +27,22 @@ export function formatCurrencyShort(value: number | string | undefined): string 
     return s.replace(/(\.\d)0$/, '$1');
   };
 
+  // Use Indian numbering system for INR: Lakhs (L) and Crores (Cr)
+  if (currency === 'INR') {
+    // Crore = 1e7, Lakh = 1e5
+    if (abs >= 10_000_000) {
+      return `${sign}${trim(abs / 10_000_000)}Cr`;
+    }
+    if (abs >= 100_000) {
+      return `${sign}${trim(abs / 100_000)}L`;
+    }
+    if (abs >= 1_000) {
+      return `${sign}${trim(abs / 1_000)}K`;
+    }
+    return `${sign}${trim(abs)}`;
+  }
+
+  // Default (international) short format: K / M / B
   if (abs >= 1_000_000_000) {
     return `${sign}${trim(abs / 1_000_000_000)}B`;
   }
@@ -41,7 +57,7 @@ export function formatCurrencyShort(value: number | string | undefined): string 
 
 export function formatCurrencyWithSymbol(value: number | string | undefined, currency: string = 'INR'): string {
   const symbol = getCurrencySymbol(currency);
-  const formattedValue = formatCurrencyShort(value);
+  const formattedValue = formatCurrencyShort(value, currency);
   return `${symbol}${formattedValue}`;
 }
 
@@ -50,8 +66,8 @@ export function formatCurrencyRange(range: { min: number; max: number } | any, c
     return 'N/A';
   }
   const symbol = getCurrencySymbol(currency);
-  const minFormatted = formatCurrencyShort(range.min);
-  const maxFormatted = formatCurrencyShort(range.max);
+  const minFormatted = formatCurrencyShort(range.min, currency);
+  const maxFormatted = formatCurrencyShort(range.max, currency);
   return `${symbol}${minFormatted} - ${symbol}${maxFormatted}`;
 }
 
