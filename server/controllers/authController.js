@@ -4,6 +4,20 @@ const { generateToken, generateOTP } = require('../utils/jwt');
 const { sendVerificationEmail, sendWelcomeEmail } = require('../utils/email');
 const { validationResult } = require('express-validator');
 
+// Helper: canonicalize for lookup (makes Gmail addresses dot-/plus-insensitive)
+const canonicalizeEmailForLookup = (raw) => {
+  if (!raw) return raw;
+  const s = String(raw).trim().toLowerCase();
+  const parts = s.split('@');
+  if (parts.length !== 2) return s;
+  let [local, domain] = parts;
+  if (domain === 'gmail.com' || domain === 'googlemail.com') {
+    // remove plus-tag and dots from local part for lookup
+    local = local.split('+')[0].replace(/\./g, '');
+  }
+  return `${local}@${domain}`;
+};
+
 // Register user
 const register = async (req, res) => {
   try {
@@ -18,9 +32,10 @@ const register = async (req, res) => {
 
   const { name, email: rawEmail, password } = req.body;
   const email = rawEmail && String(rawEmail).trim().toLowerCase();
+  const emailLookup = canonicalizeEmailForLookup(email);
 
     // Check if user already exists
-    const existingUser = await User.findOne({ email });
+  const existingUser = await User.findOne({ $or: [{ email }, { email: emailLookup }] });
     if (existingUser) {
       if (existingUser.isVerified) {
         return res.status(400).json({
@@ -31,8 +46,8 @@ const register = async (req, res) => {
         // User exists but not verified, resend OTP
         const otp = generateOTP();
         
-        // Delete old OTPs
-        await OTP.deleteMany({ email, type: 'email_verification' });
+  // Delete old OTPs (match either raw or canonicalized variants)
+  await OTP.deleteMany({ $and: [{ type: 'email_verification' }, { $or: [{ email }, { email: emailLookup }] }] });
         
         // Create new OTP
         await OTP.create({
@@ -110,11 +125,14 @@ const verifyEmail = async (req, res) => {
     const otpInput = String(otp).trim();
 
     // Find OTP record without relying on expiresAt (we'll validate expiry using createdAt)
+    const emailLookup = canonicalizeEmailForLookup(email);
     const otpRecord = await OTP.findOne({
-      email: email.toLowerCase(),
-      otp: otpInput,
-      type: 'email_verification',
-      isUsed: false
+      $and: [
+        { otp: otpInput },
+        { type: 'email_verification' },
+        { isUsed: false },
+        { $or: [{ email }, { email: emailLookup }] }
+      ]
     });
 
     if (!otpRecord) {
@@ -137,8 +155,8 @@ const verifyEmail = async (req, res) => {
       }
     }
 
-    // Find user
-    const user = await User.findOne({ email: email.toLowerCase() });
+  // Find user (match raw or canonicalized variant)
+  const user = await User.findOne({ $or: [{ email }, { email: canonicalizeEmailForLookup(email) }] });
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -196,8 +214,9 @@ const verifyEmail = async (req, res) => {
 // Resend OTP
 const resendOTP = async (req, res) => {
   try {
-  const { email: rawEmail } = req.body;
+    const { email: rawEmail } = req.body;
   const email = rawEmail && String(rawEmail).trim().toLowerCase();
+  const emailLookup = canonicalizeEmailForLookup(email);
 
     if (!email) {
       return res.status(400).json({
@@ -206,8 +225,8 @@ const resendOTP = async (req, res) => {
       });
     }
 
-    // Find user
-    const user = await User.findOne({ email: email.toLowerCase() });
+  // Find user
+  const user = await User.findOne({ $or: [{ email }, { email: emailLookup }] });
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -225,8 +244,8 @@ const resendOTP = async (req, res) => {
     // Generate new OTP
     const otp = generateOTP();
     
-    // Delete old OTPs
-    await OTP.deleteMany({ email: email.toLowerCase(), type: 'email_verification' });
+  // Delete old OTPs (match raw or canonicalized)
+  await OTP.deleteMany({ $and: [{ type: 'email_verification' }, { $or: [{ email }, { email: emailLookup }] }] });
     
     // Create new OTP
     await OTP.create({
@@ -264,11 +283,12 @@ const login = async (req, res) => {
       });
     }
 
-  const { email: rawEmail, password } = req.body;
+    const { email: rawEmail, password } = req.body;
   const email = rawEmail && String(rawEmail).trim().toLowerCase();
+  const emailLookup = canonicalizeEmailForLookup(email);
 
-    // Find user and include password
-    const user = await User.findOne({ email: email.toLowerCase() }).select('+password');
+    // Find user and include password (match raw or canonicalized)
+    const user = await User.findOne({ $or: [{ email }, { email: emailLookup }] }).select('+password');
     
     if (!user) {
       return res.status(401).json({
