@@ -67,6 +67,10 @@ const angelInvestorSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  fundSizeDescription: {
+    type: String,
+    default: ''
+  },
   isActive: {
     type: Boolean,
     default: true

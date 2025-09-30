@@ -67,6 +67,10 @@ const microVCSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  fundSizeDescription: {
+    type: String,
+    default: ''
+  },
   isActive: {
     type: Boolean,
     default: true
