@@ -16,7 +16,8 @@ const register = async (req, res) => {
       });
     }
 
-    const { name, email, password } = req.body;
+  const { name, email: rawEmail, password } = req.body;
+  const email = rawEmail && String(rawEmail).trim().toLowerCase();
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -95,7 +96,8 @@ const register = async (req, res) => {
 // Verify email with OTP
 const verifyEmail = async (req, res) => {
   try {
-    const { email, otp } = req.body;
+  const { email: rawEmail, otp } = req.body;
+  const email = rawEmail && String(rawEmail).trim().toLowerCase();
 
     if (!email || !otp) {
       return res.status(400).json({
@@ -194,7 +196,8 @@ const verifyEmail = async (req, res) => {
 // Resend OTP
 const resendOTP = async (req, res) => {
   try {
-    const { email } = req.body;
+  const { email: rawEmail } = req.body;
+  const email = rawEmail && String(rawEmail).trim().toLowerCase();
 
     if (!email) {
       return res.status(400).json({
@@ -261,7 +264,8 @@ const login = async (req, res) => {
       });
     }
 
-    const { email, password } = req.body;
+  const { email: rawEmail, password } = req.body;
+  const email = rawEmail && String(rawEmail).trim().toLowerCase();
 
     // Find user and include password
     const user = await User.findOne({ email: email.toLowerCase() }).select('+password');
