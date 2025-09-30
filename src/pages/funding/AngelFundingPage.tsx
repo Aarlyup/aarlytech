@@ -35,6 +35,18 @@ const AngelFundingPage: React.FC = () => {
   const [selectedAngel, setSelectedAngel] = useState<AngelInvestor | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
+  const isMobileDevice = () => {
+    if (typeof navigator === 'undefined') return false;
+    // navigator.userAgentData.mobile exists in some browsers
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (navigator.userAgentData && typeof navigator.userAgentData.mobile === 'boolean') {
+      // @ts-ignore
+      return navigator.userAgentData.mobile;
+    }
+    return /Mobi|Android|iPhone|iPad|iPod|Phone/i.test(navigator.userAgent);
+  };
+
 
   useEffect(() => {
     // Get angels from centralized funding context
@@ -326,8 +338,12 @@ const AngelFundingPage: React.FC = () => {
                         e.stopPropagation();
                         const to = encodeURIComponent(selectedAngel.contact);
                         const subject = encodeURIComponent(`Inquiry about ${selectedAngel.name}`);
-                        const gmailUrl = `https://mail.google.com/mail/?view=cm&to=${to}&su=${subject}`;
-                        window.open(gmailUrl, '_blank');
+                        if (isMobileDevice()) {
+                          window.location.href = `mailto:${selectedAngel.contact}?subject=${subject}`;
+                        } else {
+                          const gmailUrl = `https://mail.google.com/mail/?view=cm&to=${to}&su=${subject}`;
+                          window.open(gmailUrl, '_blank');
+                        }
                       }}
                       className="flex items-center justify-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-150 text-sm font-medium"
                     >

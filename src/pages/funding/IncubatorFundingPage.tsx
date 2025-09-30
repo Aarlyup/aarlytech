@@ -32,6 +32,18 @@ const IncubatorFundingPage: React.FC = () => {
   const [selectedIncubator, setSelectedIncubator] = useState<Incubator | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
+  const isMobileDevice = () => {
+    if (typeof navigator === 'undefined') return false;
+    // navigator.userAgentData.mobile is available in some browsers
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (navigator.userAgentData && typeof navigator.userAgentData.mobile === 'boolean') {
+      // @ts-ignore
+      return navigator.userAgentData.mobile;
+    }
+    return /Mobi|Android|iPhone|iPad|iPod|Phone/i.test(navigator.userAgent);
+  };
+
 
   useEffect(() => {
     // Get incubators from centralized funding context
@@ -320,8 +332,13 @@ const IncubatorFundingPage: React.FC = () => {
                         e.stopPropagation();
                         const to = encodeURIComponent(selectedIncubator.contact);
                         const subject = encodeURIComponent(`Inquiry about ${selectedIncubator.name}`);
-                        const gmailUrl = `https://mail.google.com/mail/?view=cm&to=${to}&su=${subject}`;
-                        window.open(gmailUrl, '_blank');
+                        if (isMobileDevice()) {
+                          // use mailto on mobile to open default mail client
+                          window.location.href = `mailto:${selectedIncubator.contact}?subject=${subject}`;
+                        } else {
+                          const gmailUrl = `https://mail.google.com/mail/?view=cm&to=${to}&su=${subject}`;
+                          window.open(gmailUrl, '_blank');
+                        }
                       }}
                       className="flex items-center justify-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-150 text-sm font-medium"
                     >
