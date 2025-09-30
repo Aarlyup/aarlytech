@@ -105,7 +105,7 @@ const categoryFields: Record<string, { name: string; label: string; type?: strin
     { name: 'eligibility', label: 'Eligibility', required: true },
     { name: 'howToApply', label: 'How to Apply', required: true },
     { name: 'timelines', label: 'Timelines', required: true },
-    { name: 'contact', label: 'Contact', required: true },
+    { name: 'contact', label: 'Website Link', required: true },
     { name: 'documentsRequired', label: 'Documents Required (optional, comma separated)' },
     { name: 'specialNotes', label: 'Special Notes' }
   ]
