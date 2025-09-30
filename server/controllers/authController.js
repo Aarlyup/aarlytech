@@ -104,13 +104,15 @@ const verifyEmail = async (req, res) => {
       });
     }
 
-    // Find valid OTP
+    // Normalize OTP input
+    const otpInput = String(otp).trim();
+
+    // Find OTP record without relying on expiresAt (we'll validate expiry using createdAt)
     const otpRecord = await OTP.findOne({
       email: email.toLowerCase(),
-      otp,
+      otp: otpInput,
       type: 'email_verification',
-      isUsed: false,
-      expiresAt: { $gt: new Date() }
+      isUsed: false
     });
 
     if (!otpRecord) {
@@ -118,6 +120,19 @@ const verifyEmail = async (req, res) => {
         success: false,
         message: 'Invalid or expired OTP'
       });
+    }
+
+    // Check expiry manually using createdAt (15 minutes)
+    const created = otpRecord.createdAt || otpRecord.updatedAt || null;
+    if (created) {
+      const ageMs = Date.now() - new Date(created).getTime();
+      const maxAgeMs = 15 * 60 * 1000; // 15 minutes
+      if (ageMs > maxAgeMs) {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid or expired OTP'
+        });
+      }
     }
 
     // Find user
