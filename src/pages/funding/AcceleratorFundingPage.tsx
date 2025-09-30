@@ -19,6 +19,7 @@ interface Accelerator {
   sectors: string[];
   applicationLink: string;
   pastCohorts: string;
+  fundSizeDescription?: string;
   icon?: {
     url: string;
     publicId: string;
@@ -221,23 +222,27 @@ const AcceleratorFundingPage: React.FC = () => {
             </div>
 
             {/* Content */}
-            <div className="overflow-y-auto p-6 max-h-[calc(85vh-120px)]">
-              <div className="space-y-6">
-                {/* Funding Offered Card */}
-                <div className="bg-gradient-to-br from-emerald-600/40 to-green-600/40 border border-emerald-400/60 rounded-xl p-6">
-                  <div className="text-center">
-                    <div className="text-sm font-semibold text-emerald-200 uppercase tracking-wide mb-2">Funding Offered</div>
-                    <div className="text-3xl font-bold text-emerald-50">{selectedAccelerator.fundingOffered}</div>
-                    <div className="text-sm text-emerald-300 mt-1">Funding terms and equity details</div>
+            <div className="overflow-y-auto p-4 max-h-[calc(85vh-120px)]">
+              <div className="space-y-4">
+                {/* Funding Offered + Program Duration (one-line on md+) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-gradient-to-br from-emerald-600/40 to-green-600/40 border border-emerald-400/60 rounded-xl p-3">
+                    <div className="text-center">
+                      <div className="text-sm font-semibold text-emerald-200 uppercase tracking-wide mb-2">Funding Offered</div>
+                      <div className="text-xl font-bold text-emerald-50">{selectedAccelerator.fundingOffered}</div>
+                      {selectedAccelerator.fundSizeDescription && (
+                        <div className="text-sm text-emerald-200 mt-2 px-3">
+                          {selectedAccelerator.fundSizeDescription}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
 
-                {/* Program Duration Card */}
-                <div className="bg-gradient-to-br from-orange-600/40 to-red-600/40 border border-orange-400/60 rounded-xl p-6">
-                  <div className="text-center">
-                    <div className="text-sm font-semibold text-orange-200 uppercase tracking-wide mb-2">Program Duration</div>
-                    <div className="text-3xl font-bold text-orange-50">{selectedAccelerator.programDuration}</div>
-                    <div className="text-sm text-orange-300 mt-1">Typical program length</div>
+                  <div className="bg-gradient-to-br from-orange-600/40 to-red-600/40 border border-orange-400/60 rounded-xl p-3">
+                    <div className="text-center">
+                      <div className="text-sm font-semibold text-orange-200 uppercase tracking-wide mb-2">Program Duration</div>
+                      <div className="text-xl font-bold text-orange-50">{selectedAccelerator.programDuration}</div>
+                    </div>
                   </div>
                 </div>
 
@@ -286,7 +291,7 @@ const AcceleratorFundingPage: React.FC = () => {
                       Services Provided
                     </h3>
                     <p 
-                      className="leading-relaxed text-gray-300"
+                      className="leading-relaxed text-gray-300 whitespace-pre-wrap break-words"
                       style={{ 
                         color: '#d1d5db',
                         WebkitTextFillColor: '#d1d5db'
@@ -311,7 +316,7 @@ const AcceleratorFundingPage: React.FC = () => {
                       Past Cohorts
                     </h3>
                     <p 
-                      className="leading-relaxed text-gray-300"
+                      className="leading-relaxed text-gray-300 whitespace-pre-wrap break-words"
                       style={{ 
                         color: '#d1d5db',
                         WebkitTextFillColor: '#d1d5db'
@@ -329,9 +334,9 @@ const AcceleratorFundingPage: React.FC = () => {
                       href={selectedAccelerator.applicationLink} 
                       target="_blank" 
                       rel="noopener noreferrer" 
-                      className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all duration-200 font-medium"
+                      className="flex items-center justify-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-150 text-sm font-medium"
                     >
-                      <ExternalLink className="w-5 h-5" />
+                      <ExternalLink className="w-4 h-4" />
                       <span>Apply Now</span>
                     </a>
                   )}
@@ -340,9 +345,9 @@ const AcceleratorFundingPage: React.FC = () => {
                       href={selectedAccelerator.websiteUrl} 
                       target="_blank" 
                       rel="noopener noreferrer" 
-                      className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium"
+                      className="flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-150 text-sm font-medium"
                     >
-                      <ExternalLink className="w-5 h-5" />
+                      <ExternalLink className="w-4 h-4" />
                       <span>Visit Website</span>
                     </a>
                   )}

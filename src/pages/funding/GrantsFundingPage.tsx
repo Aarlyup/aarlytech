@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Award, Building, Calendar, Mail, ExternalLink } from 'lucide-react';
+import { Award, Building, Calendar, ExternalLink } from 'lucide-react';
 import { useFunding } from '../../contexts/FundingContext';
 import { formatCurrencyWithSymbol } from '../../lib/utils';
 import LoadingGrid from '../../components/ui/LoadingGrid';
@@ -22,6 +22,7 @@ interface GovtGrant {
   contact: string;
   documentsRequired: string[];
   specialNotes: string;
+  fundSizeDescription?: string;
   icon?: {
     url: string;
     publicId: string;
@@ -235,23 +236,27 @@ const GrantsFundingPage: React.FC = () => {
             </div>
 
             {/* Content */}
-            <div className="overflow-y-auto p-6 max-h-[calc(85vh-120px)]">
-              <div className="space-y-6">
-                {/* Grant Size Card */}
-                <div className="bg-gradient-to-br from-emerald-600/40 to-green-600/40 border border-emerald-400/60 rounded-xl p-6">
-                  <div className="text-center">
-                    <div className="text-sm font-semibold text-emerald-200 uppercase tracking-wide mb-2">Grant Size</div>
-                    <div className="text-3xl font-bold text-emerald-50">{formatCurrencyWithSymbol(Number(selectedGrant.grantSize), selectedGrant.currency || 'INR')}</div>
-                    <div className="text-sm text-emerald-300 mt-1">Total grant amount</div>
+            <div className="overflow-y-auto p-4 max-h-[calc(85vh-120px)]">
+              <div className="space-y-4">
+                {/* Grant Size + Equity Dilution (side-by-side on md+) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-gradient-to-br from-emerald-600/40 to-green-600/40 border border-emerald-400/60 rounded-xl p-4">
+                    <div className="text-center">
+                      <div className="text-sm font-semibold text-emerald-200 uppercase tracking-wide mb-2">Grant Size</div>
+                      <div className="text-2xl font-bold text-emerald-50">{formatCurrencyWithSymbol(Number(selectedGrant.grantSize), selectedGrant.currency || 'INR')}</div>
+                      {selectedGrant.fundSizeDescription && (
+                        <div className="text-sm text-emerald-200 mt-2 px-3">
+                          {selectedGrant.fundSizeDescription}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
 
-                {/* Equity Dilution Card */}
-                <div className="bg-gradient-to-br from-sky-600/40 to-blue-600/40 border border-sky-400/60 rounded-xl p-6">
-                  <div className="text-center">
-                    <div className="text-sm font-semibold text-sky-200 uppercase tracking-wide mb-2">Equity Dilution</div>
-                    <div className="text-3xl font-bold text-sky-50">{selectedGrant.equityDilution}</div>
-                    <div className="text-sm text-sky-300 mt-1">If applicable</div>
+                  <div className="bg-gradient-to-br from-sky-600/40 to-blue-600/40 border border-sky-400/60 rounded-xl p-4">
+                    <div className="text-center">
+                      <div className="text-sm font-semibold text-sky-200 uppercase tracking-wide mb-2">Equity Dilution</div>
+                      <div className="text-2xl font-bold text-sky-50">{selectedGrant.equityDilution}</div>
+                    </div>
                   </div>
                 </div>
 
@@ -274,6 +279,31 @@ const GrantsFundingPage: React.FC = () => {
                   )}
                 </div>
 
+                {/* About (previously 'How to Apply') */}
+                {selectedGrant.howToApply && (
+                  <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
+                    <h3 
+                      className="text-lg font-semibold mb-3 text-white"
+                      style={{ 
+                        color: '#ffffff',
+                        WebkitTextFillColor: '#ffffff',
+                        textShadow: '0 0 1px rgba(255,255,255,0.5)'
+                      }}
+                    >
+                      About
+                    </h3>
+                    <p 
+                      className="leading-relaxed text-gray-300 whitespace-pre-wrap break-words"
+                      style={{ 
+                        color: '#d1d5db',
+                        WebkitTextFillColor: '#d1d5db'
+                      }}
+                    >
+                      {selectedGrant.howToApply}
+                    </p>
+                  </div>
+                )}
+
                 {/* Eligibility */}
                 {selectedGrant.eligibility && (
                   <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
@@ -288,38 +318,13 @@ const GrantsFundingPage: React.FC = () => {
                       Eligibility
                     </h3>
                     <p 
-                      className="leading-relaxed text-gray-300"
+                      className="leading-relaxed text-gray-300 whitespace-pre-wrap break-words"
                       style={{ 
                         color: '#d1d5db',
                         WebkitTextFillColor: '#d1d5db'
                       }}
                     >
                       {selectedGrant.eligibility}
-                    </p>
-                  </div>
-                )}
-
-                {/* How to Apply */}
-                {selectedGrant.howToApply && (
-                  <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
-                    <h3 
-                      className="text-lg font-semibold mb-3 text-white"
-                      style={{ 
-                        color: '#ffffff',
-                        WebkitTextFillColor: '#ffffff',
-                        textShadow: '0 0 1px rgba(255,255,255,0.5)'
-                      }}
-                    >
-                      How to Apply
-                    </h3>
-                    <p 
-                      className="leading-relaxed text-gray-300"
-                      style={{ 
-                        color: '#d1d5db',
-                        WebkitTextFillColor: '#d1d5db'
-                      }}
-                    >
-                      {selectedGrant.howToApply}
                     </p>
                   </div>
                 )}
@@ -365,7 +370,7 @@ const GrantsFundingPage: React.FC = () => {
                       Special Notes
                     </h3>
                     <p 
-                      className="leading-relaxed text-gray-300"
+                      className="leading-relaxed text-gray-300 whitespace-pre-wrap break-words"
                       style={{ 
                         color: '#d1d5db',
                         WebkitTextFillColor: '#d1d5db'
@@ -380,10 +385,12 @@ const GrantsFundingPage: React.FC = () => {
                 <div className="flex flex-col sm:flex-row gap-3">
                   {selectedGrant.contact && (
                     <a 
-                      href={`mailto:${selectedGrant.contact}`} 
-                      className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all duration-200 font-medium"
+                      href={selectedGrant.contact} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="flex items-center justify-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-150 text-sm font-medium"
                     >
-                      <ExternalLink className="w-5 h-5" />
+                      <ExternalLink className="w-4 h-4" />
                       <span>Apply Now</span>
                     </a>
                   )}

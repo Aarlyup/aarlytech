@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { User, MapPin, DollarSign, Target, ExternalLink, Mail, Linkedin } from 'lucide-react';
+import { User, MapPin, Target, Mail, Linkedin } from 'lucide-react';
 import { useFunding } from '../../contexts/FundingContext';
 import { formatCurrencyWithSymbol } from '../../lib/utils';
 import LoadingGrid from '../../components/ui/LoadingGrid';
@@ -20,6 +20,7 @@ interface AngelInvestor {
   preferFounderProfile: string;
   portfolioHighlights: string;
   contact: string;
+  fundSizeDescription?: string;
   icon?: {
     url: string;
     publicId: string;
@@ -226,14 +227,18 @@ const AngelFundingPage: React.FC = () => {
             </div>
 
             {/* Content */}
-            <div className="overflow-y-auto p-6 max-h-[calc(85vh-120px)]">
-              <div className="space-y-6">
+            <div className="overflow-y-auto p-4 max-h-[calc(85vh-120px)]">
+              <div className="space-y-4">
                 {/* Ticket Size Card */}
-                <div className="bg-gradient-to-br from-emerald-600/40 to-green-600/40 border border-emerald-400/60 rounded-xl p-6">
+                <div className="bg-gradient-to-br from-emerald-600/40 to-green-600/40 border border-emerald-400/60 rounded-xl p-4">
                   <div className="text-center">
                     <div className="text-sm font-semibold text-emerald-200 uppercase tracking-wide mb-2">Ticket Size</div>
-                    <div className="text-3xl font-bold text-emerald-50">{formatCurrencyWithSymbol(Number(selectedAngel.ticketSize), selectedAngel.currency || 'INR')}</div>
-                    <div className="text-sm text-emerald-300 mt-1">Typical investment amount</div>
+                    <div className="text-2xl font-bold text-emerald-50">{formatCurrencyWithSymbol(Number(selectedAngel.ticketSize), selectedAngel.currency || 'INR')}</div>
+                    {selectedAngel.fundSizeDescription && (
+                      <div className="text-sm text-emerald-200 mt-2 px-3">
+                        {selectedAngel.fundSizeDescription}
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -276,7 +281,7 @@ const AngelFundingPage: React.FC = () => {
                       Portfolio Highlights
                     </h3>
                     <p 
-                      className="leading-relaxed text-gray-300"
+                      className="leading-relaxed text-gray-300 whitespace-pre-wrap break-words"
                       style={{ 
                         color: '#d1d5db',
                         WebkitTextFillColor: '#d1d5db'
@@ -301,7 +306,7 @@ const AngelFundingPage: React.FC = () => {
                       Founder Preferences
                     </h3>
                     <p 
-                      className="leading-relaxed text-gray-300"
+                      className="leading-relaxed text-gray-300 whitespace-pre-wrap break-words"
                       style={{ 
                         color: '#d1d5db',
                         WebkitTextFillColor: '#d1d5db'
@@ -315,22 +320,29 @@ const AngelFundingPage: React.FC = () => {
                 {/* Contact Actions */}
                 <div className="flex flex-col sm:flex-row gap-3">
                   {selectedAngel.contact && (
-                    <a 
-                      href={`mailto:${selectedAngel.contact}`} 
-                      className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all duration-200 font-medium"
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const to = encodeURIComponent(selectedAngel.contact);
+                        const subject = encodeURIComponent(`Inquiry about ${selectedAngel.name}`);
+                        const gmailUrl = `https://mail.google.com/mail/?view=cm&to=${to}&su=${subject}`;
+                        window.open(gmailUrl, '_blank');
+                      }}
+                      className="flex items-center justify-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-150 text-sm font-medium"
                     >
-                      <Mail className="w-5 h-5" />
+                      <Mail className="w-4 h-4" />
                       <span>Send Email</span>
-                    </a>
+                    </button>
                   )}
                   {selectedAngel.linkedinProfileUrl && (
                     <a 
                       href={selectedAngel.linkedinProfileUrl} 
                       target="_blank" 
                       rel="noopener noreferrer" 
-                      className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium"
+                      className="flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-150 text-sm font-medium"
                     >
-                      <Linkedin className="w-5 h-5" />
+                      <Linkedin className="w-4 h-4" />
                       <span>View LinkedIn</span>
                     </a>
                   )}

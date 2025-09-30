@@ -182,7 +182,7 @@ const MicroVCFundingPage: React.FC = () => {
 
       {/* Micro VC Detail Modal */}
       {selectedMicroVC && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 backdrop-blur-sm animate-fade-in pt-20 px-4 md:pl-72 md:pr-8" onClick={closeModal}>
+        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 backdrop-blur-sm animate-fade-in pt-20 px-3 md:pl-72 md:pr-6" onClick={closeModal}>
           <div
             className="relative bg-gray-800 border border-gray-700 rounded-2xl shadow-2xl w-full animate-slide-up flex flex-col max-w-full md:max-w-4xl lg:max-w-5xl"
             style={{ maxHeight: 'calc(100vh - 6rem)' }}
@@ -228,20 +228,21 @@ const MicroVCFundingPage: React.FC = () => {
                 ×
               </button>
             </div>
-            <div className="overflow-y-auto p-8" style={{ maxHeight: 'calc(100vh - 12rem)' }}>
-              <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Left: metrics & tags */}
-                <aside className="lg:col-span-1 space-y-6">
-                  <div className="rounded-2xl bg-gray-800 border border-gray-700 p-5 border-l-4 border-blue-500/80">
-                    <div className="text-sm font-semibold text-gray-300 uppercase">Fund Size</div>
-                    <div className="mt-2 text-2xl font-extrabold text-white">{formatCurrencyWithSymbol(Number(selectedMicroVC.fundSize), selectedMicroVC.fundSizeCurrency || 'INR')}</div>
-                    <div className="mt-1 text-xs text-gray-400">Total committed fund</div>
-                  </div>
+            <div className="overflow-y-auto p-6" style={{ maxHeight: 'calc(100vh - 12rem)' }}>
+              <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Left: metrics & tags - show fund & check side-by-side on md+ */}
+                <aside className="lg:col-span-1 space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="rounded-2xl bg-gray-800 border border-gray-700 p-3 border-l-4 border-blue-500/80">
+                      <div className="text-sm font-semibold text-gray-300 uppercase">Fund Size</div>
+                      <div className="mt-1 text-xl font-extrabold text-white">{formatCurrencyWithSymbol(Number(selectedMicroVC.fundSize), selectedMicroVC.fundSizeCurrency || 'INR')}</div>
+                    </div>
 
-                  <div className="rounded-2xl bg-gray-800 border border-gray-700 p-5 border-l-4 border-green-500/80">
-                    <div className="text-sm font-semibold text-gray-300 uppercase">Check Size</div>
-                    <div className="mt-2 text-2xl font-extrabold text-white">{formatCurrencyWithSymbol(Number(selectedMicroVC.checkSize), selectedMicroVC.checkSizeCurrency || 'INR')}</div>
-                    <div className="mt-1 text-xs text-gray-400">Typical investment ticket</div>
+                    <div className="rounded-2xl bg-gray-800 border border-gray-700 p-3 border-l-4 border-green-500/80">
+                      <div className="text-sm font-semibold text-gray-300 uppercase">Check Size</div>
+                      <div className="mt-1 text-xl font-extrabold text-white">{formatCurrencyWithSymbol(Number(selectedMicroVC.checkSize), selectedMicroVC.checkSizeCurrency || 'INR')}</div>
+                      <div className="mt-1 text-xs text-gray-400">Typical ticket</div>
+                    </div>
                   </div>
 
                   {selectedMicroVC.stage && selectedMicroVC.stage.length > 0 && (
@@ -272,14 +273,14 @@ const MicroVCFundingPage: React.FC = () => {
                   {selectedMicroVC.portfolioHighlights && (
                     <section className="rounded-2xl bg-gray-800 border border-gray-700 p-6">
                       <h3 className="text-xl font-semibold text-white mb-3">Portfolio Highlights</h3>
-                      <p className="text-gray-100 leading-relaxed text-base">{selectedMicroVC.portfolioHighlights}</p>
+                      <p className="text-gray-100 leading-relaxed text-base whitespace-pre-wrap break-words">{selectedMicroVC.portfolioHighlights}</p>
                     </section>
                   )}
 
                   <div className="flex justify-end">
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                       {selectedMicroVC.websiteUrl && (
-                        <a href={selectedMicroVC.websiteUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full hover:from-blue-700 hover:to-blue-800 inline-flex items-center gap-2">
+                        <a href={selectedMicroVC.websiteUrl} target="_blank" rel="noopener noreferrer" className="px-3 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-md hover:from-blue-700 hover:to-blue-800 inline-flex items-center gap-2 text-sm">
                           <ExternalLink className="w-4 h-4" />
                           <span>Visit Website</span>
                         </a>

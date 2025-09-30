@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Building2, MapPin, DollarSign, Calendar, ExternalLink, Mail } from 'lucide-react';
+import { Building2, MapPin, Calendar, ExternalLink, Mail } from 'lucide-react';
 import { useFunding } from '../../contexts/FundingContext';
 import LoadingGrid from '../../components/ui/LoadingGrid';
 import EmptyState from '../../components/ui/EmptyState';
@@ -17,6 +17,7 @@ interface Incubator {
   applicationProcess: string;
   contact: string;
   alumniStartups: string;
+  fundSizeDescription?: string;
   icon?: {
     url: string;
     publicId: string;
@@ -200,27 +201,31 @@ const IncubatorFundingPage: React.FC = () => {
             </div>
 
             {/* Content */}
-            <div className="overflow-y-auto p-6 max-h-[calc(85vh-120px)]">
-              <div className="space-y-6">
-                {/* Funding Support Card */}
-                <div className="bg-gradient-to-br from-emerald-600/40 to-green-600/40 border border-emerald-400/60 rounded-xl p-6">
-                  <div className="text-center">
-                    <div className="text-sm font-semibold text-emerald-200 uppercase tracking-wide mb-2">Funding Support</div>
-                    <div className="text-3xl font-bold text-emerald-50">{selectedIncubator.fundingSupport}</div>
-                    <div className="text-sm text-emerald-300 mt-1">Monetary & non-monetary support</div>
-                  </div>
-                </div>
-
-                {/* Other Benefits Card */}
-                {selectedIncubator.otherBenefits && (
-                  <div className="bg-gradient-to-br from-purple-600/40 to-indigo-600/40 border border-purple-400/60 rounded-xl p-6">
+            <div className="overflow-y-auto p-4 max-h-[calc(85vh-120px)]">
+              <div className="space-y-4">
+                {/* Funding Support + Other Benefits side-by-side on md+ */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-gradient-to-br from-emerald-600/40 to-green-600/40 border border-emerald-400/60 rounded-xl p-4">
                     <div className="text-center">
-                      <div className="text-sm font-semibold text-purple-200 uppercase tracking-wide mb-2">Other Benefits</div>
-                      <div className="text-lg font-semibold text-purple-50">{selectedIncubator.otherBenefits}</div>
-                      <div className="text-sm text-purple-300 mt-1">Additional support provided</div>
+                      <div className="text-sm font-semibold text-emerald-200 uppercase tracking-wide mb-2">Funding Support</div>
+                      <div className="text-xl font-bold text-emerald-50">{selectedIncubator.fundingSupport}</div>
+                      {selectedIncubator.fundSizeDescription && (
+                        <div className="text-sm text-emerald-200 mt-2 px-3">
+                          {selectedIncubator.fundSizeDescription}
+                        </div>
+                      )}
                     </div>
                   </div>
-                )}
+
+                  {selectedIncubator.otherBenefits && (
+                    <div className="bg-gradient-to-br from-purple-600/40 to-indigo-600/40 border border-purple-400/60 rounded-xl p-4">
+                      <div className="text-center">
+                        <div className="text-sm font-semibold text-purple-200 uppercase tracking-wide mb-2">Other Benefits</div>
+                        <div className="text-sm font-medium text-purple-50 whitespace-pre-wrap break-words">{selectedIncubator.otherBenefits}</div>
+                      </div>
+                    </div>
+                  )}
+                </div>
 
                 {/* Location */}
                 <div className="bg-gray-800 border border-gray-700 rounded-xl p-4">
@@ -245,7 +250,7 @@ const IncubatorFundingPage: React.FC = () => {
                       Eligibility
                     </h3>
                     <p 
-                      className="leading-relaxed text-gray-300"
+                      className="leading-relaxed text-gray-300 whitespace-pre-wrap break-words"
                       style={{ 
                         color: '#d1d5db',
                         WebkitTextFillColor: '#d1d5db'
@@ -270,7 +275,7 @@ const IncubatorFundingPage: React.FC = () => {
                       Application Process
                     </h3>
                     <p 
-                      className="leading-relaxed text-gray-300"
+                      className="leading-relaxed text-gray-300 whitespace-pre-wrap break-words"
                       style={{ 
                         color: '#d1d5db',
                         WebkitTextFillColor: '#d1d5db'
@@ -295,7 +300,7 @@ const IncubatorFundingPage: React.FC = () => {
                       Alumni Startups
                     </h3>
                     <p 
-                      className="leading-relaxed text-gray-300"
+                      className="leading-relaxed text-gray-300 whitespace-pre-wrap break-words"
                       style={{ 
                         color: '#d1d5db',
                         WebkitTextFillColor: '#d1d5db'
@@ -309,22 +314,29 @@ const IncubatorFundingPage: React.FC = () => {
                 {/* Contact Actions */}
                 <div className="flex flex-col sm:flex-row gap-3">
                   {selectedIncubator.contact && (
-                    <a 
-                      href={`mailto:${selectedIncubator.contact}`} 
-                      className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all duration-200 font-medium"
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const to = encodeURIComponent(selectedIncubator.contact);
+                        const subject = encodeURIComponent(`Inquiry about ${selectedIncubator.name}`);
+                        const gmailUrl = `https://mail.google.com/mail/?view=cm&to=${to}&su=${subject}`;
+                        window.open(gmailUrl, '_blank');
+                      }}
+                      className="flex items-center justify-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-150 text-sm font-medium"
                     >
-                      <Mail className="w-5 h-5" />
+                      <Mail className="w-4 h-4" />
                       <span>Send Email</span>
-                    </a>
+                    </button>
                   )}
                   {selectedIncubator.websiteUrl && (
                     <a 
                       href={selectedIncubator.websiteUrl} 
                       target="_blank" 
                       rel="noopener noreferrer" 
-                      className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium"
+                      className="flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-150 text-sm font-medium"
                     >
-                      <ExternalLink className="w-5 h-5" />
+                      <ExternalLink className="w-4 h-4" />
                       <span>Visit Website</span>
                     </a>
                   )}

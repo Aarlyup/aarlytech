@@ -43,7 +43,7 @@ const VCFundingPage: React.FC = () => {
 
   useEffect(() => {
     // Get VCs from centralized funding context
-    const vcData = getFundingByCategory('venture-capital') as VentureCapital[];
+    const vcData = getFundingByCategory('venture-capital') as unknown as VentureCapital[];
     setVCs(vcData);
     setFilteredVCs(vcData);
   }, [getFundingByCategory]);
@@ -242,28 +242,27 @@ const VCFundingPage: React.FC = () => {
             </div>
 
             {/* Content */}
-            <div className="overflow-y-auto p-6 max-h-[calc(85vh-120px)]">
-              <div className="space-y-6">
-                {/* Fund Size Card */}
-                <div className="bg-gradient-to-br from-emerald-600/40 to-green-600/40 border border-emerald-400/60 rounded-xl p-6">
-                  <div className="text-center">
-                    <div className="text-sm font-semibold text-emerald-200 uppercase tracking-wide mb-2">Fund Size</div>
-                    <div className="text-3xl font-bold text-emerald-50">{formatCurrencyWithSymbol(Number(selectedVC.fundSize), selectedVC.fundSizeCurrency || 'INR')}</div>
-                    <div className="text-sm text-emerald-300 mt-1">Total committed fund</div>
-                    {selectedVC.fundSizeDescription && (
-                      <div className="text-sm text-emerald-200 mt-3 px-4">
-                        {selectedVC.fundSizeDescription}
-                      </div>
-                    )}
+            <div className="overflow-y-auto p-4 max-h-[calc(85vh-120px)]">
+              <div className="space-y-4">
+                {/* Fund Size + Average Ticket (one-line on md+) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-gradient-to-br from-emerald-600/40 to-green-600/40 border border-emerald-400/60 rounded-xl p-4">
+                    <div className="text-center">
+                      <div className="text-sm font-semibold text-emerald-200 uppercase tracking-wide mb-2">Fund Size</div>
+                      <div className="text-2xl font-bold text-emerald-50">{formatCurrencyWithSymbol(Number(selectedVC.fundSize), selectedVC.fundSizeCurrency || 'INR')}</div>
+                      {selectedVC.fundSizeDescription && (
+                        <div className="text-sm text-emerald-200 mt-2 px-3">
+                          {selectedVC.fundSizeDescription}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
 
-                {/* Average Ticket Size Card */}
-                <div className="bg-gradient-to-br from-sky-600/40 to-blue-600/40 border border-sky-400/60 rounded-xl p-6">
-                  <div className="text-center">
-                    <div className="text-sm font-semibold text-sky-200 uppercase tracking-wide mb-2">Average Ticket</div>
-                    <div className="text-3xl font-bold text-sky-50">{formatCurrencyRange(selectedVC.avgTicketSize, selectedVC.avgTicketSizeCurrency || 'INR')}</div>
-                    <div className="text-sm text-sky-300 mt-1">Typical check size</div>
+                  <div className="bg-gradient-to-br from-sky-600/40 to-blue-600/40 border border-sky-400/60 rounded-xl p-4">
+                    <div className="text-center">
+                      <div className="text-sm font-semibold text-sky-200 uppercase tracking-wide mb-2">Average Ticket</div>
+                      <div className="text-2xl font-bold text-sky-50">{formatCurrencyRange(selectedVC.avgTicketSize, selectedVC.avgTicketSizeCurrency || 'INR')}</div>
+                    </div>
                   </div>
                 </div>
 
@@ -306,7 +305,7 @@ const VCFundingPage: React.FC = () => {
                       Portfolio Highlights
                     </h3>
                     <p 
-                      className="leading-relaxed text-gray-300"
+                      className="leading-relaxed text-gray-300 whitespace-pre-wrap break-words"
                       style={{ 
                         color: '#d1d5db',
                         WebkitTextFillColor: '#d1d5db'
@@ -345,22 +344,29 @@ const VCFundingPage: React.FC = () => {
                 {/* Contact Actions */}
                 <div className="flex flex-col sm:flex-row gap-3">
                   {selectedVC.contact && (
-                    <a 
-                      href={`mailto:${selectedVC.contact}`} 
-                      className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all duration-200 font-medium"
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const to = encodeURIComponent(selectedVC.contact);
+                        const subject = encodeURIComponent(`Inquiry about ${selectedVC.name}`);
+                        const gmailUrl = `https://mail.google.com/mail/?view=cm&to=${to}&su=${subject}`;
+                        window.open(gmailUrl, '_blank');
+                      }}
+                      className="flex items-center justify-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-150 text-sm font-medium"
                     >
-                      <Mail className="w-5 h-5" />
+                      <Mail className="w-4 h-4" />
                       <span>Send Email</span>
-                    </a>
+                    </button>
                   )}
                   {selectedVC.websiteUrl && (
                     <a 
                       href={selectedVC.websiteUrl} 
                       target="_blank" 
                       rel="noopener noreferrer" 
-                      className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium"
+                      className="flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-150 text-sm font-medium"
                     >
-                      <ExternalLink className="w-5 h-5" />
+                      <ExternalLink className="w-4 h-4" />
                       <span>Visit Website</span>
                     </a>
                   )}
