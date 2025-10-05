@@ -79,7 +79,7 @@ const Hero: React.FC = () => {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link 
-                to="/auth" 
+                to="/dashboard" 
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 className="block bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 min-w-[200px] w-full sm:w-auto cursor-pointer text-center no-underline"
               >
