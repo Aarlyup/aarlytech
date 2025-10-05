@@ -48,25 +48,23 @@ export const router = createBrowserRouter([
     ]
   },
   
-  // Protected routes
+  // Public dashboard
   {
     path: '/dashboard',
     element: (
-      <ProtectedRoute>
-        <DashboardLayout>
-          <DashboardPage />
-        </DashboardLayout>
-      </ProtectedRoute>
+      <DashboardLayout>
+        <DashboardPage />
+      </DashboardLayout>
     ),
   },
+  
+  // Public funding routes
   {
     path: '/funding',
     element: (
-      <ProtectedRoute>
-        <FundingLayout>
-          <VCFundingPage />
-        </FundingLayout>
-      </ProtectedRoute>
+      <FundingLayout>
+        <VCFundingPage />
+      </FundingLayout>
     ),
     children: [
       { path:  'vc', element: <VCFundingPage /> },
@@ -77,6 +75,9 @@ export const router = createBrowserRouter([
       { path: 'grants', element: <GrantsFundingPage /> },
     ]
   },
+  
+
+  // Protected routes
   {
     path: '/content',
     element: (
