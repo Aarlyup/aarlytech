@@ -56,7 +56,7 @@ const Pricing: React.FC = () => {
               ))}
             </ul>
             
-            <Link to="/auth" className="block" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+            <Link to="/dashboard" className="block" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               <Button className="w-full bg-blue-600 hover:bg-blue-700 text-lg py-3">
                 Get Started Now
               </Button>
