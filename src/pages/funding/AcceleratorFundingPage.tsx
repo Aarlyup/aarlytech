@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
 import { Rocket, MapPin, ExternalLink } from 'lucide-react';
 import { useFunding } from '../../contexts/FundingContext';
+import { useAuth } from '../../contexts/AuthContext';
 import LoadingGrid from '../../components/ui/LoadingGrid';
 import EmptyState from '../../components/ui/EmptyState';
 import { FundingMobileNav } from '../../components/layout/FundingSidebar';
@@ -28,6 +30,8 @@ interface Accelerator {
 
 const AcceleratorFundingPage: React.FC = () => {
   const { getFundingByCategory, loading, error } = useFunding();
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [accelerators, setAccelerators] = useState<Accelerator[]>([]);
   const [filteredAccelerators, setFilteredAccelerators] = useState<Accelerator[]>([]);
   const [search, setSearch] = useState('');
@@ -56,6 +60,10 @@ const AcceleratorFundingPage: React.FC = () => {
     }
   }, [search, accelerators]);
   const handleAcceleratorClick = (accelerator: Accelerator) => {
+    if (!isAuthenticated) {
+      navigate('/auth');
+      return;
+    }
     setSelectedAccelerator(accelerator);
   };
 

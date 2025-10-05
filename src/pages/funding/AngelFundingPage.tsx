@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
 import { User, MapPin, Target, Mail, Linkedin } from 'lucide-react';
 import { useFunding } from '../../contexts/FundingContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { formatCurrencyWithSymbol } from '../../lib/utils';
 import LoadingGrid from '../../components/ui/LoadingGrid';
 import EmptyState from '../../components/ui/EmptyState';
@@ -29,6 +31,8 @@ interface AngelInvestor {
 
 const AngelFundingPage: React.FC = () => {
   const { getFundingByCategory, loading, error } = useFunding();
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [angels, setAngels] = useState<AngelInvestor[]>([]);
   const [filteredAngels, setFilteredAngels] = useState<AngelInvestor[]>([]);
   const [search, setSearch] = useState('');
@@ -70,6 +74,10 @@ const AngelFundingPage: React.FC = () => {
     }
   }, [search, angels]);
   const handleAngelClick = (angel: AngelInvestor) => {
+    if (!isAuthenticated) {
+      navigate('/auth');
+      return;
+    }
     setSelectedAngel(angel);
   };
 

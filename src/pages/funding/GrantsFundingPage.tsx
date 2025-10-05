@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
 import { Award, Building, Calendar, ExternalLink } from 'lucide-react';
 import { useFunding } from '../../contexts/FundingContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { formatCurrencyWithSymbol } from '../../lib/utils';
 import LoadingGrid from '../../components/ui/LoadingGrid';
 import EmptyState from '../../components/ui/EmptyState';
@@ -31,6 +33,8 @@ interface GovtGrant {
 
 const GrantsFundingPage: React.FC = () => {
   const { getFundingByCategory, loading, error } = useFunding();
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [grants, setGrants] = useState<GovtGrant[]>([]);
   const [filteredGrants, setFilteredGrants] = useState<GovtGrant[]>([]);
   const [search, setSearch] = useState('');
@@ -59,6 +63,10 @@ const GrantsFundingPage: React.FC = () => {
     }
   }, [search, grants]);
   const handleGrantClick = (grant: GovtGrant) => {
+    if (!isAuthenticated) {
+      navigate('/auth');
+      return;
+    }
     setSelectedGrant(grant);
   };
 

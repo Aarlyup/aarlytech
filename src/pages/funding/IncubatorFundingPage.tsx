@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
 import { Building2, MapPin, Calendar, ExternalLink, Mail } from 'lucide-react';
 import { useFunding } from '../../contexts/FundingContext';
+import { useAuth } from '../../contexts/AuthContext';
 import LoadingGrid from '../../components/ui/LoadingGrid';
 import EmptyState from '../../components/ui/EmptyState';
 import { FundingMobileNav } from '../../components/layout/FundingSidebar';
@@ -26,6 +28,8 @@ interface Incubator {
 
 const IncubatorFundingPage: React.FC = () => {
   const { getFundingByCategory, loading, error } = useFunding();
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [incubators, setIncubators] = useState<Incubator[]>([]);
   const [filteredIncubators, setFilteredIncubators] = useState<Incubator[]>([]);
   const [search, setSearch] = useState('');
@@ -66,6 +70,10 @@ const IncubatorFundingPage: React.FC = () => {
     }
   }, [search, incubators]);
   const handleIncubatorClick = (incubator: Incubator) => {
+    if (!isAuthenticated) {
+      navigate('/auth');
+      return;
+    }
     setSelectedIncubator(incubator);
   };
 

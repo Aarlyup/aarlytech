@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
 import { Building2, MapPin, Users, ExternalLink } from 'lucide-react';
 import { useFunding } from '../../contexts/FundingContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { formatCurrencyWithSymbol } from '../../lib/utils';
 import LoadingGrid from '../../components/ui/LoadingGrid';
 import EmptyState from '../../components/ui/EmptyState';
@@ -28,6 +30,8 @@ interface MicroVC {
 
 const MicroVCFundingPage: React.FC = () => {
   const { getFundingByCategory, loading, error } = useFunding();
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [microvcs, setMicroVCs] = useState<MicroVC[]>([]);
   const [filteredMicroVCs, setFilteredMicroVCs] = useState<MicroVC[]>([]);
   const [search, setSearch] = useState('');
@@ -56,6 +60,10 @@ const MicroVCFundingPage: React.FC = () => {
     }
   }, [search, microvcs]);
   const handleMicroVCClick = (microvc: MicroVC) => {
+    if (!isAuthenticated) {
+      navigate('/auth');
+      return;
+    }
     setSelectedMicroVC(microvc);
   };
 

@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
 import { Building2, MapPin, Users, ExternalLink, Mail } from 'lucide-react';
 import { useFunding } from '../../contexts/FundingContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { formatCurrencyWithSymbol, formatCurrencyRange } from '../../lib/utils';
 import LoadingGrid from '../../components/ui/LoadingGrid';
 import EmptyState from '../../components/ui/EmptyState';
@@ -34,6 +36,8 @@ interface VentureCapital {
 
 const VCFundingPage: React.FC = () => {
   const { getFundingByCategory, loading, error } = useFunding();
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [vcs, setVCs] = useState<VentureCapital[]>([]);
   const [filteredVCs, setFilteredVCs] = useState<VentureCapital[]>([]);
   const [search, setSearch] = useState('');
@@ -75,6 +79,10 @@ const VCFundingPage: React.FC = () => {
     }
   }, [search, vcs]);
   const handleVCClick = (vc: VentureCapital) => {
+    if (!isAuthenticated) {
+      navigate('/auth');
+      return;
+    }
     setSelectedVC(vc);
   };
 
