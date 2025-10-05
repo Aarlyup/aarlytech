@@ -380,7 +380,7 @@ const AboutPage: React.FC = () => {
               <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold mb-2 sm:mb-3 tracking-tight text-white drop-shadow-lg">Ready to Start?</h2>
               <p className="text-sm sm:text-lg md:text-xl mb-4 sm:mb-6 opacity-95 font-medium text-white drop-shadow-sm">Join thousands of entrepreneurs who found their perfect funding match through Aarly.</p>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center w-full max-w-md">
-                <Link to="/auth" className="flex-1 min-w-[150px]" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                <Link to="/dashboard" className="flex-1 min-w-[150px]" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                   <Button className="w-full bg-white text-blue-700 hover:bg-blue-50 hover:text-blue-800 font-bold px-4 sm:px-8 py-2 sm:py-3 rounded-lg shadow-lg transition-all duration-200 text-sm sm:text-base border-2 border-white focus:ring-4 focus:ring-blue-200 flex items-center justify-center gap-2">
                     Get Started
                     <ArrowRight className="w-4 h-4 ml-1" />
