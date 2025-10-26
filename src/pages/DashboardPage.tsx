@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useFunding } from '../contexts/FundingContext';
 import FundingCard from '../components/ui/FundingCard';
 import Button from '../components/ui/Button';
-import { ArrowRight, Sparkles, TrendingUp, Users, Award, DollarSign } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import { formatCurrencyWithSymbol, formatCurrencyRange } from '../lib/utils';
 import { Link } from 'react-router-dom';
 
@@ -86,13 +86,6 @@ const DashboardPage: React.FC = () => {
     }
   };
 
-  const stats = [
-    { icon: TrendingUp, label: 'Active Opportunities', value: '300+', color: 'text-blue-400' },
-    { icon: Users, label: 'Startups Funded', value: '2,500+', color: 'text-green-400' },
-    { icon: Award, label: 'Success Rate', value: '95%', color: 'text-purple-400' },
-    { icon: DollarSign, label: 'Total Funded', value: '₹120Cr+', color: 'text-orange-400' },
-  ];
-
   return (
     <>
       <Helmet>
@@ -103,7 +96,7 @@ const DashboardPage: React.FC = () => {
       <div className="min-h-screen bg-gray-900">
         <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 space-y-8 sm:space-y-12">
           {/* Top Section: Background Video with Overlay */}
-          <div className="relative w-full h-[400px] sm:h-[450px] md:h-[500px] rounded-2xl overflow-hidden mb-8">
+          <div className="relative w-full h-[180px] sm:h-[220px] rounded-2xl overflow-hidden mb-8">
             <video
               src="/video2.mp4"
               className="absolute inset-0 w-full h-full object-cover"
@@ -113,36 +106,20 @@ const DashboardPage: React.FC = () => {
               playsInline
             />
             <div className="absolute inset-0 bg-gradient-to-b from-blue-900/80 via-purple-900/80 to-blue-900/80 z-10" />
-            <div className="relative z-20 w-full h-full flex flex-col items-center justify-center text-center p-4 sm:p-6 md:p-8">
+            <div className="relative z-20 w-full h-full flex flex-col items-center justify-center text-center p-4 sm:p-6">
               <div className="max-w-4xl mx-auto">
-                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4 drop-shadow-lg">
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-3 drop-shadow-lg">
                   Welcome to Your Funding Journey
                 </h1>
-                <p className="text-sm sm:text-base md:text-lg text-blue-100 mb-4 sm:mb-6 max-w-2xl mx-auto drop-shadow-lg px-2">
+                <p className="text-sm sm:text-base text-blue-100 mb-4 max-w-2xl mx-auto drop-shadow-lg px-2">
                   Discover, connect, and secure funding from the right investors for your startup.
                 </p>
                 <Link to="/funding/vc" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                  <button className="bg-white text-blue-600 hover:bg-gray-100 px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold transition-all flex items-center gap-2 mx-auto text-sm sm:text-base shadow-lg mb-6 sm:mb-8">
+                  <button className="bg-white text-blue-600 hover:bg-gray-100 px-4 sm:px-6 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 mx-auto text-sm sm:text-base shadow-lg">
                     Explore Funding Options
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </Link>
-                
-                {/* Responsive Stats Cards */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto">
-                  {stats.map((stat, index) => {
-                    const Icon = stat.icon;
-                    return (
-                      <div key={index} className={`bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-3 sm:p-4 text-center hover:bg-white/15 transition-all shadow-lg ${index >= 2 ? 'hidden sm:block' : ''}`}>
-                        <div className={`w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 bg-white/20 rounded-lg flex items-center justify-center`}>
-                          <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${stat.color}`} />
-                        </div>
-                        <div className="text-sm sm:text-base md:text-lg font-bold text-white mb-1">{stat.value}</div>
-                        <div className="text-xs sm:text-sm text-blue-100">{stat.label}</div>
-                      </div>
-                    );
-                  })}
-                </div>
               </div>
             </div>
           </div>
