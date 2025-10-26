@@ -6,15 +6,8 @@ import { AuthProvider } from './contexts/AuthContext';
 import { FundingProvider } from './contexts/FundingContext';
 import ConfirmDialog from './components/ui/ConfirmDialog';
 import { HelmetProvider } from 'react-helmet-async';
-import DevLock, { isDevAccessGranted } from './components/DevLock';
 
 function App() {
-  const [unlocked, setUnlocked] = useState(() => isDevAccessGranted());
-
-  if (!unlocked) {
-    return <DevLock onUnlock={() => setUnlocked(true)} />;
-  }
-
   return (
     <HelmetProvider>
       <AuthProvider>
