@@ -58,7 +58,7 @@ const govtGrantSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  timelines: {
+  deadline: {
     type: String,
     required: true
   },
