@@ -18,7 +18,7 @@ const categoryLabels: Record<string, string> = {
   'micro-vcs': 'Micro VCs',
   'incubators': 'Incubators',
   'accelerators': 'Accelerators',
-  'govt-grants': 'Grants'
+  'govt-grants': 'Grant & Schemes'
 };
 
 const categoryFields: Record<string, { name: string; label: string; type?: string; required?: boolean; options?: string[]; multi?: boolean }[]> = {
@@ -104,7 +104,7 @@ const categoryFields: Record<string, { name: string; label: string; type?: strin
     { name: 'equityDilution', label: 'Equity Dilution' },
     { name: 'eligibility', label: 'Eligibility', required: true },
     { name: 'howToApply', label: 'How to Apply', required: true },
-    { name: 'timelines', label: 'Timelines', required: true },
+    { name: 'deadline', label: 'Deadline', required: true },
     { name: 'contact', label: 'Website Link', required: true },
     { name: 'documentsRequired', label: 'Documents Required (optional, comma separated)' },
     { name: 'specialNotes', label: 'Special Notes' }
@@ -611,7 +611,7 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
                     ) : field.name.includes('description') || field.name.includes('highlights') || 
                       field.name.includes('notes') || field.name.includes('eligibility') ||
                       field.name.includes('benefits') || field.name.includes('services') ||
-                      field.name.includes('howToApply') || field.name.includes('timelines') ||
+                      field.name.includes('howToApply') || field.name.includes('deadline') ||
                       field.name.includes('documentsRequired') ? (
                       <textarea
                         name={field.name}
