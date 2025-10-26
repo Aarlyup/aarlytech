@@ -16,6 +16,7 @@ import AngelFundingPage from './pages/funding/AngelFundingPage';
 import GrantsFundingPage from './pages/funding/GrantsFundingPage';
 import ContentPage from './pages/FinNewzPage';
 import InvestorMatchPage from './pages/InvestorMatchPage';
+import ComingSoonAarly from './pages/ComingSoonAarly';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import TermsOfServicePage from './pages/TermsOfServicePage';
 import ContactPage from './pages/ContactPage';
@@ -23,13 +24,7 @@ import AboutPage from './pages/AboutPage';
 import DisclaimerPage from './pages/DisclaimerPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import WhatsAppOptOutPage from './pages/WhatsAppOptOutPage';
-
-const NotFound = () => (
-  <div style={{ padding: 40, textAlign: 'center' }}>
-    <h1>404 - Page Not Found</h1>
-    <p>The page you are looking for does not exist.</p>
-  </div>
-);
+import NotFoundPage from './pages/NotFoundPage';
 
 export const router = createBrowserRouter([
   // Public routes
@@ -91,13 +86,19 @@ export const router = createBrowserRouter([
   {
     path: '/investor-match',
     element: (
-      <ProtectedRoute>
-        <DashboardLayout>
-          <InvestorMatchPage />
-        </DashboardLayout>
-      </ProtectedRoute>
+      <ComingSoonAarly />
     ),
   },
+  // {
+  //   path: '/investor-match',
+  //   element: (
+  //     <ProtectedRoute>
+  //       <DashboardLayout>
+  //         <InvestorMatchPage />
+  //       </DashboardLayout>
+  //     </ProtectedRoute>
+  //   ),
+  // },
   {
     path: '/admin',
     element: (
@@ -117,8 +118,11 @@ export const router = createBrowserRouter([
         <AppLayout />
       </ProtectedRoute>
     ),
-    children: [
-      { path: '*', element: <NotFound /> }
-    ]
   },
+  
+  // Catch-all route for 404
+  {
+    path: '*',
+    element: <NotFoundPage />
+  }
 ]);
