@@ -92,7 +92,7 @@ const categoryTemplates: Record<string, any> = {
     equityDilution: 'None',
     eligibility: 'DPIIT recognized startups',
     howToApply: 'Apply through startup.india.gov.in',
-    timelines: 'Applications open year-round',
+    deadline: 'Applications open year-round',
     contact: 'support@startupindia.gov.in',
     documentsRequired: 'DPIIT Certificate&Business Plan&Financial Projections',
     specialNotes: 'No equity dilution required'
@@ -289,7 +289,7 @@ const ExcelUploadModal: React.FC<ExcelUploadModalProps> = ({
           }
           item[header] = value;
         });
-        if (item.name && item.authority && item.grantSize && item.currency && item.eligibility && item.howToApply && item.timelines && item.contact) return item;
+        if (item.name && item.authority && item.grantSize && item.currency && item.eligibility && item.howToApply && item.deadline && item.contact) return item;
         return null;
       }).filter(Boolean);
     }
