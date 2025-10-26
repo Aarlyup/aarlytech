@@ -81,7 +81,7 @@ const govtGrantValidation = [
   body('currency').isIn(['INR', 'USD']).withMessage('Currency must be INR or USD'),
   body('eligibility').trim().notEmpty().withMessage('Eligibility is required'),
   body('howToApply').trim().notEmpty().withMessage('How to apply is required'),
-  body('timelines').trim().notEmpty().withMessage('Timelines is required'),
+  body('deadline').trim().notEmpty().withMessage('Deadline is required'),
   body('contact').trim().notEmpty().withMessage('Contact is required')
 ];
 
