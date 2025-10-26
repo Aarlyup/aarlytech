@@ -3,12 +3,12 @@ import { NavLink } from 'react-router-dom';
 import { Briefcase, DollarSign, Building2, Rocket, User, Award } from 'lucide-react';
 
 export const fundingNav = [
-  { label: 'Venture Capital', path: '/funding/vc', icon: Building2 },
-  // { label: 'Micro VCs', path: '/funding/microvc', icon: DollarSign },
-  { label: 'Incubators', path: '/funding/incubator', icon: Briefcase },
+  { label: 'Grant & Schemes', path: '/funding/grants', icon: Award },
   { label: 'Accelerators', path: '/funding/accelerator', icon: Rocket },
+  { label: 'Incubators', path: '/funding/incubator', icon: Briefcase },
+  { label: 'Venture Capital', path: '/funding/vc', icon: Building2 },
   { label: 'Angel Investors', path: '/funding/angel', icon: User },
-  { label: 'Grants', path: '/funding/grants', icon: Award },
+  // { label: 'Micro VCs', path: '/funding/microvc', icon: DollarSign },
 ];
 
 export const FundingMobileNav: React.FC = () => (
