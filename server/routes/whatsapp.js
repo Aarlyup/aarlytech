@@ -3,6 +3,7 @@ const router = express.Router();
 const { body } = require('express-validator');
 const { protect, optionalAuth } = require('../middleware/auth');
 const adminAuth = require('../middleware/adminAuth');
+const { whatsappLimiter } = require('../middleware/rateLimiters');
 const {
   subscribeToWhatsApp,
   optOutFromWhatsApp,
@@ -33,7 +34,8 @@ const messageValidation = [
 ];
 
 // Public routes
-router.post('/subscribe', optionalAuth, subscribeValidation, subscribeToWhatsApp);
+// Apply whatsappLimiter to limit subscribe attempts to 3 per IP per hour
+router.post('/subscribe', optionalAuth, whatsappLimiter, subscribeValidation, subscribeToWhatsApp);
 router.get('/opt-out/:token', optOutFromWhatsApp);
 
 // Admin routes
