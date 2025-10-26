@@ -19,6 +19,18 @@ const contactLimiter = rateLimit({
   legacyHeaders: false,
 });
 
+// WhatsApp subscribe rate limiter - 3 attempts per hour per IP
+const whatsappLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 3,
+  message: {
+    success: false,
+    message: 'Too many WhatsApp subscription attempts. Please try again in an hour.'
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 // Auth rate limiter - for login attempts
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -34,5 +46,6 @@ const authLimiter = rateLimit({
 module.exports = {
   generalLimiter,
   contactLimiter,
-  authLimiter
+  authLimiter,
+  whatsappLimiter
 };
