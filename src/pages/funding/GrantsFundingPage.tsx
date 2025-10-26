@@ -20,7 +20,7 @@ interface GovtGrant {
   equityDilution: string;
   eligibility: string;
   howToApply: string;
-  timelines: string;
+  deadline: string;
   contact: string;
   documentsRequired: string[];
   specialNotes: string;
@@ -99,13 +99,13 @@ const GrantsFundingPage: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Grants | Aarly</title>
+        <title>Grant & Schemes | Aarly</title>
         <meta name="description" content="Discover grants and schemes for startups. Find funding opportunities from DPIIT, DST, MSME and other authorities." />
       </Helmet>
       
   <FundingMobileNav />
   <div className="mb-8 px-2 md:px-6 pt-4 md:pt-8 mt-6 md:mt-10">
-        <h1 className="text-2xl font-bold mb-2 text-white">Grants</h1>
+        <h1 className="text-2xl font-bold mb-2 text-white">Grant & Schemes</h1>
         <p className="text-gray-400">
           Explore funding opportunities and grants for startups across different stages and sectors.
         </p>
@@ -163,7 +163,7 @@ const GrantsFundingPage: React.FC = () => {
               <div className="mt-4 grid grid-cols-1 gap-2">
                 <div className="flex items-center gap-2 text-sm">
                   <Calendar className="w-4 h-4 text-blue-400" />
-                  <span className="font-medium text-gray-300">{grant.timelines}</span>
+                  <span className="font-medium text-gray-300">{grant.deadline}</span>
                 </div>
               </div>
 
@@ -271,8 +271,8 @@ const GrantsFundingPage: React.FC = () => {
                 {/* Additional Info Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="bg-gray-800 border border-gray-700 rounded-xl p-4">
-                    <div className="text-sm font-semibold text-white mb-3">Timelines</div>
-                    <div className="text-gray-300">{selectedGrant.timelines}</div>
+                    <div className="text-sm font-semibold text-white mb-3">Deadline</div>
+                    <div className="text-gray-300">{selectedGrant.deadline}</div>
                   </div>
 
                   {selectedGrant.stage && selectedGrant.stage.length > 0 && (
@@ -286,6 +286,16 @@ const GrantsFundingPage: React.FC = () => {
                     </div>
                   )}
                 </div>
+
+                {/* Sector */}
+                {selectedGrant.sector && (
+                  <div className="bg-gray-800 border border-gray-700 rounded-xl p-4">
+                    <div className="text-sm font-semibold text-white mb-3">Sector</div>
+                    <div className="flex flex-wrap gap-2">
+                      <span className="px-3 py-1 rounded-full text-sm bg-blue-600/30 text-blue-300 border border-blue-500/40">{selectedGrant.sector}</span>
+                    </div>
+                  </div>
+                )}
 
                 {/* About (previously 'How to Apply') */}
                 {selectedGrant.howToApply && (
