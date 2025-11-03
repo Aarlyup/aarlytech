@@ -81,6 +81,11 @@ const govtGrantSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   }
+  ,
+  expired: {
+    type: Boolean,
+    default: false
+  }
 }, {
   timestamps: true
 });
