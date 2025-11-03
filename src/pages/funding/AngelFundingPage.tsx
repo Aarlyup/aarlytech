@@ -27,6 +27,7 @@ interface AngelInvestor {
     url: string;
     publicId: string;
   };
+  expired?: boolean;
 }
 
 const AngelFundingPage: React.FC = () => {
@@ -133,7 +134,7 @@ const AngelFundingPage: React.FC = () => {
             <div
               key={angel._id}
               onClick={() => handleAngelClick(angel)}
-              className="relative bg-gray-800 border border-gray-700 backdrop-blur-xl rounded-2xl shadow-md p-6 hover:shadow-xl hover:border-gray-600 transition-all hover:-translate-y-1 cursor-pointer group"
+              className={`relative bg-gray-800 border border-gray-700 backdrop-blur-xl rounded-2xl shadow-md p-6 hover:shadow-xl hover:border-gray-600 transition-all hover:-translate-y-1 cursor-pointer group ${angel.expired ? 'opacity-50 grayscale' : ''}`}
             >
               <div className="flex items-start gap-4">
                 <div className="w-16 h-16 rounded-xl bg-gray-700 border border-gray-600 flex items-center justify-center overflow-hidden">
@@ -216,9 +217,9 @@ const AngelFundingPage: React.FC = () => {
             ref={modalRef}
           >
             {/* Header */}
-            <div className="sticky top-0 z-20 bg-gray-900 border-b border-gray-700 flex items-center justify-between px-6 py-4">
+              <div className="sticky top-0 z-20 bg-gray-900 border-b border-gray-700 flex items-center justify-between px-6 py-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 border border-pink-500/30 flex items-center justify-center overflow-hidden">
+                <div className="hidden md:flex w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 border border-pink-500/30 flex items-center justify-center overflow-hidden">
                   {selectedAngel.icon?.url ? (
                     <img 
                       src={selectedAngel.icon.url} 
@@ -237,13 +238,18 @@ const AngelFundingPage: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <button
-                onClick={closeModal}
-                className="p-2 rounded-xl hover:bg-gray-800 transition-all duration-200 group"
-                aria-label="Close"
-              >
-                <span className="text-2xl text-gray-400 group-hover:text-white">×</span>
-              </button>
+              <div className="flex items-center gap-3">
+                <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${selectedAngel?.expired ? 'bg-gray-700 text-gray-300' : 'bg-emerald-600 text-white'}`}>
+                  {selectedAngel?.expired ? 'Expired' : 'Open'}
+                </div>
+                <button
+                  onClick={closeModal}
+                  className="p-2 rounded-xl hover:bg-gray-800 transition-all duration-200 group"
+                  aria-label="Close"
+                >
+                  <span className="text-2xl text-gray-400 group-hover:text-white">×</span>
+                </button>
+              </div>
             </div>
 
             {/* Content */}

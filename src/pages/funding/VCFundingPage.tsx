@@ -32,6 +32,7 @@ interface VentureCapital {
     url: string;
     publicId: string;
   };
+  expired?: boolean;
 }
 
 const VCFundingPage: React.FC = () => {
@@ -149,7 +150,7 @@ const VCFundingPage: React.FC = () => {
             <div
               key={vc._id}
               onClick={() => handleVCClick(vc)}
-              className="relative bg-gray-800 border border-gray-700 backdrop-blur-xl rounded-2xl shadow-md p-6 hover:shadow-xl hover:border-gray-600 transition-all hover:-translate-y-1 cursor-pointer group"
+              className={`relative bg-gray-800 border border-gray-700 backdrop-blur-xl rounded-2xl shadow-md p-6 hover:shadow-xl hover:border-gray-600 transition-all hover:-translate-y-1 cursor-pointer group ${vc.expired ? 'opacity-50 grayscale' : ''}`}
             >
               <div className="flex items-start gap-4">
                 <div className="w-16 h-16 rounded-xl bg-gray-700 border border-gray-600 flex items-center justify-center overflow-hidden">
@@ -231,9 +232,9 @@ const VCFundingPage: React.FC = () => {
             ref={modalRef}
           >
             {/* Header */}
-            <div className="sticky top-0 z-20 bg-gray-900 border-b border-gray-700 flex items-center justify-between px-6 py-4">
+              <div className="sticky top-0 z-20 bg-gray-900 border-b border-gray-700 flex items-center justify-between px-6 py-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center overflow-hidden">
+                <div className="hidden md:flex w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center overflow-hidden">
                   {selectedVC.icon?.url ? (
                     <img 
                       src={selectedVC.icon.url} 
@@ -252,13 +253,18 @@ const VCFundingPage: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <button
-                onClick={closeModal}
-                className="p-2 rounded-xl hover:bg-gray-800 transition-all duration-200 group"
-                aria-label="Close"
-              >
-                <span className="text-2xl text-gray-400 group-hover:text-white">×</span>
-              </button>
+              <div className="flex items-center gap-3">
+                <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${selectedVC?.expired ? 'bg-gray-700 text-gray-300' : 'bg-emerald-600 text-white'}`}>
+                  {selectedVC?.expired ? 'Expired' : 'Open'}
+                </div>
+                <button
+                  onClick={closeModal}
+                  className="p-2 rounded-xl hover:bg-gray-800 transition-all duration-200 group"
+                  aria-label="Close"
+                >
+                  <span className="text-2xl text-gray-400 group-hover:text-white">×</span>
+                </button>
+              </div>
             </div>
 
             {/* Content */}

@@ -29,6 +29,7 @@ interface GovtGrant {
     url: string;
     publicId: string;
   };
+  expired?: boolean;
 }
 
 const GrantsFundingPage: React.FC = () => {
@@ -133,7 +134,7 @@ const GrantsFundingPage: React.FC = () => {
             <div
               key={grant._id}
               onClick={() => handleGrantClick(grant)}
-              className="relative bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-md border border-gray-700 p-6 hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer group"
+              className={`relative bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-md border border-gray-700 p-6 hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer group ${grant.expired ? 'opacity-50 grayscale' : ''}`}
             >
               <div className="flex items-start gap-4">
                 <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-green-500/20 to-blue-500/20 flex items-center justify-center border border-green-500/30 overflow-hidden">
@@ -160,10 +161,13 @@ const GrantsFundingPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="mt-4 grid grid-cols-1 gap-2">
+              <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-2">
                 <div className="flex items-center gap-2 text-sm">
                   <Calendar className="w-4 h-4 text-blue-400" />
                   <span className="font-medium text-gray-300">{grant.deadline}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="font-medium text-gray-300">{formatCurrencyWithSymbol(Number(grant.grantSize), grant.currency || 'INR')}</span>
                 </div>
               </div>
 
@@ -216,7 +220,7 @@ const GrantsFundingPage: React.FC = () => {
             {/* Header */}
             <div className="sticky top-0 z-20 bg-gray-900 border-b border-gray-700 flex items-center justify-between px-6 py-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 flex items-center justify-center overflow-hidden">
+                <div className="hidden md:flex w-12 h-12 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 flex items-center justify-center overflow-hidden">
                   {selectedGrant.icon?.url ? (
                     <img 
                       src={selectedGrant.icon.url} 
@@ -234,13 +238,18 @@ const GrantsFundingPage: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <button
-                onClick={closeModal}
-                className="p-2 rounded-xl hover:bg-gray-800 transition-all duration-200 group"
-                aria-label="Close"
-              >
-                <span className="text-2xl text-gray-400 group-hover:text-white">×</span>
-              </button>
+              <div className="flex items-center gap-3">
+                <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${selectedGrant?.expired ? 'bg-gray-700 text-gray-300' : 'bg-emerald-600 text-white'}`}>
+                  {selectedGrant?.expired ? 'Expired' : 'Open'}
+                </div>
+                <button
+                  onClick={closeModal}
+                  className="p-2 rounded-xl hover:bg-gray-800 transition-all duration-200 group"
+                  aria-label="Close"
+                >
+                  <span className="text-2xl text-gray-400 group-hover:text-white">×</span>
+                </button>
+              </div>
             </div>
 
             {/* Content */}
