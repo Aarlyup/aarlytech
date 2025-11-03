@@ -132,6 +132,10 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
         initialData[field.name] = '';
       }
     });
+    // set expired default for selected categories
+    if (["angel-investors","venture-capital","incubators","accelerators","govt-grants"].includes(category)) {
+      initialData.expired = false;
+    }
     
     return initialData;
   });
@@ -165,6 +169,10 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
         initialData[field.name] = '';
       }
     });
+    // include expired flag when resetting for those categories
+    if (["angel-investors","venture-capital","incubators","accelerators","govt-grants"].includes(category)) {
+      initialData.expired = false;
+    }
     
     setFormData(initialData);
   }, [category]);
@@ -342,6 +350,10 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
       formattedData.avgTicketSizeMax = item.avgTicketSize.max || 0;
       delete formattedData.avgTicketSize; // Remove the original object
     }
+    // Preserve expired flag when editing (default to false for target categories)
+    if (["angel-investors","venture-capital","incubators","accelerators","govt-grants"].includes(category)) {
+      formattedData.expired = typeof item.expired === 'boolean' ? item.expired : false;
+    }
     
     setFormData({ ...formattedData });
     setShowForm(true);
@@ -373,16 +385,18 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    
-    // For multi-select fields
-    if (e.target.multiple) {
-      const selectedOptions = Array.from((e.target as HTMLSelectElement).selectedOptions).map(option => option.value);
+    const target = e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+    const name = target.name;
+
+    // For multi-select fields (select elements)
+    if ('multiple' in target && (target as HTMLSelectElement).multiple) {
+      const selectedOptions = Array.from((target as HTMLSelectElement).selectedOptions).map(option => option.value);
       setFormData(prev => ({
         ...prev,
         [name]: selectedOptions
       }));
     } else {
+      const value = (target as HTMLInputElement).value;
       setFormData(prev => ({
         ...prev,
         [name]: value
@@ -425,7 +439,8 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
           <button
             onClick={() => {
               setEditingItem(null);
-              setFormData({});
+              // start with default expired flag (unchecked)
+              setFormData({ expired: false });
               setSelectedIcon(null);
               setIconPreview(null);
               setShowForm(true);
@@ -478,7 +493,7 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
         ) : (
           <div className="divide-y divide-gray-200">
             {filteredItems.map((item) => (
-              <div key={item._id} className="p-4 hover:bg-gray-50">
+              <div key={item._id} className={`p-4 hover:bg-gray-50 ${["angel-investors","venture-capital","incubators","accelerators","govt-grants"].includes(category) && item.expired ? 'opacity-50 grayscale' : ''}`}>
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 className="font-semibold text-gray-900">{item.name}</h3>
@@ -649,6 +664,21 @@ const FundingManagement: React.FC<FundingManagementProps> = ({ category }) => {
                     )}
                   </div>
                 ))}
+                    {/* Expired checkbox for target categories */}
+                    {(["angel-investors","venture-capital","incubators","accelerators","govt-grants"].includes(category)) && (
+                      <div>
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            name="expired"
+                            checked={!!formData.expired}
+                            onChange={(e) => setFormData(prev => ({ ...prev, expired: e.target.checked }))}
+                            className="w-4 h-4"
+                          />
+                          <span className="text-sm text-gray-700">Expired</span>
+                        </label>
+                      </div>
+                    )}
                 
                 <div className="flex gap-3 pt-4">
                   <button
