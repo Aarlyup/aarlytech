@@ -13,7 +13,8 @@ const DashboardPage: React.FC = () => {
 
   useEffect(() => {
     const items = getRandomFundingItems(6);
-    setRandomFundingItems(items);
+    // filter out items marked expired
+    setRandomFundingItems(items.filter((it: any) => !it.expired));
   }, [getRandomFundingItems]);
 
   const formatAmount = (item: any) => {
@@ -131,7 +132,8 @@ const DashboardPage: React.FC = () => {
               <button
                 onClick={() => {
                   const items = getRandomFundingItems(6);
-                  setRandomFundingItems(items);
+                  // filter out items marked expired
+                  setRandomFundingItems(items.filter((it: any) => !it.expired));
                 }}
                 className="flex items-center gap-2 px-4 py-2 bg-gray-800 border border-gray-700 text-gray-300 rounded-lg hover:border-gray-600 hover:text-white transition-all"
               >
