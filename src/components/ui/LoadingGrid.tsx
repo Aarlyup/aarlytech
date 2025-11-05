@@ -39,7 +39,6 @@ const LoadingGrid: React.FC<LoadingGridProps> = ({
           <div className="mt-4 flex flex-wrap gap-2">
             <div className="px-2.5 py-1 rounded-full bg-blue-500/20 border border-blue-500/30 h-6 w-20" />
             <div className="px-2.5 py-1 rounded-full bg-blue-500/20 border border-blue-500/30 h-6 w-24" />
-            <div className="px-2.5 py-1 rounded-full bg-blue-500/20 border border-blue-500/30 h-6 w-16" />
           </div>
 
           <div className="mt-6 flex items-center justify-between">
