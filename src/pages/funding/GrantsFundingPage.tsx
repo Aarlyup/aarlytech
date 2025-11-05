@@ -134,7 +134,7 @@ const GrantsFundingPage: React.FC = () => {
             <div
               key={grant._id}
               onClick={() => handleGrantClick(grant)}
-              className={`relative bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-md border border-gray-700 p-6 hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer group ${grant.expired ? 'opacity-50 grayscale' : ''}`}
+              className={`relative bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-md border border-gray-700 p-6 hover:shadow-xl transition-all cursor-pointer group ${grant.expired ? 'opacity-50 grayscale' : ''}`}
             >
               <div className="flex items-start gap-4">
                 <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-green-500/20 to-blue-500/20 flex items-center justify-center border border-green-500/30 overflow-hidden">
@@ -189,8 +189,16 @@ const GrantsFundingPage: React.FC = () => {
                 </div>
               )}
 
+              {grant.sector && (
+                <div className="mt-2">
+                  <span className="inline-block px-2.5 py-1 text-xs font-medium bg-purple-500/20 text-purple-400 rounded-full border border-purple-500/30">
+                    {grant.sector}
+                  </span>
+                </div>
+              )}
+
               <div className="mt-6 flex items-center justify-between">
-                <span className="text-sm text-gray-400">{grant.sector}</span>
+                <span className="text-sm text-gray-400"></span>
                 <span className="text-blue-400 font-medium text-sm group-hover:text-blue-300">
                   View Details →
                 </span>

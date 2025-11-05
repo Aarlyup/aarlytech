@@ -117,7 +117,7 @@ const MicroVCFundingPage: React.FC = () => {
             <div
               key={microvc._id}
               onClick={() => handleMicroVCClick(microvc)}
-              className="relative bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-md border border-gray-700 p-6 hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer group"
+              className="relative bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-md border border-gray-700 p-6 hover:shadow-xl transition-all cursor-pointer group"
             >
               <div className="flex items-start gap-4">
                 <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-green-500/20 to-blue-500/20 flex items-center justify-center border border-green-500/30 overflow-hidden">
@@ -165,6 +165,24 @@ const MicroVCFundingPage: React.FC = () => {
                   {microvc.stage.length > 3 && (
                     <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-gray-600 text-gray-300">
                       +{microvc.stage.length - 3} more
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {Array.isArray(microvc.sector) && microvc.sector.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {microvc.sector.slice(0, 2).map((s) => (
+                    <span
+                      key={s}
+                      className="px-2.5 py-1 rounded-full text-xs font-medium bg-purple-500/20 text-purple-400 border border-purple-500/30"
+                    >
+                      {s}
+                    </span>
+                  ))}
+                  {microvc.sector.length > 2 && (
+                    <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-gray-600/50 text-gray-400 border border-gray-600">
+                      +{microvc.sector.length - 2}
                     </span>
                   )}
                 </div>

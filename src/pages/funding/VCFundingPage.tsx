@@ -150,7 +150,7 @@ const VCFundingPage: React.FC = () => {
             <div
               key={vc._id}
               onClick={() => handleVCClick(vc)}
-              className={`relative bg-gray-800 border border-gray-700 backdrop-blur-xl rounded-2xl shadow-md p-6 hover:shadow-xl hover:border-gray-600 transition-all hover:-translate-y-1 cursor-pointer group ${vc.expired ? 'opacity-50 grayscale' : ''}`}
+              className={`relative bg-gray-800 border border-gray-700 backdrop-blur-xl rounded-2xl shadow-md p-6 hover:shadow-xl hover:border-gray-600 transition-all cursor-pointer group ${vc.expired ? 'opacity-50 grayscale' : ''}`}
             >
               <div className="flex items-start gap-4">
                 <div className="w-16 h-16 rounded-xl bg-gray-700 border border-gray-600 flex items-center justify-center overflow-hidden">
@@ -198,6 +198,24 @@ const VCFundingPage: React.FC = () => {
                   {vc.stageFocus.length > 3 && (
                     <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-gray-600 text-gray-300">
                       +{vc.stageFocus.length - 3} more
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {vc.sectorFocus && vc.sectorFocus.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {vc.sectorFocus.slice(0, 2).map((s) => (
+                    <span
+                      key={s}
+                      className="px-2.5 py-1 rounded-full text-xs font-medium bg-purple-500/20 text-purple-400 border border-purple-500/30"
+                    >
+                      {s}
+                    </span>
+                  ))}
+                  {vc.sectorFocus.length > 2 && (
+                    <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-gray-600/50 text-gray-400 border border-gray-600">
+                      +{vc.sectorFocus.length - 2}
                     </span>
                   )}
                 </div>

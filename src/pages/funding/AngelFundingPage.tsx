@@ -134,7 +134,7 @@ const AngelFundingPage: React.FC = () => {
             <div
               key={angel._id}
               onClick={() => handleAngelClick(angel)}
-              className={`relative bg-gray-800 border border-gray-700 backdrop-blur-xl rounded-2xl shadow-md p-6 hover:shadow-xl hover:border-gray-600 transition-all hover:-translate-y-1 cursor-pointer group ${angel.expired ? 'opacity-50 grayscale' : ''}`}
+              className={`relative bg-gray-800 border border-gray-700 backdrop-blur-xl rounded-2xl shadow-md p-6 hover:shadow-xl hover:border-gray-600 transition-all cursor-pointer group ${angel.expired ? 'opacity-50 grayscale' : ''}`}
             >
               <div className="flex items-start gap-4">
                 <div className="w-16 h-16 rounded-xl bg-gray-700 border border-gray-600 flex items-center justify-center overflow-hidden">

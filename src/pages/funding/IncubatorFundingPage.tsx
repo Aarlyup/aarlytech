@@ -128,7 +128,7 @@ const IncubatorFundingPage: React.FC = () => {
             <div
               key={incubator._id}
               onClick={() => handleIncubatorClick(incubator)}
-              className={`relative bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-md border border-gray-700 p-6 hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer group ${incubator.expired ? 'opacity-50 grayscale' : ''}`}
+              className={`relative bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-md border border-gray-700 p-6 hover:shadow-xl transition-all cursor-pointer group ${incubator.expired ? 'opacity-50 grayscale' : ''}`}
             >
               <div className="flex items-start gap-4">
                 <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center border border-purple-500/30 overflow-hidden">
