@@ -9,18 +9,7 @@ import { HelmetProvider } from 'react-helmet-async';
 
 function App() {
   return (
-    <HelmetProvider>
-      <AuthProvider>
-        <FundingProvider>
-          <UiProvider>
-            <div className="min-h-screen bg-gray-900">
-              <RouterProvider router={router} />
-              <ConfirmDialog />
-            </div>
-          </UiProvider>
-        </FundingProvider>
-      </AuthProvider>
-    </HelmetProvider>
+    <div style={{ width: "100vw", height: "100vh", backgroundColor: "white" }} />
   );
 }
 
